@@ -44,7 +44,8 @@ class AsientoController extends Controller {
             {
                 $nroAs = $nroAsiento[0]->nro_asiento;
             }
-            
+            date_default_timezone_set('America/La_Paz');
+            ini_set('date.timezone','America/La_Paz');
             $hora = date("H:i:s");
             $asiento=Asiento::create([
                 'nro_asiento'=>$nroAs + 1,
