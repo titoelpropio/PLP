@@ -82,6 +82,7 @@
                 <th style="display: none"><CENTER>ID</CENTER></th>
                 <th style="vertical-align: middle;"><CENTER>CÓDIGO</CENTER></th>
                 <th style="vertical-align: middle;"><CENTER>CUENTA</CENTER></th>
+                <th style="display: none"><CENTER>TIPO</CENTER></th>
                 <th style="vertical-align: middle;"><CENTER>DEBE Bs.</CENTER></th>
                 <th style="vertical-align: middle;"><CENTER>HABER Bs.</CENTER></th>
                 <th style="vertical-align: middle;"><CENTER>DEBE $us.</CENTER></th>
@@ -89,37 +90,40 @@
                 </thead>
 
                 <tbody id="tabla">
-                <tr id="fila_1">
+                <tr id="fila_0">
                     <td style="vertical-align: middle;">
                         <CENTER>
-                            <a href="#" name="agregar_1" id="agregar_1" data-status=0 class='btn btn-success' onclick="lista_cuentas(1)">
+                            <a href="#" name="agregar_0" id="agregar_0" data-status=0 class='btn btn-success' onclick="lista_cuentas()">
                                 <i class="fa fa-plus" aria-hidden="true"></i>
                             </a>
-                            <a href="#" name="quitar_1" id="quitar_1" data-status=0 class='btn btn-danger' onclick="quitar_fila(1)" style="display: none">
+                            <a href="#" name="quitar_0" id="quitar_0" data-status=0 class='btn btn-danger' onclick="quitar_fila(0)" style="display: none">
                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                             </a>
                         </CENTER>
                     </td>
                     <td style="display: none">
-                        <input type="hidden" name="id[]" id="id_1" class="form-control" style="border:none;" readonly>
+                        <input type="hidden" name="id[]" id="id_0" class="form-control" style="border:none;" readonly>
                     </td>
                     <td>
-                        <input type="hidden" name="codigo[]" id="codigo_1" class="form-control" style="border:none;" readonly>
+                        <input type="hidden" name="codigo[]" id="codigo_0" class="form-control" style="border:none;" readonly>
                     </td>
                     <td>
-                        <input type="hidden" name="cuenta[]" id="cuenta_1" class="form-control" style="border:none;" readonly>
+                        <input type="hidden" name="cuenta[]" id="cuenta_0" class="form-control" style="border:none;" readonly>
                     </td>
-                    <td>
-                        <input type="hidden" name="debe_bs[]" id="debe_bs_1" class="form-control" style="border:none; text-align: right;" onfocus="bloquear_desbloquear(1,'debe_bs')" onchange="calcular(1,'debe_bs')">
+                    <td style="display: none">
+                        <input type="hidden" name="tipo[]" id="tipo_0" class="form-control" style="border:none;" readonly>
                     </td>
-                    <td>
-                        <input type="hidden" name="haber_bs[]" id="haber_bs_1" class="form-control" style="border:none; text-align: right;" onfocus="bloquear_desbloquear(1,'haber_bs')" onchange="calcular(1,'haber_bs')">
+                    <td onclick="bloquear_desbloquear(0,'debe_bs')">
+                        <input type="hidden" name="debe_bs[]" id="debe_bs_0" class="form-control" style="border:none; text-align: right;" onchange="calcular(0,'debe_bs')" value="0.00" readonly>
                     </td>
-                    <td>
-                        <input type="hidden" name="debe_sus[]" id="debe_sus_1" class="form-control" style="border:none; text-align: right;" onfocus="bloquear_desbloquear(1,'debe_sus')" onchange="calcular(1,'debe_sus')">
+                    <td onclick="bloquear_desbloquear(0,'haber_bs')">
+                        <input type="hidden" name="haber_bs[]" id="haber_bs_0" class="form-control" style="border:none; text-align: right;" onchange="calcular(0,'haber_bs')" value="0.00" readonly>
                     </td>
-                    <td>
-                        <input type="hidden" name="haber_sus[]" id="haber_sus_1" class="form-control" style="border:none; text-align: right;" onfocus="bloquear_desbloquear(1,'haber_sus')" onchange="calcular(1,'haber_sus')">
+                    <td onclick="bloquear_desbloquear(0,'debe_sus')">
+                        <input type="hidden" name="debe_sus[]" id="debe_sus_0" class="form-control" style="border:none; text-align: right;" onchange="calcular(0,'debe_sus')" value="0.00" readonly>
+                    </td>
+                    <td onclick="bloquear_desbloquear(0,'haber_sus')">
+                        <input type="hidden" name="haber_sus[]" id="haber_sus_0" class="form-control" style="border:none; text-align: right;" onchange="calcular(0,'haber_sus')" value="0.00" readonly>
                     </td>
                 </tr>
                 </tbody>

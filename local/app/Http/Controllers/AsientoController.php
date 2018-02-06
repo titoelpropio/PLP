@@ -62,18 +62,19 @@ class AsientoController extends Controller {
             $nro_detalle = 1;
             $tamaño = count($request['id']);
             $id_cuenta = $request['id'];
+            $tipo_fila = $request['tipo'];
             $debe_bs = $request['debe_bs'];
             $haber_bs = $request['haber_bs'];
             $debe_sus = $request['debe_sus'];
             $haber_sus = $request['haber_sus'];
             for ($i=0; $i < $tamaño-1; $i++) {
-                if ($debe_bs[$i] > $haber_bs[$i]) {
-                     $tipo = 1;
+                if ($tipo_fila[$i] == 1) {
+                     $tipo = $tipo_fila[$i];
                      $montoSus = $debe_sus[$i];
                      $montoBs = $debe_bs[$i];
                 }
-                else if ($debe_bs[$i] < $haber_bs[$i]) {
-                     $tipo = 2;
+                else if ($tipo_fila[$i] == 2) {
+                     $tipo = $tipo_fila[$i];
                      $montoSus = $haber_sus[$i];
                      $montoBs = $haber_bs[$i];
                 }
