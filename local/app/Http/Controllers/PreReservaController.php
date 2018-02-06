@@ -186,9 +186,9 @@ public function seccion1($opcion){
 //
     $Categoria=Categoria::lists('categoria','id');
 
-   return view('mapas.guadalupe',['opcion'=>$opcion,'categoria'=>$Categoria,'fase'=>1]) ;
+   return view('mapas.guadalupe',['opcion'=>$opcion,'categoria'=>$Categoria,'fase'=>1,'proyecto'=>3]) ;
 
-   return view('mapas.barrancaFase1',['opcion'=>$opcion,'categoria'=>$Categoria,'fase'=>1]) ;
+   // return view('mapas.barrancaFase1',['opcion'=>$opcion,'categoria'=>$Categoria,'fase'=>1]) ;
 
 }
 

@@ -1,6 +1,6 @@
 $(document).ready(function(){
     
-    $('#loading').css('display','none')
+    // $('#loading').css('display','none')
 });
 
 
@@ -10,7 +10,7 @@ $(document).ready(function(){
     punto="";
     idLote=0;
 
-    function divLogin(lote,tipo) {// tipo 0 es cuando es poligono 1 cuando es path
+    function divLogin(lote,tipo) {// tipo 0 es cuando es poligono, 1 cuando es path, 2 es cuando es rectangule
 
  $('#tipo').val(tipo);
 
@@ -23,7 +23,12 @@ $(document).ready(function(){
          punto=$(lote).attr('points');
        }
        else{
-        punto=$(lote).attr('d');
+        if (tipo==1) {
+        punto=$(lote).attr('d').trim();
+    }else{
+        punto=$(lote).attr('transform').trim();
+        
+    }
        }
          if (lotes=="") {
             lote.style.fill = "#0195bf"; 

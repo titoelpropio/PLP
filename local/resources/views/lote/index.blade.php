@@ -18,6 +18,7 @@
               <li  onclick="cambiomapa(4)"class=" pull-right"><a href="#">FASE 1-B</a></li>
                
             <li  onclick="cambiomapa(1)"class=" pull-right"><a href="#">FASE 1</a></li>
+            <li  onclick="cambiomapa(1)"class=" pull-right"><a href="#">GUARDALUPE</a></li>
   <input type="hidden" value="{!!URL::to('seccion2/2')!!}" id="mapa2">
   <input type="hidden" value="{!!URL::to('seccion3/2')!!}" id="mapa3">
   <input type="hidden" value="{!!URL::to('seccion1b/2')!!}" id="mapa1b">
