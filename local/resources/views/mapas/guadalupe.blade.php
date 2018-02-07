@@ -25,7 +25,7 @@
 @include('alerts.errors')
 <?php 
 $contador=0;
-$tablalote=DB::select('SELECT point,estado FROM `lote` where fase=1 and idProyecto='.$proyecto);
+$tablalote=DB::select('SELECT point,estado FROM `lote` where fase=1 and idProyecto=3');
  
  switch($opcion){
       case "1": ?>
