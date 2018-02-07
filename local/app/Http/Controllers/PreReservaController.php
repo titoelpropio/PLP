@@ -207,7 +207,7 @@ public function seccion3($opcion){
 public function seccion1b($opcion){
 
  $Categoria=Categoria::where('idProyecto',Session::get('idProyecto'))->lists('categoria','id');
-   return view('mapas.seccion1-b',['opcion'=>$opcion,'categoria'=>$Categoria,'fase'=>1]) ;
+   return view('mapas.barrancaFase1',['opcion'=>$opcion,'categoria'=>$Categoria,'fase'=>1]) ;
 }
 }
 
