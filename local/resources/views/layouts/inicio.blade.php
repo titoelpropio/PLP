@@ -424,7 +424,7 @@
           {!!Html::script('datatables/jquery.dataTables.min.js')!!}
           {!!Html::script('datatables/dataTables.bootstrap.min.js')!!}
 
-          <!-- {!!Html::script('js/categoriaasientos.js')!!} -->
+          {!!Html::script('js/categoriaasientos.js')!!}
           @yield('javascript')
 <script type="text/javascript">
       $('#datepicker').datepicker({
