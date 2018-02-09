@@ -30,7 +30,15 @@ class AsientoController extends Controller {
         $tipocambio=DB::select('SELECT * FROM tipocambio where deleted_at IS NULL');
         $tipo_asiento = DB::select('select * from categoriacuenta');
 
-        return view('modulocontable.asientos.index', compact('cuenta', 'gestion', 'tipocambio', 'tipo_asiento'));
+        $verificargestion = DB::select("SELECT count(*) as count FROM gestion WHERE estado=1");
+
+        if ($verificargestion[0]->count == 1 ) {
+           return view('modulocontable.asientos.index', compact('cuenta', 'gestion', 'tipocambio', 'tipo_asiento'));
+        }
+        else if ($verificargestion[0]->count != 1 ) {
+           Session::flash('error-gestion','DEBE APERTURAR UNA GESTIÓN PARA PODER AGREGAR COMPROBANTES');
+           return Redirect::to('index');
+        }
     }
 
     function store(Request $request)

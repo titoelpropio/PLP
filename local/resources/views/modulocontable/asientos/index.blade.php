@@ -29,7 +29,7 @@
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 pull-right">
             <div class="form-group">
                 <center>
-                    <span style="font-size: 15pt; ">Gestión Actual: <span style="font-size:20pt; color: #00A65A;">{{$gestion[0]->nombre_gestion}}</span></span>
+                    <span style="font-size: 15pt;">Gestión Actual: <span style="font-size:20pt; color: #00A65A;">{{$gestion[0]->nombre_gestion}}</span></span>
                     <input type="hidden" value="{{$gestion[0]->id}}" name="id_gestion" id="id_gestion" class="form-control">
                 </center>
             </div>
