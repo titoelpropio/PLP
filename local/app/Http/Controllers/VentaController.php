@@ -504,7 +504,7 @@ var $texto="";
                         'idCuenta'=>$request['cuentaC'],
                         'nroDocumento'=>$request['nroDocumentoC'],
                         'monto'=>$venta['cuotaInicial'],
-                        'fecha'=>$request['fecha'],
+                        'fecha'=>$request['fechaDeposito'],
                       ]);
 
                       //---------------------------------- Contabilidad BANCO----------------------------------------------------//
@@ -529,35 +529,35 @@ var $texto="";
                         'idVenta'=>$venta['id'],
                         'idBanco'=>$request['bancoC'],
                         'idCuenta'=>$request['cuentaC'],
-                        'fecha'=>$request['fecha'],
                         'nroDocumento'=>$request['nroDocumentoC'],
                         'monto'=>$request['montoBanco'],
+                        'fecha'=>$request['fechaDeposito'],
                       ]);
 
                       //---------------------------------- Contabilidad BANCO CAJA------------------------------------------------//
                       //CAJA
-                      $montoBs = $venta['montoEfectivo'] * $moneda[0]->monedaVenta;
+                      $montoBs = $request->montoEfectivo * $moneda[0]->monedaVenta;
                       $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Caja'");                      
                       Detalle::create([
                         'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
                         'id_asiento'=>$asiento['id'],
                         'nro_detalle'=>$nro_detalle,
                         'tipo'=>1,//1 = Debe, 2 = Haber
-                        'montoSus'=>round($venta['montoEfectivo'], 2),
+                        'montoSus'=>round($request->montoEfectivo, 2),
                         'montoBs'=>round($montoBs, 2)
                       ]);
 
                       $nro_detalle++;
 
                       //BANCO
-                      $montoBancoBs = $venta['montoBanco'] * $moneda[0]->monedaVenta;
+                      $montoBancoBs = $request->montoBanco * $moneda[0]->monedaVenta;
                       $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Bancos'");
                       Detalle::create([
                         'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
                         'id_asiento'=>$asiento['id'],
                         'nro_detalle'=>$nro_detalle,
                         'tipo'=>1,//1 = Debe, 2 = Haber
-                        'montoSus'=>round($venta['montoBanco'], 2),
+                        'montoSus'=>round($request->montoBanco, 2),
                         'montoBs'=>round($montoBancoBs, 2)
                       ]);
 
