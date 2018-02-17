@@ -105,6 +105,11 @@ class AsientoController extends Controller {
         }
     }
 
+    function lista_index(Request $request) {
+        $gestion=DB::select('SELECT * FROM gestion where estado=1');
+        return view('modulocontable.asientos.lista_asiento', compact('gestion'));
+    }
+
     function lista_asiento(Request $request) {
         $id_empresa = DB::select("SELECT id,nombre FROM empresa");
         $lista_asiento = DB::select("SELECT asiento.id, asiento.nro_asiento, asiento.glosa, asiento.fecha, asiento.cambio_tipo, categoriacuenta.nombre as categoria, gestion.nombre_gestion from asiento,categoriacuenta,moneda,gestion,users,empresa WHERE asiento.id_categoria=categoriacuenta.id AND asiento.id_gestion=gestion.id and asiento.id_moneda=moneda.id AND asiento.id_gestion=(SELECT MAX(id) as id from gestion) and empresa.id=" . $id_empresa[0]->id . " and users.idEmpleado=asiento.id_usuario  ORDER by asiento.id");

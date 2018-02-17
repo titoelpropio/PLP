@@ -13,56 +13,72 @@
             <div class="row">
                 <div class="col-md-12">
 
-
+@include('alerts.cargando')
 @if(Session::has('message'))
 <div class="alert alert-success alert-dismissible" role="alert">
 	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	{{Session::get('message')}}
 </div>
 @endif
-@include('alerts.request')
-@include('modulocontable.asientos.modal')
-               
-                <button class="btn btn-success" data-toggle='modal' data-target='#myModal'>
-                    <i class="fa fa-plus-square" aria-hidden="true"></i>     
-                </button>
-               
-		<div class="row">	
-		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-			<div class="table-responsive">	
-			<H1>EMPRESA</H1>
-				<table class="table table-striped table-bordered table-condensed table-hover">
-					<thead>
-						<th><center>ID</center></th>
-						<th><center>NUMERO ASIENTO</center></th>
-						<th><center>GLOSA</center></th>
-						<th><center>FECHA</center></th>
-						<th><center>TIPO DE CAMBIO</center></th>
-					
-						<th><center>CATEGORIA</center></th>
-						<th><center>GESTION</center></th>
-						<th><center>OPERACION</center></th>
-					</thead>
-					@foreach($lista_asiento as $l_a)
-					<tr>
-						<td><center>{{ $l_a->id}}</center></td>
-						<td><center>{{ $l_a->nro_asiento}}</center></td>
-						<td><center>{{ $l_a->glosa}}</center></td>
-						<td><center>{{ $l_a->fecha}}</center></td>
-						<td><center>{{ $l_a->cambio_tipo}}</center></td>
-						<td><center>{{ $l_a->categoria}}</center></td>
-						<td><center>{{ $l_a->nombre_gestion}}</center></td>
-						<td><CENTER>
-                                                    <button class="btn btn-primary">ACTUALIZAR</button>  
-						</CENTER></td>
-					</tr>
-					@endforeach
-				</table>
-	
-			</div>
+
+<center><H2><strong>COMPROBANTE</strong></H2></center>
+ 
+<div class="row">
+
+    <div class="col-lg-3 col-md-3 col-sm-5 col-xs-12">
+        <div class="form-group" >
+            <button class="btn btn-primary" onclick="sumas_saldos(1)"> Buscar</button><br>
+            <b>Desde el:</b><input type="date" id="fecha_in" class="form-control">
+            <b>Hasta el:</b><input type="date" id="fecha_fi" class="form-control">
+        </div>    
+    </div>
+    <div class="col-lg-3 col-md-3 col-sm-5 col-xs-12 pull-right">
+        <center>
+        <span style="font-size: 15pt ">Gestion Actual:&nbsp;
+        <?php
+            if (count($gestion)==1) {
+        ?>
+        <span style="font-size:20pt; color: #00A65A;">{{$gestion[0]->nombre_gestion}}</span>
+        </span><br>
+        <input id="fecha_inicial" type="hidden" value="{{$gestion[0]->fecha_inicio}}">
+        <input id="fecha_fin" type="hidden" value="{{$gestion[0]->fecha_fin}}">
+        <div class="form-group" >
+            <button class="btn btn-success" onclick="sumas_saldos(0)">Gestion actual</button>
+        </div>
+        <?php
+            }
+            else {
+               echo "<span style='font-size:20pt; color: #DD4B39;'>Ninguna</span></span><br>";
+            }
+        ?>
+        </center>
+    </div>
+
+	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+		<div class="table-responsive">	
+		
+			<table class="table table-striped table-bordered table-condensed table-hover">
+				<thead>
+					<th><center>N°</center></th>
+					<th><center>TIPO</center></th>
+					<th><center>GLOSA</center></th>
+					<th><center>FECHA</center></th>
+					<th><center>TIPO DE CAMBIO</center></th>
+				
+					<th><center>CATEGORIA</center></th>
+					<th><center>GESTION</center></th>
+					<th><center>OPERACION</center></th>
+				</thead>
+
+				<tbody id="tabla">
+                    
+                </tbody>
+			</table>
 
 		</div>
+
 	</div>
+</div>
 
            </div>
         </div>

@@ -322,9 +322,9 @@
                                         <i class="fa fa-angle-left pull-right"></i>
                                     </a>
                                     <ul  class="treeview-menu">
-                                        <li><a href="{!!URL::to('moneda')!!}"><i class="fa fa-eur"></i>Registrar Moneda</a></li>
-                                        <li><a href="{!!URL::to('gestion')!!}"><i class="fa fa-calendar" aria-hidden="true"></i>Registrar Gestion</a></li>
-                                        <li><a href="{!!URL::to('categoriacuenta')!!}"><i class="fa fa-tasks"></i> Registrar Categoria</a></li>
+                                        <li><a href="{!!URL::to('moneda')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Registrar Moneda</a></li>
+                                        <li><a href="{!!URL::to('gestion')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Registrar Gestion</a></li>
+                                        <li><a href="{!!URL::to('categoriacuenta')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Registrar Categoria</a></li>
                                         <!-- <li><a href="{!!URL::to('ufv')!!}"  > Registrar U.F.V.</a></li>
                                         <li><a href="{!!URL::to('depreciacion')!!}"  >Registrar Depresiacion</a></li> -->
                                     </ul>
@@ -337,9 +337,9 @@
                                         <i class="fa fa-angle-left pull-right"></i>
                                     </a>
                                     <ul id="listacategoriacuenta" class="treeview-menu">
-                                        <li><a href="{!!URL::to('plan_cuenta')!!}"  ><i class="fa fa-sort-amount-asc" aria-hidden="true"></i> Plan de Cuentas</a></li>
-                                        <li><a href="{!!URL::to('cuentaautomatica')!!}"  ><i class="fa fa-bars" aria-hidden="true"></i>Cuentas Automáticas</a></li>
-                                        <li><a href="{!!URL::to('cuenta')!!}"  ><i class="fa fa-bars" aria-hidden="true"></i>Lista de Cuentas</a></li>
+                                        <li><a href="{!!URL::to('plan_cuenta')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Plan de Cuentas</a></li>
+                                        <li><a href="{!!URL::to('cuentaautomatica')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Cuentas Automáticas</a></li>
+                                        <li><a href="{!!URL::to('cuenta')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i></i>Lista de Cuentas</a></li>
                                     </ul>
                                 </li>
 
@@ -350,7 +350,8 @@
                                         <i class="fa fa-angle-left pull-right"></i>
                                     </a>
                                     <ul id="listacategoriacuenta" class="treeview-menu">
-                                        <li><a href="{!!URL::to('comprobante')!!}"  ><i class="fa fa-eur"></i>Registrar Comprobante</a></li>
+                                        <li><a href="{!!URL::to('comprobante')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Registrar Comprobante</a></li>
+                                        <li><a href="{!!URL::to('lista_index')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Lista de Comprobante</a></li>
                                     </ul>
                                 </li>
 

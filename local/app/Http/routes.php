@@ -360,6 +360,7 @@ Route::get('BienesRaicez',function(){
 
 //asiento
 Route::get('asiento/{id}','AsientoController@index');
+Route::get('lista_index','AsientoController@lista_index');
 Route::get('lista_asiento','AsientoController@lista_asiento');
 Route::resource('comprobante','AsientoController');
 
