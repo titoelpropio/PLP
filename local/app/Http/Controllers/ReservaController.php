@@ -112,6 +112,9 @@ var   $puedeModificar=0;
                 $nroAsiento=DB::select("SELECT * from asiento where id_gestion=".$gestion[0]->id." order by id desc limit 1");
                 $nroAs=0;
                 $nro_detalle = 1;
+                date_default_timezone_set('America/La_Paz');
+                ini_set('date.timezone','America/La_Paz');
+                $fecha_transaccion = date("Y-m-d H:i:s");
 
                 if($contAsiento[0]->count > 0)
                 {
@@ -122,6 +125,7 @@ var   $puedeModificar=0;
                   'nro_asiento'=>$nroAs + 1,
                   'tipo'=>1,// 1 = Ingreso, 2 = Egreso, 3 = Traspaso
                   'glosa'=>$request['glosa'],
+                  'fecha_transaccion'=>$fecha_transaccion,
                   'cambio_tipo'=>$moneda[0]->monedaVenta,
                   'estado'=>1,
                   'id_categoria'=>$categoria[0]->id,
