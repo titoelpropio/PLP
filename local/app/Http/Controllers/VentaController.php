@@ -263,7 +263,7 @@ var $texto="";
 
                   $asiento=Asiento::create([
                     'nro_asiento'=>$nroAs + 1,
-                    'tipo'=>1,// 1 = Ingreso, 2 = Egreso, 3 = Traspaso 
+                    'tipo'=>3,// 1 = Ingreso, 2 = Egreso, 3 = Traspaso 
                     'glosa'=>$request['glosa'],
                     'fecha_transaccion'=>$fecha_transaccion,
                     'cambio_tipo'=>$moneda[0]->monedaVenta,
@@ -358,7 +358,7 @@ var $texto="";
                         'idVenta'=>$venta['id'],
                         'idBanco'=>$request['bancoC'],
                         'idCuenta'=>$request['cuentaC'],
-                        'idCuenta'=>$request['fecha'],
+                        'fecha'=>$request['fechaDeposito'],
                         'nroDocumento'=>$request['nroDocumentoC'],
                         'monto'=>$venta['cuotaInicial'],
                       ]);
@@ -384,35 +384,35 @@ var $texto="";
                         'idVenta'=>$venta['id'],
                         'idBanco'=>$request['bancoC'],
                         'idCuenta'=>$request['cuentaC'],
-                        'fecha'=>$request['fecha'],
+                        'fecha'=>$request['fechaDeposito'],
                         'nroDocumento'=>$request['montoBanco'],
-                        'monto'=>$venta['cuotaInicial'],
+                        'monto'=>$request['montoBanco'],
                       ]);
 
                       //---------------------------------- Contabilidad BANCO CAJA------------------------------------------------//
                       //CAJA
-                      $montoBs = $venta['montoEfectivo'] * $moneda[0]->monedaVenta;
+                      $montoBs = $request->montoEfectivo * $moneda[0]->monedaVenta;
                       $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Caja'");
                       Detalle::create([
                         'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
                         'id_asiento'=>$asiento['id'],
                         'nro_detalle'=>$nro_detalle,
                         'tipo'=>1,//1 = Debe, 2 = Haber
-                        'montoSus'=>round($venta['montoEfectivo'], 2),
+                        'montoSus'=>round($request->montoEfectivo, 2),
                         'montoBs'=>round($montoBs, 2)
                       ]);
 
                       $nro_detalle++;
 
                       //BANCO
-                      $montoBancoBs = $venta['montoBanco'] * $moneda[0]->monedaVenta;
+                      $montoBancoBs = $request->montoBanco * $moneda[0]->monedaVenta;
                       $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Bancos'");
                       Detalle::create([
                         'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
                         'id_asiento'=>$asiento['id'],
                         'nro_detalle'=>$nro_detalle,
                         'tipo'=>1,//1 = Debe, 2 = Haber
-                        'montoSus'=>round($venta['montoBanco'], 2),
+                        'montoSus'=>round($request->montoBanco, 2),
                         'montoBs'=>round($montoBancoBs, 2)
                       ]);
 
@@ -454,7 +454,7 @@ var $texto="";
 
                   $asiento=Asiento::create([
                     'nro_asiento'=>$nroAs + 1,
-                    'tipo'=>1,// 1 = Ingreso, 2 = Egreso, 3 = Traspaso
+                    'tipo'=>3,// 1 = Ingreso, 2 = Egreso, 3 = Traspaso
                     'glosa'=>$request['glosa'],
                     'fecha_transaccion'=>$fecha_transaccion,
                     'cambio_tipo'=>$moneda[0]->monedaVenta,
