@@ -65,7 +65,7 @@ class CuentaBancoController extends Controller {
 
     public function show($id) {
 
-      $cuentabanco=DB::select('select cuentabanco.id as idCuenta, banco.nombre, banco.id as idBanco, cuentabanco.tipoCuenta, cuentabanco.moneda, cuentabanco.nroCuenta from CuentaBanco, banco where banco.id=cuentabanco.idBanco and cuentabanco.deleted_at IS NULL and cuentabanco.idBanco='.$id);
+      $cuentabanco=DB::select('select cuentabanco.id as idCuenta, banco.nombre, banco.id as idBanco, cuentabanco.tipoCuenta, cuentabanco.moneda, cuentabanco.nroCuenta from cuentabanco, banco where banco.id=cuentabanco.idBanco and cuentabanco.deleted_at IS NULL and cuentabanco.idBanco='.$id);
       $banco=DB::select('select * from  banco where id='.$id);
 
      return view('cuentabanco.index',compact('cuentabanco','banco'));
