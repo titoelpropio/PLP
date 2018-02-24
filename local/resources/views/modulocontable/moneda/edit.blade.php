@@ -14,16 +14,15 @@
                 <div class="col-md-12">
 
 @include('alerts.request')
-<div class="col-lg-4 col-sm-4 col-md-4 col-xs-4" >
-	{!!Form::model($moneda,['route'=>['moneda.update',$moneda->id],'method'=>'PUT', 'style'=>'display:inline'])!!}
-	
-	@include('modulocontable.moneda.forms.moneda')
-	{!!Form::submit('Actualizar',['class'=>'btn btn-primary'])!!}
-	{!!Form::close()!!}
-
-	{!!Form::open(['route'=>['moneda.destroy',$moneda->id],'method'=>'DELETE', 'style'=>'display:inline'])!!}
-	{!!Form::submit('Eliminar',['class'=>'btn btn-danger'])!!}
-	{!!Form::close()!!}
+<H1>MODIFICAR MONEDA</H1>
+  <div class="col-lg-6 col-sm-6 col-md-6 col-xs-6" >
+  	{!!Form::model($moneda,['route'=>['tipomoneda.update',$moneda->id],'method'=>'PUT', 'style'=>'display:inline'])!!}
+  	@include('modulocontable.moneda.forms.moneda')   
+    <div align="right">
+      {!!Form::submit('ACTUALIZAR',['class'=>'btn btn-primary','id'=>'btn_registrar','onclick'=>'btn_esconder()'])!!}   
+      <a href="{!!URL::to('tipomoneda')!!}" class="btn btn-danger">CANCELAR</a>
+    </div>
+  	{!!Form::close()!!}
 	</div>
 </div>
 

@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 id="titulogalpon" class="modal-title" ></h4>
+                <h4 id="titulogalpon" class="modal-title" >REGISTRAR CUENTA</h4>
             </div>
 
             <div class="modal-body">
@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="form-group">
-                    {!!Form::label('Hijo','Cuenta Hijo:')!!}
+                    {!!Form::label('Hijo','Cuenta Inferior:')!!}
                     {!!Form::hidden('valorhijo','0',['id'=>'valorhijo'])!!}
                     {!!Form::text('hijo','NO',['id'=>'hijo','class'=>'form-control','readonly'])!!}
                 </div>
@@ -37,7 +37,7 @@
                  <div class="form-group" >
                     {!!Form::hidden('idpadre',null,['id'=>'idpadre'])!!}
                     {!!Form::hidden('estadohijo',null,['id'=>'estadohijo'])!!}
-                    {!!Form::label('Padre','Cuenta Padre:')!!}
+                    {!!Form::label('Padre','Cuenta Superior:')!!}
                     {!!Form::text('padre',null,['id'=>'padre','class'=>'form-control','readonly'])!!}
         </div>
 

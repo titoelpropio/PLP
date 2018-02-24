@@ -68,7 +68,7 @@ class CuentaAutomaticaController extends Controller {
         'id_cuenta' => $id
         ]);
         $cuentaautomatica->save();
-        Session::flash('message', 'Consumo Actualizado Correctamente');
+        Session::flash('message', 'ACTUALIZADO CORRECTAMENTE');
         return Redirect::to('/cuentaautomatica');
     }
 

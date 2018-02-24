@@ -52,23 +52,23 @@
 			<td><CENTER>
 			<?php
 			  if ($ges->estado=='0'){
-                echo "<span name='estado".$ges->id."' id='estado".$ges->id."' style='color:red'>Gestion Cerrada</span>";
-              }
-              else{
-                echo "<span name='estado".$ges->id."' id='estado".$ges->id."' style='color:green'>Gestión Actual</span>";
-              }
-            ?>
-            </CENTER></td>
+            echo "<span name='estado".$ges->id."' id='estado".$ges->id."' style='color:red'>Gestion Cerrada</span>";
+        }
+        else{
+          echo "<span name='estado".$ges->id."' id='estado".$ges->id."' style='color:green'>Gestión Actual</span>";
+        }
+      ?>
+      </CENTER>
+      </td>
 			<td><CENTER>
-			
-            <?php 
-              if ($ges->estado==1) {
-            ?>     
-                 {!!link_to_route('gestion.edit', $title = 'Editar', $parameters = $ges->id, $attributes = ['class'=>'btn btn-primary'])!!}
-            <?php 
-                 echo "<button name='btn".$ges->id."' id='btn".$ges->id."' data-status=0 class='btn btn-danger' onclick=cerrar_gestion(".$ges->id.",this)>Cerrar</button>";
-              }
-            ?>
+      <?php 
+          if ($ges->estado==1) {
+      ?>     
+             {!!link_to_route('gestion.edit', $title = 'Editar', $parameters = $ges->id, $attributes = ['class'=>'btn btn-primary'])!!}
+      <?php 
+             echo "<button name='btn".$ges->id."' id='btn".$ges->id."' data-status=0 class='btn btn-danger' onclick=cerrar_gestion(".$ges->id.",this)>Cerrar</button>";
+          }
+      ?>
 			</CENTER></td>
 		</TR>
 		@endforeach 

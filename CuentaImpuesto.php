@@ -11,41 +11,21 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Cuenta extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract {
+class CuentaImpuesto extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract {
 
     use Authenticatable,
         Authorizable,
         CanResetPassword;
 
 use SoftDeletes;
-
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
-    protected $table = 'cuenta';
+ 
+   protected $table = 'cuentaimpuesto';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['id','codigo','id_padre','hijo','nombre','estado','utilizable'];
-
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at'];
-
-    public function scopeName($query, $name) {
-        
-        if ($name!="") {
-                $query->where('nombre', $name);
-        }
-    
-    }
-
+    protected $fillable = ['id','nombre','porcentaje','descripcion','id_cuenta'];
+    protected $dates=['deleted_at'];
 }

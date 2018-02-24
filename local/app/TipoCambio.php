@@ -14,7 +14,6 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 class TipoCambio extends Authenticatable implements AuthenticatableContract,
                                     AuthorizableContract
-                                    
 {
     use  Authorizable, SoftDeletes;
     /**
@@ -22,7 +21,7 @@ class TipoCambio extends Authenticatable implements AuthenticatableContract,
      *
      * @var array
      */
-      protected $table = 'tipocambio';
+    protected $table = 'tipocambio';
     protected $fillable = [
         'monedaVenta', 'monedaCompra'
     ];

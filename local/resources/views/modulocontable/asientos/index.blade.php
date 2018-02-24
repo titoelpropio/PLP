@@ -26,6 +26,13 @@
 {!!Form::open(['route'=>'comprobante.store','method'=>'POST','enctype'=>'multipart/form-data','onsubmit'=>'javascript:return validar()'])!!}
 <div class="row">
     <div class="col-lg-12 col-sm-12 col-xs-12" >
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
+            <div class="form-group">
+                <span style="font-size: 15pt;">Cambio $us. a <span style="font-size:20pt; color: #357CA5;">{{$tipocambio[0]->monedaVenta}}</span> Bs.</span>
+                <input type="hidden" value="{{$tipocambio[0]->monedaVenta}}" name="tipo_cambio" id="tipo_cambio" class="form-control">
+                <input type="hidden" value="{{$tipocambio[0]->id}}" name="id_tipo_cambio" id="id_tipo_cambio"  class="form-control">
+            </div>
+        </div>
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 pull-right">
             <div class="form-group">
                 <center>
@@ -43,18 +50,18 @@
         </div>
     </div>
 
-    <div class="col-lg-3 col-sm-3 col-xs-12" >
+    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
         <div class="form-group" >
             <label for="categoria">Categoria:</label>
             <select class="form-control" name="categoria" id="categoria">
                 @foreach($tipo_asiento as $tipo)
-                <option value="{{$tipo->id}}" <?php if($tipo->id == 2) { echo "selected"; } ?> >{{$tipo->nombre}}</option> 
+                <option value="{{$tipo->id}}" <?php if($tipo->id == 2) { echo "selected"; } ?> >{{$tipo->nombre}}</option>
                 @endforeach
             </select>
         </div>
     </div>
 
-    <div class="col-lg-3 col-sm-3 col-xs-3" >
+    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
         <div class="form-group" >
             <label for="tipo_comprobante">Tipo de Comprobante:</label>
             <select class="form-control" name="tipo_comprobante" id="tipo_comprobante">
@@ -65,11 +72,14 @@
         </div>
     </div>
 
-    <div class="col-lg-2 col-sm-2 col-xs-2" >
-        <div class="form-group">
-            <label for="tipo_cambio">Tipo de Cambio:</label>
-            <input name="tipo_cambio" type="text" value="{{$tipocambio[0]->monedaVenta}}" class="form-control" id="tipo_cambio" onclick="extraerid(this)" style = 'text-align: right;'>
-            <input type="hidden" value="{{$tipocambio[0]->id}}" name="id_tipo_cambio" id="id_tipo_cambio"  class="form-control">
+    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
+        <div class="form-group" >
+            <label for="moneda">Moneda:</label>
+            <select class="form-control" name="moneda" id="moneda">
+                @foreach($moneda as $mon)
+                <option value="{{$mon->id}}" >{{$mon->nombre}}</option> 
+                @endforeach
+            </select>
         </div>
     </div>
 
@@ -87,16 +97,18 @@
                 <th style="vertical-align: middle;"><CENTER>HABER Bs.</CENTER></th>
                 <th style="vertical-align: middle;"><CENTER>DEBE $us.</CENTER></th>
                 <th style="vertical-align: middle;"><CENTER>HABER $us.</CENTER></th>
+                <th style="display: none"><CENTER>ID C.C.</CENTER></th>
+                <th style="vertical-align: middle;"><CENTER>CENTRO DE COSTO</CENTER></th>
                 </thead>
 
                 <tbody id="tabla">
                 <tr id="fila_0">
                     <td style="vertical-align: middle;">
                         <CENTER>
-                            <a href="#" name="agregar_0" id="agregar_0" data-status=0 class='btn btn-success' onclick="lista_cuentas()">
+                            <a href="#" name="agregar_0" id="agregar_0" data-status=0 class='btn btn-success' onclick="lista_cuentas()" title='Agregar cuenta'>
                                 <i class="fa fa-plus" aria-hidden="true"></i>
                             </a>
-                            <a href="#" name="quitar_0" id="quitar_0" data-status=0 class='btn btn-danger' onclick="quitar_fila(0)" style="display: none">
+                            <a href="#" name="quitar_0" id="quitar_0" data-status=0 class='btn btn-danger' onclick="quitar_fila(0)" style="display: none" title='Eliminar'>
                                 <i class="fa fa-trash-o" aria-hidden="true"></i>
                             </a>
                         </CENTER>
@@ -125,6 +137,12 @@
                     <td onclick="bloquear_desbloquear(0,'haber_sus')">
                         <input type="hidden" name="haber_sus[]" id="haber_sus_0" class="form-control" style="border:none; text-align: right;" onchange="calcular(0,'haber_sus')" value="0.00" readonly>
                     </td>
+                    <td style="display: none">
+                        <input type="hidden" name="id_centro_costo[]" id="id_centro_costo_0" class="form-control" style="border:none;" readonly>
+                    </td>
+                    <td>
+                        <input type="hidden" name="centro_costo[]" id="centro_costo_0" class="form-control" onclick="lista_centro_costo(0)" style="border:none;" readonly>
+                    </td>
                 </tr>
                 </tbody>
 
@@ -141,6 +159,9 @@
                 </th>
                 <th>
                     <input type="text" name="total_haber_sus" id="total_haber_sus" class="form-control" style="border:none; text-align: right;" value="0.00" readonly>
+                </th>
+                <th>
+                    
                 </th>
                 </tfoot>
             </table>

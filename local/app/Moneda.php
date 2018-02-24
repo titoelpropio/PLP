@@ -23,7 +23,7 @@ class Moneda extends Authenticatable implements AuthenticatableContract,
      * @var array
      */
       protected $table = 'moneda';
-      protected $fillable = ['id','tipo_cambio','fecha'];
+      protected $fillable = ['id','nombre','abreviatura'];
 
     /**
      * The attributes that should be hidden for arrays.

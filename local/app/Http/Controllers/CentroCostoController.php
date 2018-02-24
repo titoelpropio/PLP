@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Cuenta;
+use App\CentroCosto;
 use App\Galpon;
 use App\Silos;
 use App\Http\Requests;
@@ -12,7 +12,7 @@ use Session;
 use Redirect;
 use DB;
 
-class CuentaController extends Controller {
+class CentroCostoController extends Controller {
 
 
     public function __construct(Request $request) {
@@ -22,15 +22,15 @@ class CuentaController extends Controller {
     }
     function index(Request $request) {
 
-        if ($request->cuenta == ""){
-           $cuenta= DB::select("select c1.*, (select nombre from cuenta c2 where c2.id = c1.id_padre) as nombre_padre from cuenta c1 order by c1.codigo");
+        if ($request->centrocosto == ""){
+           $centrocosto= DB::select("select c1.*, (select nombre from centrocosto c2 where c2.id = c1.id_padre) as nombre_padre from centrocosto c1 order by c1.codigo");
         }
         else{
-           $cuenta= DB::select("select c1.*, (select nombre from cuenta c2 where c2.id = c1.id_padre) as nombre_padre from cuenta c1 where c1.nombre like '".$request->cuenta."%' order by c1.codigo");
+           $centrocosto= DB::select("select c1.*, (select nombre from centrocosto c2 where c2.id = c1.id_padre) as nombre_padre from centrocosto c1 where c1.nombre like '".$request->centrocosto."%' order by c1.codigo");
         }
         
        
-        return view('modulocontable.cuenta.lista_cuentas',  compact('cuenta'));
+        return view('modulocontable.centrocosto.lista_centro_costo',  compact('centrocosto'));
 
     }
 
@@ -48,7 +48,7 @@ class CuentaController extends Controller {
 
            DB::beginTransaction();
            
-             Cuenta::create([
+             CentroCosto::create([
                  'codigo'=>$request->codigo,
                  'id_padre'=>$request->idpadre,
                  'hijo'=>$request->valorhijo,
@@ -57,16 +57,16 @@ class CuentaController extends Controller {
                  'estado'=>$request->estado
                  ]);
              if($request->estadohijo == "0"){
-                $cuenta = Cuenta::find($request->idpadre);
-                $cuenta->fill([
+                $centrocosto = CentroCosto::find($request->idpadre);
+                $centrocosto->fill([
                     'hijo'=>"1",
                     'utilizable'=>"0"
                 ]);
-                $cuenta->save();
+                $centrocosto->save();
              }
               DB::commit();
                  Session::flash('message','GUARDADO CORRECTAMENTE');
-        return Redirect::to('/plan_cuenta');
+        return Redirect::to('/centro_costo');
         } catch (Exception $exc) {
              DB::rollback();
             echo $exc->getTraceAsString();
@@ -98,25 +98,25 @@ class CuentaController extends Controller {
         Session::flash('message', 'Consumo Eliminado Correctamente');
         return Redirect::to('/consumo');
     }
-     public function  plan_cuenta(){
+     public function  centro_costo(){
         $Elementos = array('Hijo' => array(),'Padre' => array());
-        $cuenta= DB::select("select*from cuenta order by id_padre,codigo");
-        foreach ($cuenta as $items) 
+        $centrocosto= DB::select("select*from centrocosto order by id_padre,codigo");
+        foreach ($centrocosto as $items) 
         {
             $Elementos['Hijo'][$items->id] = $items;
             $Elementos['Padre'][$items->id_padre][] = $items->id;
         }
-        return view('modulocontable.cuenta.index', compact('Elementos')); 
+        return view('modulocontable.centrocosto.index', compact('Elementos'));
     }
 
-    public function  buscarcuenta($id){
-        $cuenta= DB::select("select*from cuenta where id='".$id."'");
-        $codigo= DB::select("select codigo from cuenta where id_padre='".$id."' order by codigo desc limit 1");
-        return response()->json(['cuenta'=>$cuenta,'codigo'=>$codigo]);
+    public function  buscarcentrocosto($id){
+        $centrocosto= DB::select("select*from centrocosto where id='".$id."'");
+        $codigo= DB::select("select codigo from centrocosto where id_padre='".$id."' order by codigo desc limit 1");
+        return response()->json(['centrocosto'=>$centrocosto,'codigo'=>$codigo]);
     }
   
-    public function  buscarultimacuenta(){
-        $cuenta= DB::select("select*from cuenta where id_padre='0' order by codigo desc limit 1");
-        return response()->json($cuenta);
+    public function  buscarultimocentrocosto(){
+        $centrocosto= DB::select("select*from centrocosto where id_padre='0' order by codigo desc limit 1");
+        return response()->json($centrocosto);
     }
 }

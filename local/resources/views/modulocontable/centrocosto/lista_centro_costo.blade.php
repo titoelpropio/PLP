@@ -22,19 +22,19 @@
 @endif
 @include('alerts.request')
 @include('alerts.cargando')
-@include('modulocontable.cuenta.modal')
+@include('modulocontable.centrocosto.modal')
 
 
 
 <div class="row">	
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="table-responsive">
-            <H1>LISTA CUENTA</H1>
-            {!! Form::open(['route'=> 'cuenta.index','method'=>'GET','class'=>'navbar-from navbar-left pull-right','role' =>'search', 'style'=>'padding-bottom: 6px'])!!}
+            <H1>LISTA CENTRO DE COSTO</H1>
+            {!! Form::open(['route'=> 'centrocosto.index','method'=>'GET','class'=>'navbar-from navbar-left pull-right','role' =>'search', 'style'=>'padding-bottom: 6px'])!!}
 
               <div class="col-lg-4">
                 <div class="input-group">
-                  {!!Form::text('cuenta',null,['class'=>'form-control','placeholder'=>'Nombre'])!!}
+                  {!!Form::text('centrocosto',null,['class'=>'form-control','placeholder'=>'Nombre'])!!}
                   <span class="input-group-btn">
                     <button class="btn btn-default " type="submit" > 
                         <i class="fa fa-search" aria-hidden="true"></i>
@@ -49,14 +49,14 @@
                 <thead>
                 <th><CENTER>NOMBRE</CENTER></th>
                 <th><CENTER>CÓDIGO</CENTER></th>
-                <th><CENTER>CUENTA INFERIOR</CENTER></th>
-                <th><CENTER>CUENTA SUPERIOR</CENTER></th>
+                <th><CENTER>CENTRO COSTO INFERIOR</CENTER></th>
+                <th><CENTER>CENTRO COSTO SUPERIOR</CENTER></th>
                 <th><CENTER>ESTADO</CENTER></th>
                 <th><CENTER>UTILIZABLE</CENTER></th>
                 <th><CENTER>OPCIÓN</CENTER></th>
 
                 </thead>
-                @foreach($cuenta as $result)
+                @foreach($centrocosto as $result)
                 <TR>
                 <td><CENTER>{{ $result->nombre}}</CENTER></td>
                 <td>{{ $result->codigo}}</td>

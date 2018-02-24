@@ -309,7 +309,7 @@
                         </li>
                             <li class="treeview">
                             <a href="#">
-                                <i class="fa fa-building-o" aria-hidden="true"></i>
+                                <i class="fa fa-book" aria-hidden="true"></i>
                                 <span>CONTABILIDAD</span>
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
@@ -317,14 +317,15 @@
                             <ul class="treeview-menu">
                                 <li class="treeview">
                                     <a href="#">
-                                       <i class="fa fa-building" aria-hidden="true"></i></i>
+                                        <i class="fa fa-circle-o" aria-hidden="true"></i>
                                         <span>EMPRESA</span>
                                         <i class="fa fa-angle-left pull-right"></i>
                                     </a>
                                     <ul  class="treeview-menu">
-                                        <li><a href="{!!URL::to('moneda')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Registrar Moneda</a></li>
-                                        <li><a href="{!!URL::to('gestion')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Registrar Gestion</a></li>
-                                        <li><a href="{!!URL::to('categoriacuenta')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Registrar Categoria</a></li>
+                                        <li><a href="{!!URL::to('gestion')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Gestión</a></li>
+                                        <li><a href="{!!URL::to('TipoCambio')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Tipo de cambio</a></li>
+                                        <li><a href="{!!URL::to('tipomoneda')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Moneda</a></li>
+                                        <li><a href="{!!URL::to('categoriacuenta')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Categoria</a></li>
                                         <!-- <li><a href="{!!URL::to('ufv')!!}"  > Registrar U.F.V.</a></li>
                                         <li><a href="{!!URL::to('depreciacion')!!}"  >Registrar Depresiacion</a></li> -->
                                     </ul>
@@ -332,32 +333,47 @@
 
                                 <li class="treeview">
                                     <a href="#">
-                                        <i class="fa-calculator"></i>
+                                        <i class="fa fa-circle-o" aria-hidden="true"></i>
                                         <span>CUENTAS</span>
                                         <i class="fa fa-angle-left pull-right"></i>
                                     </a>
                                     <ul id="listacategoriacuenta" class="treeview-menu">
                                         <li><a href="{!!URL::to('plan_cuenta')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Plan de Cuentas</a></li>
-                                        <li><a href="{!!URL::to('cuentaautomatica')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Cuentas Automáticas</a></li>
                                         <li><a href="{!!URL::to('cuenta')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i></i>Lista de Cuentas</a></li>
+                                        <li><a href="{!!URL::to('cuentaautomatica')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Cuentas Automáticas</a></li>
+                                        <li><a href="{!!URL::to('cuentagrupo')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Gestionar Grupos</a></li>
+                                        <li><a href="{!!URL::to('cuentaimpuesto')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Cuentas de Impuestos</a></li>
                                     </ul>
                                 </li>
 
                                 <li class="treeview">
                                     <a href="#">
-                                        <i class="fa-calculator"></i>
+                                        <i class="fa fa-circle-o" aria-hidden="true"></i>
+                                        <span>CENTRO DE COSTO</span>
+                                        <i class="fa fa-angle-left pull-right"></i>
+                                    </a>
+                                    <ul id="listacategoriacuenta" class="treeview-menu">
+                                        <li><a href="{!!URL::to('centro_costo')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Gestionar</a></li>
+                                        <li><a href="{!!URL::to('centrocosto')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i></i>Lista</a></li>
+                                    </ul>
+                                </li>
+
+                                <li class="treeview">
+                                    <a href="#">
+                                        <i class="fa fa-circle-o" aria-hidden="true"></i>
                                         <span>COMPROBANTES</span>
                                         <i class="fa fa-angle-left pull-right"></i>
                                     </a>
                                     <ul id="listacategoriacuenta" class="treeview-menu">
-                                        <li><a href="{!!URL::to('comprobante')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Registrar Comprobante</a></li>
-                                        <li><a href="{!!URL::to('lista_index')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Lista de Comprobante</a></li>
+                                        <li><a href="{!!URL::to('comprobante')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Registrar</a></li>
+                                        <li><a href="{!!URL::to('lista_index')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Lista</a></li>
+                                        <li><a href="{!!URL::to('lista_anulado_index')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Anulado</a></li>
                                     </ul>
                                 </li>
 
                                 <li class="treeview">
                                     <a href="#">
-                                        <i class="fa-calculator"></i>
+                                        <i class="fa fa-circle-o" aria-hidden="true"></i>
                                         <span>REPORTES</span>
                                         <i class="fa fa-angle-left pull-right"></i>
                                     </a>

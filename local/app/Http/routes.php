@@ -96,9 +96,6 @@ Route::resource('libro_diario','AsientoController@libro_diario');
 Route::get('reporte_libro_diario/{fecha1}/{fecha2}','AsientoController@reporte_libro_diario');
 Route::get('reporte_libro_mayor/{fecha1}/{fecha2}','AsientoController@reporte_libro_mayor');
 
-//moneda
-Route::resource('moneda','MonedaController');
-
 //login
 Route::resource('/','LoginController');
 Route::resource('login','LoginController@store');
@@ -361,24 +358,44 @@ Route::get('BienesRaicez',function(){
 //asiento
 Route::get('asiento/{id}','AsientoController@index');
 Route::get('lista_index','AsientoController@lista_index');
-Route::get('lista_asiento','AsientoController@lista_asiento');
+Route::get('lista_asiento/{fecha1}/{fecha2}','AsientoController@lista_asiento');
+Route::get('detalle_asiento/{id}','AsientoController@detalle_asiento');
+Route::post('anular_asiento', ['as' => 'anular_asiento', 'uses'=>'AsientoController@anular_asiento']);
 Route::resource('comprobante','AsientoController');
+Route::get('lista_anulado_index','AsientoController@lista_anulado_index');
+Route::get('lista_asiento_anulado/{fecha1}/{fecha2}','AsientoController@lista_asiento_anulado');
+Route::get('detalle_asiento_anulado/{id}','AsientoController@detalle_asiento_anulado');
 
-//categoriacuenta
+//categoria cuenta
 Route::resource('categoriacuenta','CategoriaCuentaController');
 Route::get('listacategoriacuenta','CategoriaCuentaController@listacategoria');
 
 //cuenta
 Route::resource('cuenta','CuentaController');
 Route::resource('plan_cuenta','CuentaController@plan_cuenta');
-Route::get('extraercodigo','CuentaController@extraercodigo');
 Route::get('buscarcuenta/{id}','CuentaController@buscarcuenta');
 Route::get('buscarultimacuenta','CuentaController@buscarultimacuenta');
 
-//cuentaautomatica
+//centro de costo
+Route::resource('centrocosto','CentroCostoController');
+Route::resource('centro_costo','CentroCostoController@centro_costo');
+Route::get('buscarcentrocosto/{id}','CentroCostoController@buscarcentrocosto');
+Route::get('buscarultimocentrocosto','CentroCostoController@buscarultimocentrocosto');
+
+//cuenta automatica
 Route::resource('cuentaautomatica','CuentaAutomaticaController');
 Route::get('guardar_cuenta_automatica/{id}/{nombre}','CuentaAutomaticaController@store');
 Route::get('modificar_cuenta_automatica/{id}/{nombre}','CuentaAutomaticaController@update');
+
+//cuenta grupo
+Route::resource('cuentagrupo','CuentaGrupoController');
+Route::get('guardar_cuenta_grupo','CuentaGrupoController@store');
+Route::get('modificar_cuenta_grupo','CuentaGrupoController@update');
+
+//cuenta impuesto
+Route::resource('cuentaimpuesto','CuentaImpuestoController');
+Route::get('guardar_cuenta_impuesto','CuentaImpuestoController@store');
+Route::get('modificar_cuenta_impuesto','CuentaImpuestoController@update');
 
 //depreciasiones
 Route::resource('depreciacion','DepreciacionController');
@@ -390,23 +407,22 @@ Route::resource('detalle','Detallecontroller');
 Route::resource('gestion','GestionController');
 Route::post('cerrar_gestion', ['as' => 'cerrar_gestion', 'uses'=>'GestionController@cerrar_gestion']);
 
-
 //moneda
-Route::resource('moneda','TipoCambioController');
+Route::resource('tipomoneda','MonedaController');
 
-//reportes de los balances
-Route::get('reporte_libro_diario/{fecha1}/{fecha2}','ReportesController@reporte_libro_diario');
-Route::get('reporte_libro_mayor/{fecha1}/{fecha2}','ReportesController@reporte_libro_mayor');
-Route::get('reporte_sumas_saldos/{fecha1}/{fecha2}','ReportesController@reporte_sumas_saldos');
-Route::get('reporte_estado_resultado/{fecha1}/{fecha2}','ReportesController@reporte_estado_resultado');
-Route::get('reporte_balance_general/{fecha1}/{fecha2}','ReportesController@reporte_balance_general');
-
-//formularios reportes
+//formularios de reportes
 Route::resource('libro_diario','ReportesController@libro_diario');
 Route::resource('libro_mayor','ReportesController@libro_mayor');
 Route::resource('sumas_saldos','ReportesController@sumas_saldos');
 Route::resource('estado_resultado','ReportesController@estado_resultado');
 Route::resource('balance_general','ReportesController@balance_general');
+
+//reportes
+Route::get('reporte_libro_diario/{fecha1}/{fecha2}','ReportesController@reporte_libro_diario');
+Route::get('reporte_libro_mayor/{fecha1}/{fecha2}','ReportesController@reporte_libro_mayor');
+Route::get('reporte_sumas_saldos/{fecha1}/{fecha2}','ReportesController@reporte_sumas_saldos');
+Route::get('reporte_estado_resultado/{fecha1}/{fecha2}','ReportesController@reporte_estado_resultado');
+Route::get('reporte_balance_general/{fecha1}/{fecha2}','ReportesController@reporte_balance_general');
 
 //ufv
 Route::resource('ufv','UfvController');

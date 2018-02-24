@@ -107,7 +107,7 @@ var   $puedeModificar=0;
                 //---------------------------------- Contabilidad ----------------------------------------------------------//
                 $categoria = DB::select("SELECT * FROM categoriacuenta WHERE nombre='Asiento Diario'");
                 $gestion = DB::select("SELECT * FROM gestion WHERE estado=1");
-                $moneda=DB::select("SELECT * FROM tipocambio where deleted_at IS NULL");
+                $tipocambio=DB::select("SELECT * FROM tipocambio where deleted_at IS NULL");
                 $contAsiento=DB::select("SELECT count(*) as count from asiento where id_gestion=".$gestion[0]->id." order by id desc limit 1");
                 $nroAsiento=DB::select("SELECT * from asiento where id_gestion=".$gestion[0]->id." order by id desc limit 1");
                 $nroAs=0;
@@ -126,11 +126,11 @@ var   $puedeModificar=0;
                   'tipo'=>1,// 1 = Ingreso, 2 = Egreso, 3 = Traspaso
                   'glosa'=>$request['glosa'],
                   'fecha_transaccion'=>$fecha_transaccion,
-                  'cambio_tipo'=>$moneda[0]->monedaVenta,
+                  'cambio_tipo'=>$tipocambio[0]->monedaVenta,
                   'estado'=>1,
                   'id_categoria'=>$categoria[0]->id,
                   'id_gestion'=>$gestion[0]->id,
-                  'id_moneda'=>$moneda[0]->id,
+                  'id_tipo_cambio'=>$tipocambio[0]->id,
                   'id_usuario'=>Session::get('idEmpleado')
                 ]);
                 //----------------------------------- fin Contabilidad -----------------------------------------------------//

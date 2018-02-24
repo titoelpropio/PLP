@@ -20,6 +20,7 @@ $(document).ready(function () {
 var Tamaño = 1;
 var idcuenta = ["0"];
 var onclick = [false];
+var indice = 0;
 
 var debebs = ["0.00"];
 var haberbs = ["0.00"];
@@ -55,6 +56,11 @@ function lista_cuentas() {
    $("#myModal").modal('show');
 }
 
+function lista_centro_costo(index) {
+   $("#myModal_CC").modal('show');
+   indice = index;
+}
+
 function agregar_datos(index)
 {
    var id = $("#idcuenta_"+index).html();
@@ -72,6 +78,7 @@ function agregar_datos(index)
 
        $("#codigo_"+Fila).attr('type','text');
        $("#cuenta_"+Fila).attr('type','text');
+       $("#centro_costo_"+Fila).attr('type','text');
        $("#agregar_"+Fila).css('display','none');
        $("#quitar_"+Fila).css('display','inline');
        $('#myModal').modal('hide');
@@ -80,10 +87,10 @@ function agregar_datos(index)
        <tr id="fila_'+Tamaño+'">\n\
             <td style="vertical-align: middle;">\n\
                 <CENTER>\n\
-                    <a href="#" name="agregar_'+Tamaño+'" id="agregar_'+Tamaño+'" data-status=0 class="btn btn-success" onclick="lista_cuentas()">\n\
+                    <a href="#" name="agregar_'+Tamaño+'" id="agregar_'+Tamaño+'" data-status=0 class="btn btn-success" onclick="lista_cuentas()" title="Agregar cuenta">\n\
                         <i class="fa fa-plus" aria-hidden="true"></i>\n\
                     </a>\n\
-                    <a href="#" name="quitar_'+Tamaño+'" id="quitar_'+Tamaño+'" data-status=0 class="btn btn-danger" onclick="quitar_fila('+Tamaño+')" style="display: none">\n\
+                    <a href="#" name="quitar_'+Tamaño+'" id="quitar_'+Tamaño+'" data-status=0 class="btn btn-danger" onclick="quitar_fila('+Tamaño+')" style="display: none" title="Eliminar">\n\
                         <i class="fa fa-trash-o" aria-hidden="true"></i>\n\
                     </a>\n\
                 </CENTER>\n\
@@ -112,6 +119,12 @@ function agregar_datos(index)
             <td onclick="bloquear_desbloquear('+Tamaño+','+"'"+'haber_sus'+"'"+')">\n\
                 <input type="hidden" name="haber_sus[]" id="haber_sus_'+Tamaño+'" class="form-control" style="border:none; text-align: right;" onchange="calcular('+Tamaño+','+"'"+'haber_sus'+"'"+')" value="0.00" readonly>\n\
             </td>\n\
+            <td style="display: none">\n\
+                <input type="hidden" name="id_centro_costo[]" id="id_centro_costo_'+Tamaño+'" class="form-control" style="border:none;" readonly>\n\
+            </td>\n\
+            <td>\n\
+                <input type="hidden" name="centro_costo[]" id="centro_costo_'+Tamaño+'" class="form-control" onclick="lista_centro_costo('+Tamaño+')" style="border:none;" readonly>\n\
+            </td>\n\
         </tr>';
         $('#tabla').append(fila);
         idcuenta[Tamaño] = "0";
@@ -127,6 +140,13 @@ function agregar_datos(index)
    {
       toastr.error("LA CUENTA YA ESTA EN USO");
    }
+}
+
+function agregar_centro_costo(index)
+{
+    $("#id_centro_costo_"+indice).val($("#idcentrocosto_"+index).html());
+    $("#centro_costo_"+indice).val($("#nombrecentrocosto_"+index).html());
+    $('#myModal_CC').modal('hide');
 }
 
 function quitar_fila(index)
@@ -189,12 +209,12 @@ function calcular(index,valor)
         haberbs[index] = "0.00";
         habersus[index] = "0.00";
 
-        $("#total_debe_bs").val(suma_debebs());
-        $("#total_debe_sus").val(suma_debesus());
+        $("#total_debe_bs").val(suma_debebs().toFixed(2));
+        $("#total_debe_sus").val(suma_debesus().toFixed(2));
 
         
-        $("#total_haber_bs").val(suma_haberbs());
-        $("#total_haber_sus").val(suma_habersus());
+        $("#total_haber_bs").val(suma_haberbs().toFixed(2));
+        $("#total_haber_sus").val(suma_habersus().toFixed(2));
         
     }
     else if (valor == "debe_sus")
@@ -206,11 +226,11 @@ function calcular(index,valor)
         habersus[index] = "0.00";
         haberbs[index] = "0.00";
 
-        $("#total_debe_bs").val(suma_debebs());
-        $("#total_debe_sus").val(suma_debesus());
+        $("#total_debe_bs").val(suma_debebs().toFixed(2));
+        $("#total_debe_sus").val(suma_debesus().toFixed(2));
         
-        $("#total_haber_bs").val(suma_haberbs());
-        $("#total_haber_sus").val(suma_habersus());
+        $("#total_haber_bs").val(suma_haberbs().toFixed(2));
+        $("#total_haber_sus").val(suma_habersus().toFixed(2));
     }
     else if (valor == "haber_bs")
     {
@@ -221,11 +241,11 @@ function calcular(index,valor)
         debebs[index] = "0.00";
         debesus[index] = "0.00";
 
-        $("#total_haber_bs").val(suma_haberbs());
-        $("#total_haber_sus").val(suma_habersus());
+        $("#total_haber_bs").val(suma_haberbs().toFixed(2));
+        $("#total_haber_sus").val(suma_habersus().toFixed(2));
         
-        $("#total_debe_bs").val(suma_debebs());
-        $("#total_debe_sus").val(suma_debesus());
+        $("#total_debe_bs").val(suma_debebs().toFixed(2));
+        $("#total_debe_sus").val(suma_debesus().toFixed(2));
     }
     else if (valor == "haber_sus")
     {
@@ -236,17 +256,17 @@ function calcular(index,valor)
         debesus[index] = "0.00";
         debebs[index] = "0.00";
 
-        $("#total_haber_bs").val(suma_haberbs());
-        $("#total_haber_sus").val(suma_habersus());
+        $("#total_haber_bs").val(suma_haberbs().toFixed(2));
+        $("#total_haber_sus").val(suma_habersus().toFixed(2));
         
-        $("#total_debe_bs").val(suma_debebs());
-        $("#total_debe_sus").val(suma_debesus());
+        $("#total_debe_bs").val(suma_debebs().toFixed(2));
+        $("#total_debe_sus").val(suma_debesus().toFixed(2));
     }
 }
 
 function suma_debebs()
 {
-   var suma = 0;
+   var suma = 0.00;
    for (var i = 0; i < Tamaño; i++) {
        suma = suma + parseFloat(debebs[i]);
    }
@@ -255,7 +275,7 @@ function suma_debebs()
 
 function suma_debesus()
 {
-    var suma = 0;
+    var suma = 0.00;
    for (var i = 0; i < Tamaño; i++) {
        suma = suma + parseFloat(debesus[i]);
    }
@@ -264,7 +284,7 @@ function suma_debesus()
 
 function suma_haberbs()
 {
-    var suma = 0;
+    var suma = 0.00;
    for (var i = 0; i < Tamaño; i++) {
        suma = suma + parseFloat(haberbs[i]);
    }
@@ -273,7 +293,7 @@ function suma_haberbs()
 
 function suma_habersus()
 {
-    var suma = 0;
+    var suma = 0.00;
    for (var i = 0; i < Tamaño; i++) {
        suma = suma + parseFloat(habersus[i]);
    }

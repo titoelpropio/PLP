@@ -11,7 +11,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Cuenta extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract {
+class CentroCosto extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract {
 
     use Authenticatable,
         Authorizable,
@@ -24,7 +24,7 @@ use SoftDeletes;
      *
      * @var string
      */
-    protected $table = 'cuenta';
+    protected $table = 'centrocosto';
 
     /**
      * The attributes that are mass assignable.
@@ -39,13 +39,5 @@ use SoftDeletes;
      * @var array
      */
     protected $dates = ['deleted_at'];
-
-    public function scopeName($query, $name) {
-        
-        if ($name!="") {
-                $query->where('nombre', $name);
-        }
-    
-    }
 
 }

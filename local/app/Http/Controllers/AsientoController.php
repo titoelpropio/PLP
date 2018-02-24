@@ -29,11 +29,13 @@ class AsientoController extends Controller {
         $gestion=DB::select('SELECT * FROM gestion where estado=1');
         $tipocambio=DB::select('SELECT * FROM tipocambio where deleted_at IS NULL');
         $tipo_asiento = DB::select('select * from categoriacuenta');
+        $centrocosto = DB::select('SELECT * FROM centrocosto WHERE estado=1 and utilizable=1 and deleted_at IS NULL');
+        $moneda=DB::select('SELECT * FROM moneda where deleted_at IS NULL');
 
         $verificargestion = DB::select("SELECT count(*) as count FROM gestion WHERE estado=1");
 
         if ($verificargestion[0]->count == 1 ) {
-           return view('modulocontable.asientos.index', compact('cuenta', 'gestion', 'tipocambio', 'tipo_asiento'));
+           return view('modulocontable.asientos.index', compact('cuenta', 'gestion', 'tipocambio', 'tipo_asiento', 'centrocosto', 'moneda'));
         }
         else if ($verificargestion[0]->count != 1 ) {
            Session::flash('error-gestion','DEBE APERTURAR UNA GESTIÓN PARA PODER AGREGAR COMPROBANTES');
@@ -61,11 +63,12 @@ class AsientoController extends Controller {
                 'glosa'=>$request->glosa,
                 'fecha_transaccion'=>$request->fecha_transaccion." ".$hora,
                 'cambio_tipo'=>$request->tipo_cambio,
-                'estado'=>1,
+                'estado'=>1,// 0 = ANULADO, 1 = ACTIVO
                 'id_categoria'=>$request->categoria,
                 'id_gestion'=>$request->id_gestion,
-                'id_moneda'=>$request->id_tipo_cambio,
-                'id_usuario'=>Session::get('idEmpleado')
+                'id_tipo_cambio'=>$request->id_tipo_cambio,
+                'id_usuario'=>Session::get('idEmpleado'),
+                'id_moneda'=>$request->moneda
             ]);
             $nro_detalle = 1;
             $tamaño = count($request['id']);
@@ -75,6 +78,7 @@ class AsientoController extends Controller {
             $haber_bs = $request['haber_bs'];
             $debe_sus = $request['debe_sus'];
             $haber_sus = $request['haber_sus'];
+            $id_centro_costo = $request['id_centro_costo'];
             for ($i=0; $i < $tamaño-1; $i++) {
                 if ($tipo_fila[$i] == 1) {
                      $tipo = $tipo_fila[$i];
@@ -86,14 +90,27 @@ class AsientoController extends Controller {
                      $montoSus = $haber_sus[$i];
                      $montoBs = $haber_bs[$i];
                 }
-                Detalle::create([
-                    'id_cuenta'=>$id_cuenta[$i],
-                    'id_asiento'=>$asiento['id'],
-                    'nro_detalle'=>$nro_detalle,
-                    'tipo'=>$tipo,//1 = Debe, 2 = Haber
-                    'montoSus'=> $montoSus,
-                    'montoBs'=> $montoBs
-                ]);
+                if ($id_centro_costo[$i] == "") {
+                    Detalle::create([
+                        'id_cuenta'=>$id_cuenta[$i],
+                        'id_asiento'=>$asiento['id'],
+                        'nro_detalle'=>$nro_detalle,
+                        'tipo'=>$tipo,//1 = Debe, 2 = Haber
+                        'montoSus'=> $montoSus,
+                        'montoBs'=> $montoBs
+                    ]);
+                }
+                else if ($id_centro_costo[$i] != "") {
+                    Detalle::create([
+                        'id_cuenta'=>$id_cuenta[$i],
+                        'id_asiento'=>$asiento['id'],
+                        'nro_detalle'=>$nro_detalle,
+                        'tipo'=>$tipo,//1 = Debe, 2 = Haber
+                        'montoSus'=> $montoSus,
+                        'montoBs'=> $montoBs,
+                        'id_centro_costo'=> $id_centro_costo[$i]
+                    ]);
+                }
                 $nro_detalle++;
             }
             DB::commit();
@@ -110,11 +127,57 @@ class AsientoController extends Controller {
         return view('modulocontable.asientos.lista_asiento', compact('gestion'));
     }
 
-    function lista_asiento(Request $request) {
-        $id_empresa = DB::select("SELECT id,nombre FROM empresa");
-        $lista_asiento = DB::select("SELECT asiento.id, asiento.nro_asiento, asiento.glosa, asiento.fecha, asiento.cambio_tipo, categoriacuenta.nombre as categoria, gestion.nombre_gestion from asiento,categoriacuenta,moneda,gestion,users,empresa WHERE asiento.id_categoria=categoriacuenta.id AND asiento.id_gestion=gestion.id and asiento.id_moneda=moneda.id AND asiento.id_gestion=(SELECT MAX(id) as id from gestion) and empresa.id=" . $id_empresa[0]->id . " and users.idEmpleado=asiento.id_usuario  ORDER by asiento.id");
-        $gestion = DB::select("SELECT *from gestion ORDER by id");
-        return view('modulocontable.asientos.lista_asiento', compact('lista_asiento', 'gestion'));
+    function lista_asiento($fecha1, $fecha2, Request $request) {
+        $resultado = DB::select('SELECT asiento.*, categoriacuenta.nombre as categoria, gestion.nombre_gestion as gestion from asiento, categoriacuenta, gestion where asiento.id_categoria = categoriacuenta.id and asiento.id_gestion = gestion.id and asiento.estado = 1 and fecha_transaccion BETWEEN "'.$fecha1.'" AND "'.$fecha2.'" ORDER BY asiento.fecha_transaccion, asiento.nro_asiento');
+        
+        return response()->json($resultado);
     }
 
+    function detalle_asiento($id) {
+        $resultado = DB::select('SELECT detalle.*,cuenta.codigo, cuenta.nombre as cuenta, (SELECT nombre from centrocosto where centrocosto.id = detalle.id_centro_costo) as centro_costo from detalle, cuenta where detalle.id_cuenta = cuenta.id and detalle.id_asiento = "'.$id.'" ORDER BY detalle.nro_detalle');
+        
+        return response()->json($resultado);
+    }
+
+    function anular_asiento(Request $request) {
+
+        try {
+            DB::beginTransaction();
+            $asiento = Asiento::find($request['id_anular_asiento']);
+            $asiento->fill([
+                'estado' => 0,
+                'motivo_anulado' => $request['motivo_anulado']
+            ]);
+            $asiento->save();
+            $detalle = DB::select('SELECT * FROM detalle WHERE id_asiento = "'.$request['id_anular_asiento'].'"');
+            foreach ($detalle as $fila) {
+                $eliminar = Detalle::find($fila->id);
+                $eliminar->delete();
+            }
+            $asiento->delete();
+            DB::commit();
+            Session::flash('message','ANULADO CORRECTAMENTE');
+            return Redirect::to('lista_index');
+        } catch (Exception $exc) {
+             DB::rollback();
+            echo $exc->getTraceAsString();
+        }
+    }
+
+    function lista_anulado_index(Request $request) {
+        $gestion=DB::select('SELECT * FROM gestion where estado=1');
+        return view('modulocontable.asientos.lista_asiento_anulado', compact('gestion'));
+    }
+
+    function lista_asiento_anulado($fecha1, $fecha2, Request $request) {
+        $resultado = DB::select('SELECT asiento.*, categoriacuenta.nombre as categoria, gestion.nombre_gestion as gestion from asiento, categoriacuenta, gestion where asiento.id_categoria = categoriacuenta.id and asiento.id_gestion = gestion.id and asiento.estado = 0 and fecha_transaccion BETWEEN "'.$fecha1.'" AND "'.$fecha2.'" ORDER BY asiento.fecha_transaccion, asiento.nro_asiento');
+        
+        return response()->json($resultado);
+    }
+
+    function detalle_asiento_anulado($id) {
+        $resultado = DB::select('SELECT detalle.*,cuenta.codigo, cuenta.nombre as cuenta, (SELECT nombre from centrocosto where centrocosto.id = detalle.id_centro_costo) as centro_costo, asiento.motivo_anulado, asiento.deleted_at as fecha_anulado from detalle, cuenta, asiento where detalle.id_cuenta = cuenta.id and detalle.id_asiento = asiento.id and detalle.id_asiento = "'.$id.'" ORDER BY detalle.nro_detalle');
+        
+        return response()->json($resultado);
+    }
 }

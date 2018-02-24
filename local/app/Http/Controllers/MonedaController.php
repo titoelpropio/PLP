@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\MonedaRequest;
 use App\Moneda;
 use DB;
 use App\Http\Requests;
@@ -15,7 +14,7 @@ class MonedaController extends Controller
 
 	function index(){
         $moneda=Moneda::paginate(9);
-       return view('modulocontable.moneda.index',compact('moneda'));
+        return view('modulocontable.moneda.index',compact('moneda'));
 	}
   
   
@@ -23,23 +22,19 @@ class MonedaController extends Controller
       return view('modulocontable.moneda.create');	
     }
     
-    public function store(MonedaRequest $request){
+    public function store(Request $request){
         try {
-            DB::beginTransaction();    
-            $moneda=DB::select("SELECT *from moneda WHERE moneda.deleted_at IS NULL");
-            if(count($moneda) != 0)
-            {
-              $this->eliminar($moneda[0]->id);
-            }      
+            DB::beginTransaction();     
             Moneda::create([
-            'tipo_cambio' => $request['tipo_cambio'],
+            'nombre' => $request['nombre'],
+            'abreviatura' => $request['abreviatura']
             ]);
             
             DB::commit(); 
-            return redirect('moneda')->with('message','GUARDADO CORRECTAMENTE');  
+            return redirect('tipomoneda')->with('message','GUARDADO CORRECTAMENTE');  
         }catch (Exception $e) {
             DB::rollback();
-            return redirect('moneda')->with("message-error","ERROR INTENTE NUEVAMENTE");      
+            return redirect('tipomoneda')->with("message-error","ERROR INTENTE NUEVAMENTE");      
         }
     }
 
@@ -49,13 +44,18 @@ class MonedaController extends Controller
    return view('modulocontable.moneda.edit',['moneda'=>$moneda]);
     }
 
-public function update($id, MonedaRequest $request){
-        $moneda =Moneda::find($id);
-        $moneda->fill($request->all());
-        $moneda->save();
-        Session::flash('message','moneda Actualizado Correctamente');
-        return Redirect::to('/moneda');
-
+    public function update($id, Request $request){
+        try {
+            DB::beginTransaction();     
+            $moneda =Moneda::find($id);
+            $moneda->fill($request->all());
+            $moneda->save();
+            DB::commit(); 
+            return redirect('tipomoneda')->with('message','ACTUALIZADO CORRECTAMENTE');  
+        }catch (Exception $e) {
+            DB::rollback();
+            return redirect('tipomoneda')->with("message-error","ERROR INTENTE NUEVAMENTE");      
+        }
     }
 
     public function eliminar($id){
