@@ -66,18 +66,18 @@ var $texto="";
     }
   }
     function index(Request $request) {
-
+      $Proyecto=DB::select("select *from proyecto where  proyecto.deleted_at IS NULL");
        if ($request->nroLote == "" )
        {
            $Lote = DB::select("SELECT lote.id,lote.nroLote, lote.superficie, lote.manzano, lote.uv, categorialote.categoria, preciocategoria.precio, cuotaminima.porcentaje, descuentoventa.porcentaje as descuento from lote, categorialote, preciocategoria, proyecto, cuotaminima, descuentoventa WHERE lote.idCategoriaLote = categorialote.id and preciocategoria.idCategoria = categorialote.id and lote.idProyecto = proyecto.id and categorialote.idProyecto = proyecto.id and cuotaminima.idProyecto = proyecto.id and descuentoventa.idProyecto = proyecto.id and preciocategoria.deleted_at IS NULL and descuentoventa.deleted_at IS NULL and cuotaminima.deleted_at IS NULL and lote.estado = 0 order by lote.id desc LIMIT 20"); 
 
-           return view('venta.index',compact('Lote', $Lote));
+           return view('venta.index',compact('Lote', $Lote,'Proyecto',$Proyecto));
        }
        else
        {
            $Lote = DB::select("SELECT lote.id,lote.nroLote, lote.superficie, lote.manzano, lote.uv, categorialote.categoria, preciocategoria.precio, cuotaminima.porcentaje, descuentoventa.porcentaje as descuento from lote, categorialote, preciocategoria, proyecto, cuotaminima, descuentoventa WHERE lote.idCategoriaLote = categorialote.id and preciocategoria.idCategoria = categorialote.id and lote.idProyecto = proyecto.id and categorialote.idProyecto = proyecto.id and cuotaminima.idProyecto = proyecto.id and descuentoventa.idProyecto = proyecto.id and preciocategoria.deleted_at IS NULL and descuentoventa.deleted_at IS NULL and cuotaminima.deleted_at IS NULL and lote.estado = 0  and lote.id = ".$request->nroLote." order by lote.id desc LIMIT 20"); 
 
-           return view('venta.index',compact('Lote', $Lote));
+           return view('venta.index',compact('Lote', $Lote,'Proyecto',$Proyecto));
        }
               
         
