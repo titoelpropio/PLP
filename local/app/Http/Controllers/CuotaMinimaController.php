@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\CuotaMinima;
+use App\Proyecto;
 use App\Http\Requests;
 use App\Http\Requests\UserUpdateRequest;
 use Session;
@@ -20,25 +21,27 @@ class CuotaMinimaController extends Controller {
     }
 
     function index() {
-        $CuotaMinima = DB::select("SELECT *from proyecto,cuotaminima WHERE proyecto.id=cuotaminima.idProyecto and cuotaminima.deleted_at IS NULL and proyecto.id=".Session::get('idProyecto'));
+      $CuotaMinima = DB::select("SELECT *from proyecto,cuotaminima WHERE proyecto.id=cuotaminima.idProyecto and cuotaminima.deleted_at IS NULL ");
         return view('cuota_minima.index', compact('CuotaMinima'));
     }
 
     public function create() {
-        return view('cuota_minima.create');
+        $Proyecto=Proyecto::lists('nombre','id');
+        return view('cuota_minima.create', compact('Proyecto'));
     }
 
     public function store(Request $request) {
         try {
           DB::beginTransaction();  
-           $descuento=DB::select("SELECT *from cuotaminima WHERE cuotaminima.idProyecto=".Session::get('idProyecto')." AND cuotaminima.deleted_at IS NULL");
+
+           $descuento=DB::select("SELECT *from cuotaminima WHERE cuotaminima.idProyecto=".$request['idProyecto']." AND cuotaminima.deleted_at IS NULL");
            if(count($descuento) != 0)
             {
               $this->destroy($descuento[0]->id);
             }
             CuotaMinima::create([
                 'porcentaje'=>$request['porcentaje'],
-                'idProyecto'=>Session::get('idProyecto'),
+                'idProyecto'=>$request['idProyecto']
             ]);
             DB::commit(); 
             return redirect('CuotaMinima')->with('message','GUARDADO CORRECTAMENTE');  

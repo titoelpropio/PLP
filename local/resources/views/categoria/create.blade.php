@@ -6,7 +6,10 @@
 	{!!Form::open(['route'=>'Categoria.store', 'method'=>'POST'])!!}
       <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
         <h3>REGISTRAR CATEGORIA</h3>
-
+        <div class="form-group">
+			{!!Form::label('porcentaje','Urbanizacion:')!!}
+        	 {!!Form::select('idProyecto',$Proyecto,null,array('class'=>'form-control'))!!}
+        </div>
 		<div class="form-group">
 			{!!Form::label('categoria','Categoria:')!!}
 			{!!Form::text('categoria',null,['class'=>'form-control ','placeholder'=>'Categoria'])!!}

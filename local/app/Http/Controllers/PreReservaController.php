@@ -183,9 +183,7 @@ WHERE lote.idCategoriaLote=categorialote.id AND categorialote.id=preciocategoria
   
 public function seccion1($opcion){
         // $manzano = Manzano::lists('numero', 'id');     
-//
-    $Categoria=Categoria::lists('categoria','id');
-
+    $Categoria=Categoria::where('idProyecto',3)->lists('categoria','id');
    return view('mapas.guadalupe',['opcion'=>$opcion,'categoria'=>$Categoria,'fase'=>1,'proyecto'=>3]) ;
 
    // return view('mapas.barrancaFase1',['opcion'=>$opcion,'categoria'=>$Categoria,'fase'=>1]) ;
@@ -194,20 +192,18 @@ public function seccion1($opcion){
 
 
 public function seccion2($opcion){
-
- $Categoria=Categoria::lists('categoria','id');
-   return view('mapas.seccion2',['opcion'=>$opcion,'categoria'=>$Categoria,'fase'=>2]) ;
-
+ $Categoria=Categoria::where('idProyecto',1)->lists('categoria','id');
+   return view('mapas.seccion2',['opcion'=>$opcion,'categoria'=>$Categoria,'fase'=>2,'proyecto'=>1]) ;
 }
 public function seccion3($opcion){
- $Categoria=Categoria::lists('categoria','id');
-   return view('mapas.seccion3',['opcion'=>$opcion,'categoria'=>$Categoria,'fase'=>3]) ;
+ $Categoria=Categoria::where('idProyecto',1)->lists('categoria','id');
+   return view('mapas.seccion3',['opcion'=>$opcion,'categoria'=>$Categoria,'fase'=>3,'proyecto'=>1]) ;
 
 }
 public function seccion1b($opcion){
 
- $Categoria=Categoria::where('idProyecto',Session::get('idProyecto'))->lists('categoria','id');
-   return view('mapas.barrancaFase1',['opcion'=>$opcion,'categoria'=>$Categoria,'fase'=>1]) ;
+ $Categoria=Categoria::where('idProyecto',1)->lists('categoria','id');
+   return view('mapas.barrancaFase1',['opcion'=>$opcion,'categoria'=>$Categoria,'fase'=>1,'proyecto'=>1]) ;
 }
 }
 

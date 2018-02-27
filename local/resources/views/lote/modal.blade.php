@@ -1,4 +1,3 @@
-
 <!-- modal guardar -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-lg" role="document">
@@ -24,8 +23,6 @@
 <div class="form-group">
     {!!Form::label('manzano','Manzano:')!!}
     {!!Form::number('manzano',null,['class'=>'form-control ','placeholder'=>'Ingresa el manzano'])!!}
-    
-       
 </div>
 
 </div>
@@ -60,6 +57,7 @@
     {!!Form::label('uv','U-V:')!!}
     {!!Form::text('uv','0',['class'=>'form-control ','placeholder'=>'Ingresa la Matricula'])!!}
     
+    {!!Form::hidden('idProyecto',$proyecto,['class'=>'form-control ','placeholder'=>'Ingresa la Matricula'])!!}
        
   </div> 
 </div>
@@ -209,7 +207,7 @@
 <div class="form-group">
     {!!Form::label('matricula','Matricula:')!!}
     {!!Form::text('matricula_ac',null,['class'=>'form-control ','placeholder'=>'Ingresa la Matricula'])!!}
-    
+     {!!Form::hidden('idProyecto_ac',$proyecto,['class'=>'form-control ','placeholder'=>'Ingresa la Matricula'])!!}
        
   </div> 
 </div>
@@ -226,8 +224,7 @@
 
 <div class="form-group">
     {!!Form::label('idCategoria_ac','Categoria:')!!}
-    <select class="form-control" name="idCategoria_ac">    
-    </select>
+   {!!Form::select('idCategoria_ac',$categoria,null,array('class'=>'form-control'))!!}
     
        
   </div> 

@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Requests\CategoriaRequest;
 use App\Categoria;
+use App\Proyecto;
 use App\PrecioCategoria;
 use DB;
 use Session;
@@ -22,8 +23,6 @@ class CategoriaController extends Controller
         $this->middleware('auth',['only'=>'admin']);
     }else{
        $verficar=DB::select("select modulo.nombre,perfilobjeto.puedeGuardar,perfilobjeto.puedeModificar,perfilobjeto.puedeEliminar,perfilobjeto.puedeListar, perfilobjeto.puedeVerReporte,perfilobjeto.puedeImprimir,objeto.urlObjeto from perfil,perfilobjeto,objeto,modulo where perfilobjeto.deleted_at IS NULL and perfil.id=perfilobjeto.idPerfil and perfilobjeto.idObjeto=objeto.id and modulo.id=objeto.idModulo and objeto.urlObjeto='/Categoria'  and perfil.id=".Session::get('idPerfil'));
-   
-  
        
          if (count($verficar)==0) {
   Session::flash('message-error', 'No tiene privilegio');
@@ -49,15 +48,15 @@ function index(){
     $categoria=DB::table('categorialote')
     ->join('proyecto','proyecto.id','=','categorialote.idProyecto')
     ->select('categorialote.id', 'categorialote.categoria','categorialote.descripcion', 'proyecto.nombre','categorialote.idProyecto')
-    ->where('categorialote.idProyecto',Session::get('idProyecto')) 
     ->paginate(30);
      ///$categoria=Categoria::paginate(10);
      return view('categoria.index',['categoria'=>$categoria]);//,compact('categoria'));
   }
   
   public function create(){
+     $Proyecto=Proyecto::lists('nombre','id');
         if ($this->puedeGuardar==1) {
-    return view('categoria.create');  
+    return view('categoria.create',compact('Proyecto',$Proyecto));  
   } else{
        return redirect('/Categoria')->with('message-error','No tiene privilegios para guardar');  
     }
@@ -70,7 +69,7 @@ function index(){
         $idCategoria=Categoria::create([
           'categoria' => $request['categoria'],
           'descripcion' => $request['descripcion'],
-          'idProyecto' => Session::get('idProyecto'),//$request['proyecto']
+          'idProyecto' => $request['idProyecto'],//$request['proyecto']
         ]);
               
         DB::commit();                                               
@@ -80,7 +79,6 @@ function index(){
         return redirect('Categoria')->with("message-error","ERROR INTENTE NUEVAMENTE");      
     }         
   }
-
   public function update(Request $request,$id){
       if ($this->puedeModificar==1) {
   try {
@@ -88,7 +86,6 @@ function index(){
         $categoria = Categoria::find($id);
         $categoria->fill($request->all());
         $categoria->save();
-
         if ($request['precio'] != $request['precio_aux']) {
           PrecioCategoria::create([ 'precio' => $request['precio'], 'idCategoria' => $id ]);           
         }
@@ -124,7 +121,8 @@ function index(){
 
   public function destroy($id){
       if ($this->puedeEliminar==1) {
-
+         $descuento = Categoria::find($id);
+        $descuento->delete();
       }else{
        return redirect('/Categoria')->with('message-error','No tiene privilegios para Eliminar');  
 

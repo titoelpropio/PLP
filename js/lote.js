@@ -27,7 +27,7 @@ $(document).ready(function(){
         punto=$(lote).attr('d').trim();
     }else{
         punto=$(lote).attr('transform').trim();
-        
+
     }
        }
          if (lotes=="") {
@@ -72,7 +72,12 @@ $(document).ready(function(){
          punto=$(lote).attr('points');
        }
        else{
-        punto=$(lote).attr('d');
+        if (tipo==1) {
+        punto=$(lote).attr('d').trim();
+    }else{
+        punto=$(lote).attr('transform').trim();
+        
+    }
        }
          if (lotes=="") {
             lote.style.fill = "#0195bf"; 
@@ -131,7 +136,8 @@ function CargarModalActualizar(){
            $('select[name=idCategoria_ac]').empty();
             $("select[name=estado_ac]").empty();
             idLote="";
-  punto= punto.trim();
+  
+
     $.get('../cargar_lote/'+punto , function (response) { 
       idLote=response[0][0].id;
         $("#id_lote").val(response[0][0].id);      
@@ -150,7 +156,7 @@ function CargarModalActualizar(){
            $("input[name=oeste_ac]").val(response[0][0].oeste);
            $("input[name=medida_oeste_ac]").val(response[0][0].medidaOeste);
            $("input[name=uv_ac]").val(response[0][0].uv);
-           $('select[name=idCategoria_ac]').append('<option value='+response[0][0].idCategoria+' >'+response[0][0].categoria);
+           $('select[name=idCategoria_ac]').val(response[0][0].idCategoria);
            for (var i = 0; i <response[1].length; i++) {
              $('select[name=idCategoria_ac]').append('<option value='+response[1][i].id+' >'+response[1][i].categoria);
            }
@@ -181,6 +187,7 @@ function CargarModalActualizar(){
 function ActualizarLote(){
 
    
+  idProyecto= $('input[name=idProyecto_ac]').val();
           
        nroLote= $("#nro_lote_ac").val();
         superficie=$("#superficie_ac").val();
@@ -206,7 +213,7 @@ id=idLote;
      url:'../ModificarLote/'+id,
      type: 'GET',
      dataType: 'json',
-    data:{idLote:idLote,manzano:manzano,nroLote:nroLote,estado:estado,superficie:superficie,matricula:matricula,idCategoria:idCategoria,norte:norte,
+    data:{idProyecto:idProyecto,idLote:idLote,manzano:manzano,nroLote:nroLote,estado:estado,superficie:superficie,matricula:matricula,idCategoria:idCategoria,norte:norte,
       medidaNorte:medidaNorte,sur:sur,medidaSur:medidaSur,este:este,medidaEste:medidaEste
       ,oeste:oeste,medidaOeste:medidaOeste,uv:uv},
       success:function(response){
@@ -280,13 +287,14 @@ estado=$('select[name=estadoLote]').val();
   medida_este= $('input[name=medida_este]').val();
   oeste= $('input[name=oeste]').val();
   medida_oeste= $('input[name=medida_oeste]').val();
+  idProyecto= $('input[name=idProyecto]').val();
   tipo= $('#tipo').val();
   punto=punto.trim();
   $.ajax({
      url:'../guardarLote',
      type: 'GET',
      dataType: 'json',
-    data:{fase:fase,tipo:tipo,punto:punto,manzano:manzano,nroLote:nroLote,estado:estado,superficie:superficie,matricula:matricula,idCategoria:idCategoria,norte:norte,
+    data:{idProyecto:idProyecto,fase:fase,tipo:tipo,punto:punto,manzano:manzano,nroLote:nroLote,estado:estado,superficie:superficie,matricula:matricula,idCategoria:idCategoria,norte:norte,
       medida_norte:medida_norte,sur:sur,medida_sur:medida_sur,este:este,medida_este:medida_este,oeste:oeste,medida_oeste:medida_oeste,uv:uv},
       success:function(response){
         if (response.mensaje==1) {

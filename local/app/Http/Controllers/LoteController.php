@@ -62,12 +62,12 @@ var   $puedeModificar=0;
     }
 
     public function storeLote(Request $request) {
-        $verificar=DB::select("SELECT COUNT(*)as contador from lote WHERE manzano=".$request['manzano']." AND nroLote=".$request['nroLote']." and idProyecto=".Session::get('idProyecto'));
+        $verificar=DB::select("SELECT COUNT(*)as contador from lote WHERE manzano=".$request['manzano']." AND nroLote=".$request['nroLote']." and idProyecto=".$request['idProyecto']);
         if ($verificar[0]->contador == 1) {
           return response()->json(['mensaje'=>0]);
                       
         } else {
-           DB::table('lote')->insert(['nroLote' => $request['nroLote'],'superficie' => $request['superficie'],'estado' => $request['estado'],'point' => $request['punto'],'manzano' => $request['manzano'],'tipo_etiqueta' => $request['tipo'],'norte' => $request['norte'],'medidaNorte' => $request['medida_norte'],'sur' => $request['sur'],'medidaSur' => $request['medida_sur'],'este' => $request['este'],'medidaEste' => $request['medida_este'],'oeste' => $request['oeste'],'medidaOeste' => $request['medida_oeste'],'matricula'=>$request['matricula'],'uv'=>$request['uv'],'idCategoriaLote'=>$request['idCategoria'],'idProyecto'=>Session::get('idProyecto'),'fase'=>$request['fase']]);        
+           DB::table('lote')->insert(['nroLote' => $request['nroLote'],'superficie' => $request['superficie'],'estado' => $request['estado'],'point' => $request['punto'],'manzano' => $request['manzano'],'tipo_etiqueta' => $request['tipo'],'norte' => $request['norte'],'medidaNorte' => $request['medida_norte'],'sur' => $request['sur'],'medidaSur' => $request['medida_sur'],'este' => $request['este'],'medidaEste' => $request['medida_este'],'oeste' => $request['oeste'],'medidaOeste' => $request['medida_oeste'],'matricula'=>$request['matricula'],'uv'=>$request['uv'],'idCategoriaLote'=>$request['idCategoria'],'idProyecto'=>$request['idProyecto'],'fase'=>$request['fase']]);        
           return response()->json(['mensaje'=>1]);
            
         }
