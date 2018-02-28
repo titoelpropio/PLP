@@ -706,8 +706,9 @@ $vendedor=DB::select('select empleado.codigo,nombre,id from empleado where codig
 
      public function VentaReserva($id){
       $total = 0;
-      $reserva=DB::select("SELECT cliente.ci, detallereserva.id as idDetalleReserva, detallereserva.subTotal, detallereserva.idLote  from cliente,detallereserva,reserva where detallereserva.idReserva=reserva.id and cliente.id=reserva.idCliente and detallereserva.id=".$id);
+      $reserva=DB::select("SELECT reserva.moneda, cliente.ci, detallereserva.id as idDetalleReserva, detallereserva.subTotal, detallereserva.idLote,detallereserva.subTotalBs  from cliente,detallereserva,reserva where detallereserva.idReserva=reserva.id and cliente.id=reserva.idCliente and detallereserva.id=".$id);
       $total = $total +$reserva[0]->subTotal;
+      $totalBs = $reserva[0]->subTotalBs;
          $lote=DB::select('select  proyecto.nombre as nombreProyecto, categorialote.descripcion,preciocategoria.precio,manzano,uv,fase,nroLote,norte,sur,este,oeste,medidaEste,medidaOeste,medidaSur,medidaNorte,superficie,categorialote.categoria,descuentoventa.porcentaje as descuento from lote,categorialote,proyecto,preciocategoria,descuentoventa where proyecto.id=descuentoventa.idProyecto and   lote.id="'.$reserva[0]->idLote.'" and lote.idCategoriaLote=categorialote.id and proyecto.id=categorialote.idProyecto and preciocategoria.idCategoria=categorialote.id and preciocategoria.deleted_at IS NULL and categorialote.deleted_at IS NULL');
 
   $meses=DB::select('select *from meses where deleted_at IS NULL');
@@ -716,11 +717,11 @@ $vendedor=DB::select('select empleado.codigo,nombre,id from empleado where codig
   $tipoCambio=DB::select('select *from tipocambio where deleted_at IS NULL');
   $cuotaMinima=DB::select('select *from cuotaminima where deleted_at IS NULL');
 $vendedor=DB::select('select empleado.codigo,nombre,id from empleado where codigo IS NOT NULL and deleted_at IS NULL GROUP by codigo');
-  return view('venta.venta',['ci'=>$reserva[0]->ci,'id_lote'=>$reserva[0]->idLote,'reserva'=>$total,'idReserva'=>$reserva[0]->idDetalleReserva,'idPreReserva'=>0],compact('lote','descuento','tipoCambio','cuotaMinima','meses','vendedor','nacionalidad'));
+  return view('venta.venta',['ci'=>$reserva[0]->ci,'id_lote'=>$reserva[0]->idLote,'reserva'=>$total,'idReserva'=>$reserva[0]->idDetalleReserva,'idPreReserva'=>0,'moneda'=>$reserva[0]->moneda,'reservaBs'=>$totalBs],compact('lote','descuento','tipoCambio','cuotaMinima','meses','vendedor','nacionalidad'));
     }
 
          public function VentaPreReserva($id){
-  $prereserva=DB::select("SELECT lote.id as idLote,cliente.id as idCliente,cliente.ci,detalleprereserva.id as idDetalle, prereserva.id, DATE_FORMAT(prereserva.fecha,'%d/%m/%Y %H:%i:%s') AS fecha  ,proyecto.nombre, categorialote.categoria,lote.nroLote,lote.manzano,lote.superficie, (preciocategoria.precio * lote.superficie)as precio_superficie,preciocategoria.precio, CONCAT(cliente.nombre,' ',cliente.apellidos)as cliente, cliente.ci as ci_cliente, CONCAT(empleado.nombre,' ',empleado.apellido)as empleado, empleado.ci as ci_empleado from prereserva,detalleprereserva,lote,categorialote,proyecto,preciocategoria,cliente,empleado WHERE prereserva.id=detalleprereserva.idPreReserva AND detalleprereserva.idLote=lote.id AND categorialote.idProyecto=proyecto.id AND lote.idCategoriaLote=categorialote.id AND preciocategoria.idCategoria=categorialote.id AND cliente.id=prereserva.idCliente AND empleado.id=prereserva.idEmpleado  and preciocategoria.deleted_at IS NULL and detalleprereserva.id=".$id." AND proyecto.id=".Session::get("idProyecto"));  
+  $prereserva=DB::select("SELECT lote.id as idLote,cliente.id as idCliente,cliente.ci,detalleprereserva.id as idDetalle, prereserva.id, DATE_FORMAT(prereserva.fecha,'%d/%m/%Y %H:%i:%s') AS fecha  ,proyecto.nombre, categorialote.categoria,lote.nroLote,lote.manzano,lote.superficie, (preciocategoria.precio * lote.superficie)as precio_superficie,preciocategoria.precio, CONCAT(cliente.nombre,' ',cliente.apellidos)as cliente, cliente.ci as ci_cliente, CONCAT(empleado.nombre,' ',empleado.apellido)as empleado, empleado.ci as ci_empleado from prereserva,detalleprereserva,lote,categorialote,proyecto,preciocategoria,cliente,empleado WHERE prereserva.id=detalleprereserva.idPreReserva AND detalleprereserva.idLote=lote.id AND categorialote.idProyecto=proyecto.id AND lote.idCategoriaLote=categorialote.id AND preciocategoria.idCategoria=categorialote.id AND cliente.id=prereserva.idCliente AND empleado.id=prereserva.idEmpleado  and preciocategoria.deleted_at IS NULL and detalleprereserva.id=".$id);  
   $nacionalidad=DB::select('SELECT * FROM `pais` ORDER by paisnombre');
 
   $cliente = Cliente::find($prereserva[0]->idCliente);

@@ -41,7 +41,7 @@
 </div>
 <div class="col-sm-2">
   <center><label for="">NÚMERO DE LOTE</label></center>
-  <select class="form-control" name="nroLote" id="nro_lote" onchange="(this)"" type="onsubmit"></select>
+  <select class="form-control" name="nroLote" id="nro_lote" onchange="Buscar_Lote(this)" type="onsubmit"></select>
 
 </div>
 
@@ -67,7 +67,7 @@
                 <th><center>Precio al Contado</center></th>
                 <th><center>Precio a Plazo</center></th>
                 <th><CENTER>Operación</CENTER></th>
-
+                <tbody id="tbodyLotes">
                 @foreach ($Lote as $Lot)
                 <TR>    
                   <td><center>{{$Lot->nroLote}}</center></td>
@@ -83,6 +83,7 @@
                   </center></td>
                 </TR>
                 @endforeach 
+                </tbody>
               </table>
 
             </div>
@@ -124,9 +125,22 @@ proyecto="";
             });
           }
           function Buscar_Lote(select){
+            $('#tbodyLotes').empty();
             $('#loading').css('display','block');      
-            idLote = $("#nro_lote").val();
-            $.get('BuscarLoteId/'+idLote , function (response) { 
+            idLote = $(select).val();
+            $.get('BuscarLoteId/'+idLote+'/'+proyecto , function (res) { 
+              for (var i = 0; i < res.length; i++) {
+                $('#tbodyLotes').append('<tr>'+
+                  '<td>'+res[i].nro_lote+
+                  '<td>'+res[i].superficie+' m<sup>2</sup>'+
+                  '<td>'+res[i].manzano+
+                  '<td>'+res[i].categoria+
+                  '<td>'+res[i].precio+
+                  '<td>'+res[i].descuento+
+                  '<td> <center><a href="VentaLote/'+idLote+'" class="btn btn-success">Vender</a>\n\
+                  </center>'
+                  );
+              }
 
               $('#loading').css('display','none');      
             });

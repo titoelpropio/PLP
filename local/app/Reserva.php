@@ -24,7 +24,7 @@ class Reserva extends Authenticatable implements AuthenticatableContract,
      */
       protected $table = 'reserva';
     protected $fillable = [
-        'idEmpleado','idCliente', 'montoTotal'
+        'idEmpleado','idCliente', 'montoTotal','montoTotalBs','moneda'
     ];
 
     /**

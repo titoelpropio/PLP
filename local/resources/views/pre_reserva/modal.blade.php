@@ -23,7 +23,13 @@
             <option value="be">BANCO - EFECTIVO</option>
           </select>        
        </div>
-
+      <div class="form-group">
+         <label>Tipo De Moneda:</label><br>
+          <select name="tipoMoneda" id="tipoMoneda" class="form-control">
+            <option value="BOLIVIANO">BOLIVIANO</option>
+            <option value="DOLARES">DOLARES</option>
+          </select>        
+       </div>
        <div class="form-group" style="display: block;" id="divEfectivo">
         <div class="form-group">
             {!!Form::label('monto','Monto Efectivo $us:')!!}

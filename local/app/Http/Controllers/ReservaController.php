@@ -219,12 +219,15 @@ var   $puedeModificar=0;
                         'idEmpleado' =>  Session::get('idEmpleado'),              
                         'idCliente' => $request['idCliente'],  //ACA VA EL ID DEL CLIENTE Q ESTE LOGUEADO         
                         'montoTotal' => $Monto,
+                        'montoTotalBs' => $MontoBs,
+                        'moneda' => $request['tipoMoneda']
                     ]);
                     $reserva=DetalleReserva::create([
                         'idLote'=> $request['idLote'],
                         'idReserva'=> $idReserva['id'],
                         'subTotal'=> $Monto,
-                        'tipoPago'=> $request['tipoPago'],
+                        'subTotalBs'=> $MontoBs,
+                        'tipoPago'=> $request['tipoPago']
                     ]);
 
                     if ($request['tipoPago'] != "e" )  {
