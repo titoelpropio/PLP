@@ -9,6 +9,8 @@ use App\Gestion;
 use App\TipoCambio;
 use App\Asiento;
 use App\Detalle;
+use App\LibroVenta;
+use App\LibroCompra;
 use Illuminate\Database\Events\TransactionBeginning;
 use Illuminate\Database\MySqlConnection;
 use Session;
@@ -112,6 +114,47 @@ class AsientoController extends Controller {
                     ]);
                 }
                 $nro_detalle++;
+            }
+            if ($request->tipo_comprobante == "1") {
+                if ($request->agregar_LV == "1") {
+                    LibroVenta::create([
+                        'fecha_factura'=>$request['fecha_factura_LV'],
+                        'nro_factura'=>$request['nro_factura_LV'],
+                        'nro_autorizacion'=>$request['nro_autorizacion_LV'],
+                        'estado'=>$request['estado_LV'],
+                        'nit_ci_cliente'=>$request['nit_ci_cliente_LV'],
+                        'nombre_razon_social'=>$request['nombre_razon_social_LV'],
+                        'importe_total_venta'=>$request['importe_total_venta_LV'],
+                        'importe_no_sujeto_IVA'=>$request['importe_no_sujeto_IVA_LV'],
+                        'exportaciones_operaciones_exentas'=>$request['exportaciones_operaciones_exentas_LV'],
+                        'ventas_gravadas_TC'=>$request['ventas_gravadas_TC_LV'],
+                        'subtotal'=>$request['subtotal_LV'],
+                        'descuento_sujeto_IVA'=>$request['descuento_sujeto_IVA_LV'],
+                        'importe_base_DF'=>$request['importe_base_DF_LV'],
+                        'debito_fiscal'=>$request['debito_fiscal_LV'],
+                        'codigo_control'=>$request['codigo_control_LV']
+                    ]);
+                }
+            }
+            else if ($request->tipo_comprobante == "2") {
+                if ($request->agregar_LC == "1") {
+                    LibroCompra::create([
+                        'fecha_factura_DUI'=>$request['fecha_factura_DUI_LC'],
+                        'nit_proveedor'=>$request['nit_proveedor_LC'],
+                        'nombre_razon_social'=>$request['nombre_razon_social_LC'],
+                        'nro_factura'=>$request['nro_factura_LC'],
+                        'nro_DUI'=>$request['nro_DUI_LC'],
+                        'nro_autorizacion'=>$request['nro_autorizacion_LC'],
+                        'importe_total_compra'=>$request['importe_total_compra_LC'],
+                        'importe_no_sujeto_CF'=>$request['importe_no_sujeto_CF_LC'],
+                        'subtotal'=>$request['subtotal_LC'],
+                        'descuento_sujeto_IVA'=>$request['descuento_sujeto_IVA_LC'],
+                        'importe_base_CF'=>$request['importe_base_CF_LC'],
+                        'credito_fiscal'=>$request['credito_fiscal_LC'],
+                        'codigo_control'=>$request['codigo_control_LC'],
+                        'tipo_compra'=>$request['tipo_compra_LC']
+                    ]);
+                }
             }
             DB::commit();
             Session::flash('message','GUARDADO CORRECTAMENTE');

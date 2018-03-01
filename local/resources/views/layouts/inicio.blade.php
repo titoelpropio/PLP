@@ -378,6 +378,8 @@
                                         <i class="fa fa-angle-left pull-right"></i>
                                     </a>
                                     <ul  id="gestiones" class="treeview-menu">
+                                        <li><a href="{!!URL::to('libro_venta')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Libro de Venta</a></li>
+                                        <li><a href="{!!URL::to('libro_compra')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Libro de Compra</a></li>
                                         <li><a href="{!!URL::to('libro_diario')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Libro Diario</a></li>
                                         <!-- <li><a href="{!!URL::to('lista_asiento')!!}">Lista de Asientos</a></li> -->
                                         <li><a href="{!!URL::to('libro_mayor')!!}"><i class="fa fa-caret-right" aria-hidden="true"></i>Libro Mayor</a></li>

@@ -411,6 +411,8 @@ Route::post('cerrar_gestion', ['as' => 'cerrar_gestion', 'uses'=>'GestionControl
 Route::resource('tipomoneda','MonedaController');
 
 //formularios de reportes
+Route::resource('libro_venta','ReportesController@libro_venta');
+Route::resource('libro_compra','ReportesController@libro_compra');
 Route::resource('libro_diario','ReportesController@libro_diario');
 Route::resource('libro_mayor','ReportesController@libro_mayor');
 Route::resource('sumas_saldos','ReportesController@sumas_saldos');
@@ -418,6 +420,8 @@ Route::resource('estado_resultado','ReportesController@estado_resultado');
 Route::resource('balance_general','ReportesController@balance_general');
 
 //reportes
+Route::get('reporte_libro_venta/{fecha1}/{fecha2}','ReportesController@reporte_libro_venta');
+Route::get('reporte_libro_compra/{fecha1}/{fecha2}','ReportesController@reporte_libro_compra');
 Route::get('reporte_libro_diario/{fecha1}/{fecha2}','ReportesController@reporte_libro_diario');
 Route::get('reporte_libro_mayor/{fecha1}/{fecha2}','ReportesController@reporte_libro_mayor');
 Route::get('reporte_sumas_saldos/{fecha1}/{fecha2}','ReportesController@reporte_sumas_saldos');

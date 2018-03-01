@@ -16,6 +16,17 @@ class ReportesController extends Controller
     }
 
     //retorna las vistas
+    
+    function libro_venta(Request $request) {
+        $gestion=DB::select('SELECT * FROM gestion where estado=1');
+        return view('modulocontable.reportes.libro_venta', compact('gestion'));
+    }
+
+    function libro_compra(Request $request) {
+        $gestion=DB::select('SELECT * FROM gestion where estado=1');
+        return view('modulocontable.reportes.libro_compra', compact('gestion'));
+    }
+
     function libro_diario(Request $request) {
         $gestion=DB::select('SELECT * FROM gestion where estado=1');
         return view('modulocontable.reportes.libro_diario', compact('gestion'));
@@ -42,6 +53,19 @@ class ReportesController extends Controller
     }
     
     //retorna los reportes
+
+    function reporte_libro_venta($fecha1, $fecha2, Request $request) {
+        $resultado = DB::select('SELECT * fROM libroventa WHERE fecha_factura BETWEEN "'.$fecha1.'" AND "'.$fecha2.'" ORDER BY fecha_factura, id');
+        
+        return response()->json($resultado);
+    }
+
+    function reporte_libro_compra($fecha1, $fecha2, Request $request) {
+        $resultado = DB::select('SELECT * fROM librocompra WHERE fecha_factura_DUI BETWEEN "'.$fecha1.'" AND "'.$fecha2.'" ORDER BY fecha_factura_DUI, id');
+        
+        return response()->json($resultado);
+    }
+
     function reporte_libro_diario($fecha1, $fecha2, Request $request) {
         $resultado = DB::select('SELECT asiento.tipo as tipo_asiento, asiento.nro_asiento, asiento.fecha_transaccion, asiento.glosa, cuenta.codigo, cuenta.nombre, detalle.tipo as tipo_detalle, detalle.nro_detalle, detalle.montoSus, detalle.montoBs fROM cuenta, detalle, asiento WHERE cuenta.id=detalle.id_cuenta and detalle.id_asiento=asiento.id and asiento.fecha_transaccion BETWEEN "'.$fecha1.'" AND "'.$fecha2.'" ORDER BY asiento.fecha_transaccion, asiento.nro_asiento,
             detalle.nro_detalle');

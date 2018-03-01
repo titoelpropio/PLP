@@ -1,8 +1,8 @@
 
 $(document).ready(function () {
 
-       $('#loading').css("display","none");
-    armarasiento();
+    $('#loading').css("display","none");
+    //armarasiento();
     var hoy = new Date();
     var dd = hoy.getDate();
     var mm = hoy.getMonth() + 1; //hoy es 0!

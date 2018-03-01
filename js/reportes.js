@@ -18,6 +18,107 @@ $(document).ready(function () {
     $('#fecha_fi').val(hoy);
 });
 
+function reporte_libro_venta(verificar) {
+
+    if (verificar == 1) {
+        var fecha1 = $('#fecha_in').val()+' 00:00:00';
+        var fecha2 = $('#fecha_fi').val()+' 23:59:59';
+    }
+    else {
+        var fecha1 = $('#fecha_inicial').val()+' 00:00:00';
+        var fecha2 = $('#fecha_fin').val()+' 23:59:59';
+    }
+
+    $('#tabla').empty();
+
+    var tabla = $('#tabla');
+    var total_filas = 0;
+    var fila = 1;
+    $('#loading').css("display", "block");
+    $.get('reporte_libro_venta/' + fecha1 + '/' + fecha2, function (response) {
+
+        if(Object.keys(response).length > 0) {
+            total_filas = Object.keys(response).length;
+
+            for (var i = 0; i < total_filas; i++) {
+
+                tabla.append("<tr >\n\
+                <td>" + fila + "</td>\n\
+                <td>" + response[i].fecha_factura + "</td>\n\
+                <td style = 'text-align: right;'>" + response[i].nro_factura + "</td>\n\
+                <td>" + response[i].nro_autorizacion + "</td>\n\
+                <td>" + response[i].estado + "</td>\n\
+                <td style = 'text-align: right;'>" + response[i].nit_ci_cliente + "</td>\n\
+                <td>" + response[i].nombre_razon_social + "</td>\n\
+                <td style = 'text-align: right;'>" + response[i].importe_total_venta + "</td>\n\
+                <td style = 'text-align: right;'>" + response[i].importe_no_sujeto_IVA + "</td>\n\
+                <td style = 'text-align: right;'>" + response[i].exportaciones_operaciones_exentas + "</td>\n\
+                <td style = 'text-align: right;'>" + response[i].ventas_gravadas_TC + "</td>\n\
+                <td style = 'text-align: right;'>" + response[i].subtotal + "</td>\n\
+                <td style = 'text-align: right;'>" + response[i].descuento_sujeto_IVA + "</td>\n\
+                <td style = 'text-align: right;'>" + response[i].importe_base_DF + "</td>\n\
+                <td style = 'text-align: right;'>" + response[i].debito_fiscal + "</td>\n\
+                <td>" + response[i].codigo_control + "</td>\n\
+                <tr>");
+
+                fila++;
+            }
+        }
+
+        $('#loading').css("display", "none");
+    });
+}
+
+function reporte_libro_compra(verificar) {
+
+    if (verificar == 1) {
+        var fecha1 = $('#fecha_in').val()+' 00:00:00';
+        var fecha2 = $('#fecha_fi').val()+' 23:59:59';
+    }
+    else {
+        var fecha1 = $('#fecha_inicial').val()+' 00:00:00';
+        var fecha2 = $('#fecha_fin').val()+' 23:59:59';
+    }
+
+    $('#tabla').empty();
+
+    var tabla = $('#tabla');
+    var total_filas = 0;
+    var fila = 1;
+    $('#loading').css("display", "block");
+    $.get('reporte_libro_compra/' + fecha1 + '/' + fecha2, function (response) {
+
+        if(Object.keys(response).length > 0) {
+            total_filas = Object.keys(response).length;
+
+            for (var i = 0; i < total_filas; i++) {
+
+                tabla.append("<tr >\n\
+                <td>" + fila + "</td>\n\
+                <td>" + response[i].fecha_factura_DUI + "</td>\n\
+                <td style = 'text-align: right;'>" + response[i].nit_proveedor + "</td>\n\
+                <td>" + response[i].nombre_razon_social + "</td>\n\
+                <td style = 'text-align: right;'>" + response[i].nro_factura + "</td>\n\
+                <td>" + response[i].nro_DUI + "</td>\n\
+                <td>" + response[i].nro_autorizacion + "</td>\n\
+                <td style = 'text-align: right;'>" + response[i].importe_total_compra + "</td>\n\
+                <td style = 'text-align: right;'>" + response[i].importe_no_sujeto_CF + "</td>\n\
+                <td style = 'text-align: right;'>" + response[i].subtotal + "</td>\n\
+                <td style = 'text-align: right;'>" + response[i].descuento_sujeto_IVA + "</td>\n\
+                <td style = 'text-align: right;'>" + response[i].importe_base_CF + "</td>\n\
+                <td style = 'text-align: right;'>" + response[i].credito_fiscal + "</td>\n\
+                <td>" + response[i].codigo_control + "</td>\n\
+                <td>" + response[i].tipo_compra + "</td>\n\
+                <tr>");
+
+                fila++;
+            }
+        }
+
+        $('#loading').css("display", "none");
+    });
+}
+
 function reporte_libro_diario(verificar) {
 
     var total_debe = 0.00;

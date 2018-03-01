@@ -43,43 +43,45 @@
         </div>
     </div>
 
-    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-        <div class="form-group">
-            <label for="fecha_transaccion">Fecha de Transacción:</label>
-            <input type="date"  class="form-control" id="fecha_transaccion" name="fecha_transaccion">
+    <div class="col-lg-12 col-sm-12 col-xs-12" >
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+            <div class="form-group">
+                <label for="fecha_transaccion">Fecha de Transacción:</label>
+                <input type="date"  class="form-control" id="fecha_transaccion" name="fecha_transaccion">
+            </div>
         </div>
-    </div>
 
-    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
-        <div class="form-group" >
-            <label for="categoria">Categoria:</label>
-            <select class="form-control" name="categoria" id="categoria">
-                @foreach($tipo_asiento as $tipo)
-                <option value="{{$tipo->id}}" <?php if($tipo->id == 2) { echo "selected"; } ?> >{{$tipo->nombre}}</option>
-                @endforeach
-            </select>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
+            <div class="form-group" >
+                <label for="categoria">Categoria:</label>
+                <select class="form-control" name="categoria" id="categoria">
+                    @foreach($tipo_asiento as $tipo)
+                    <option value="{{$tipo->id}}" <?php if($tipo->id == 2) { echo "selected"; } ?> >{{$tipo->nombre}}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
-    </div>
 
-    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
-        <div class="form-group" >
-            <label for="tipo_comprobante">Tipo de Comprobante:</label>
-            <select class="form-control" name="tipo_comprobante" id="tipo_comprobante">
-                <option value="1">INGRESO</option>
-                <option value="2">EGRESO</option>
-                <option value="3">TRASPASO</option>
-            </select>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
+            <div class="form-group" >
+                <label for="tipo_comprobante">Tipo de Comprobante:</label>
+                <select class="form-control" name="tipo_comprobante" id="tipo_comprobante" onchange="agregar_libro_compra_venta()">
+                    <option value="1">INGRESO</option>
+                    <option value="2">EGRESO</option>
+                    <option value="3">TRASPASO</option>
+                </select>
+            </div>
         </div>
-    </div>
 
-    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
-        <div class="form-group" >
-            <label for="moneda">Moneda:</label>
-            <select class="form-control" name="moneda" id="moneda">
-                @foreach($moneda as $mon)
-                <option value="{{$mon->id}}" >{{$mon->nombre}}</option> 
-                @endforeach
-            </select>
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
+            <div class="form-group" >
+                <label for="moneda">Moneda:</label>
+                <select class="form-control" name="moneda" id="moneda">
+                    @foreach($moneda as $mon)
+                    <option value="{{$mon->id}}" >{{$mon->nombre}}</option> 
+                    @endforeach
+                </select>
+            </div>
         </div>
     </div>
 
@@ -174,6 +176,41 @@
             <label for="glosa">Detalle de la transacción:</label>
             <textarea class="form-control" rows="3" id="glosa" name="glosa" placeholder="Ej: Venta de lote al contado pagado en efectivo segun documento Nro 0012"></textarea>
         </div>
+    </div>
+
+    <div class="col-lg-12 col-sm-12 col-xs-12" id="mostrar_LV">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
+                    <label for="agregar_LV">Agregar a Libro de Venta:</label><br>
+                    <label class="radio-inline"><input type="radio" value="1" name="agregar_LV" id="agregar_LV_si" onchange="agregar_libro_venta(this.value)">Si</label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label class="radio-inline"><input type="radio" value="0" name="agregar_LV" id="agregar_LV_no" onchange="agregar_libro_venta(this.value)" checked>No</label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="#" class="btn btn-success" data-toggle='modal' data-target='#myModal_LV' name="btn_agregar_LV" id="btn_agregar_LV" disabled>Agregar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12 col-sm-12 col-xs-12" id="mostrar_LC" style="display: none">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
+                    <label for="agregar_LC">Agregar a Libro de Compra:</label><br>
+                    <label class="radio-inline"><input type="radio" value="1" name="agregar_LC" id="agregar_LC_si" onchange="agregar_libro_compra(this.value)">Si</label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label class="radio-inline"><input type="radio" value="0" name="agregar_LC" id="agregar_LC_no" onchange="agregar_libro_compra(this.value)" checked>No</label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="#" class="btn btn-success" data-toggle='modal' data-target='#myModal_LC' name="btn_agregar_LC" id="btn_agregar_LC" disabled>Agregar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @include('modulocontable.asientos.modal_LCV')
+
+    <div  class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
         <div class="form-group" >
             {!!Form::submit('Registrar',['class'=>'btn btn-primary'])!!}
             <a href="{!!URL::to('index')!!}" class="btn btn-danger">Cancelar</a>

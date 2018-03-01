@@ -123,5 +123,44 @@ valor decimal(8,4) DEFAULT NULL,
 deleted_at datetime DEFAULT NULL
 );
 
+CREATE TABLE libroventa(
+id int(11) primary key auto_increment,
+fecha_factura datetime DEFAULT NULL,
+nro_factura varchar(30) DEFAULT NULL,
+nro_autorizacion varchar(50) DEFAULT NULL,
+estado varchar(1) DEFAULT NULL,
+nit_ci_cliente varchar(20) DEFAULT NULL,
+nombre_razon_social varchar(200) DEFAULT NULL,
+importe_total_venta decimal(12,2) DEFAULT NULL,
+importe_no_sujeto_IVA decimal(12,2) DEFAULT NULL,
+exportaciones_operaciones_exentas decimal(12,2) DEFAULT NULL,
+ventas_gravadas_TC decimal(12,2) DEFAULT NULL,
+subtotal decimal(12,2) DEFAULT NULL,
+descuento_sujeto_IVA decimal(12,2) DEFAULT NULL,
+importe_base_DF decimal(12,2) DEFAULT NULL,
+debito_fiscal decimal(12,2) DEFAULT NULL,
+codigo_control varchar(50) DEFAULT NULL,
+deleted_at datetime DEFAULT NULL
+);
+
+CREATE TABLE librocompra(
+id int(11) primary key auto_increment,
+fecha_factura_DUI datetime DEFAULT NULL,
+nit_proveedor varchar(20) DEFAULT NULL,
+nombre_razon_social varchar(200) DEFAULT NULL,
+nro_factura varchar(30) DEFAULT NULL,
+nro_DUI varchar(30) DEFAULT NULL,
+nro_autorizacion varchar(50) DEFAULT NULL,
+importe_total_compra decimal(12,2) DEFAULT NULL,
+importe_no_sujeto_CF decimal(12,2) DEFAULT NULL,
+subtotal decimal(12,2) DEFAULT NULL,
+descuento_sujeto_IVA decimal(12,2) DEFAULT NULL,
+importe_base_CF decimal(12,2) DEFAULT NULL,
+credito_fiscal decimal(12,2) DEFAULT NULL,
+codigo_control varchar(50) DEFAULT NULL,
+tipo_compra varchar(1) DEFAULT NULL,
+deleted_at datetime DEFAULT NULL
+);
+
 --Agregar IdAsiento a Tabla Venta
 --agregar tipoCuenta y moneda a tabla cuentabanco
