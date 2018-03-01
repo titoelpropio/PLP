@@ -18,7 +18,13 @@
     <li class="active">VENTA DE LOTE</li>
   </ol>
 </section>
+<script type="text/javascript">
+  tipoDecambioVenta='<?php echo $tipoCambio[0]->monedaVenta; ?>';
+          monedaReserva=0;
+          subTotalReservaBs=0;
+          subTotalReservaDolar=0;
 
+</script>
 <div class="col-md-12">
   <div class="box box box-info">
     <div class="box-header with-border">
@@ -29,18 +35,19 @@
     </div>
     <div class="box-body">
       <div class="row">
+
         <?php if ($idReserva>0) {
          if ($moneda=="BOLIVIANO") {
-           $reserva=number_format($reservaBs/$tipoCambio[0]->monedaVenta, 2, ',', '');
+           $reserva=number_format($reservaBs/$tipoCambio[0]->monedaVenta, 2, '.', '');
          }else{
-          $reservaBs=number_format($reserva*$tipoCambio[0]->monedaVenta, 2, ',', '');
+          $reservaBs=number_format($reserva*$tipoCambio[0]->monedaVenta, 2, '.', '');
         }
         ?>
         <script type="text/javascript">
-          tipoDecambioVenta=<?php echo $tipoCambio[0]->monedaVenta; ?>;
-          monedaReserva=<?php echo $moneda; ?>;
-          subTotalReservaBs=<?php echo $reservaBs; ?>;
-          subTotalReservaDolar=<?php echo $reserva; ?>;
+         
+          monedaReserva='<?php echo $moneda; ?>';
+          subTotalReservaBs='<?php echo $reservaBs; ?>';
+          subTotalReservaDolar='<?php echo $reserva; ?>';
 
         </script>
         <?php  } ?>
@@ -377,8 +384,8 @@
 
             <input type="radio" id="tipoPagop" name="tipoPago" value="p" onclick="CargarTabla(this)">Plazo
           </label>      
-          <label class="pull-right"> <input type="radio" id="" name="tipoMoneda" value="" checked="" onclick="">Dolares</label>
-          <label class="pull-right"> <input type="radio" id="" name="tipoMoneda" value="" onclick="">Bolivianos</label>
+          <label class="pull-right"> <input type="radio" id="tipoMonedaDolares" name="tipoMoneda" value="DOLAR" checked="" onclick="convertirMoneda(this)">Dolares</label>
+          <label class="pull-right"> <input type="radio" id="tipoMonedaBoliviano" name="tipoMoneda" value="BOLIVIANO" onclick="convertirMoneda(this)">Bolivianos</label>
         </div>  
         <div class="panel-body">
           <div class="row">
@@ -397,11 +404,12 @@
              $precioContado=($lote[0]->precio*$lote[0]->superficie)-((($lote[0]->precio*$lote[0]->superficie)*$lote[0]->descuento)/100) ;
 
              $precioContadoMenoReserva=$precioContado-$reserva;
+
              $precioContadoBs=$precioContado*$tipoCambio[0]->monedaVenta;
-             $precioContadoBs=$precioContadoBs-$reserva;
+             $precioContadoBsMenosReserva=$precioContadoBs-$reservaBs;
              $precioContadoDolar=$precioContadoBs/$tipoCambioVenta;
 // $pagoInicialReserva=$pagoInicial-$reserva;
-number_format($pagoInicialReserva, 0, '.', '');//esto es lo qe tiene q pagar como minimo
+number_format($pagoInicialReserva, 2, '.', '');//esto es lo qe tiene q pagar como minimo
 ?>
 
 <input type="hidden" name="cuotaMinima">
@@ -414,26 +422,31 @@ number_format($pagoInicialReserva, 0, '.', '');//esto es lo qe tiene q pagar com
    <th>PRECIO DEL LOTE DE TERRENO</th>
    <th>%DESCUENTO</th>
    <th>PRECIO DEL LOTE AL CONTADO</th>
-   <th>pagar</th>
 
    <th>RESERVA</th>
-   <th>Total</th>
+   <th>TOTAL A PAGAR</th>
+  
  </thead>
  <tbody>
    <tr>
 
      <td><input type="text" readonly="" name="PrecioLote" value= <?php $precioVenta=($lote[0]->precio*$lote[0]->superficie);
-     echo number_format($precioVenta, 0, '.', ''); ?> readonly="readonly" class="form-control">
-     <td><?php echo $lote[0]->descuento."%"; ?>
+     echo number_format($precioVenta, 2, '.', ''); ?> readonly="readonly" class="form-control">
+     <input type="hidden" readonly="" name="PrecioLoteBolivano" value= <?php 
+     echo number_format($precioVenta*$tipoCambio[0]->monedaVenta, 2, '.', ''); ?> readonly="readonly" class="form-control">
+     <td ><?php echo $lote[0]->descuento."%"; ?>
       <td>
-       <td>
-        <input type="hidden" name="descuentoContado" value=<?php echo $lote[0]->descuento ?> readonly="readonly" class="form-control"><input type="text" name="PrecioContado" value=  <?php echo number_format($precioContadoMenoReserva, 0, '.', '');  ?> readonly="readonly" class="form-control">
+        <input type="text" name="PrecioContado" value=  <?php echo number_format($precioContado, 2, '.', '');  ?> readonly="readonly" class="form-control">
+        <input type="hidden" name="PrecioContadoBolivano" value=  <?php echo number_format($precioContado*$tipoCambio[0]->monedaVenta, 2, '.', '');  ?> readonly="readonly" class="form-control">
+       <td id="tdReserva">
+        <input type="hidden" name="descuentoContado" value=<?php echo $lote[0]->descuento ?> readonly="readonly" class="form-control">
+        <?php echo $reserva ?>
       </td>
 
-      <td><?php echo $reserva ?></td>
-      <td>
-       <input type="text" name="PrecioContado" value=  <?php echo number_format($precioContado, 0, '.', '');  ?> readonly="readonly" class="form-control">
-     </td>
+      <td> <input type="text" name="PCMR" value=  <?php echo number_format($precioContadoMenoReserva, 2, '.', '');  ?> readonly="readonly" class="form-control">
+        <input type="hidden" name="PCMRBs" value='<?php echo number_format($precioContadoBsMenosReserva, 2, '.', '');  ?>' readonly="readonly" class="form-control">
+      </td>
+      
 
    </tr>
  </tbody>
@@ -449,12 +462,13 @@ number_format($pagoInicialReserva, 0, '.', '');//esto es lo qe tiene q pagar com
    <th>Total a Pagar 
      <th>Reserva</th>
      <th>Total</th>
-     <th>.</th> 
    </thead>
    <tbody>
      <tr>
-       <td><input type="text" name="PrecioLotePlazo" value= <?php $precioVenta=($lote[0]->precio*$lote[0]->superficie);
-       echo number_format($precioVenta, 0, '.', ''); ?> readonly="readonly" class="form-control">
+       <td id="tdPrecioLoteTipoPlazo"><?php $precioVenta=($lote[0]->precio*$lote[0]->superficie);
+       echo number_format($precioVenta, 2, '.', ''); ?> 
+        <input type="hidden" name="PrecioLotePlazo" value= <?php $precioVenta=($lote[0]->precio*$lote[0]->superficie);
+       echo number_format($precioVenta, 2, '.', ''); ?> readonly="readonly" class="form-control">
        <td><!-- <input class="form-control" type="hidden" name="pago" value=<?php echo number_format($pagoInicialReserva, 2, '.', '');; ?>> -->
         <select name="SelectPagoInicial" onchange="PagoInicial(this)" style="display: none" class="form-control">
 
@@ -465,6 +479,7 @@ number_format($pagoInicialReserva, 0, '.', '');//esto es lo qe tiene q pagar com
 
         </select>
         <input class="form-control" type="number" name="pagoInicial" style="display: none" onchange="VerificarPagoInicial(this)" >
+        <input class="form-control" type="number" name="pagoInicialBs" style="display: none;" onchange="VerificarPagoInicial(this)" >
       </td>
       <td><input type="number" name="meses" class="form-control" onchange="verificarPlazo(this)">
        <td><select class="form-control" name="diaMes">
@@ -480,10 +495,11 @@ number_format($pagoInicialReserva, 0, '.', '');//esto es lo qe tiene q pagar com
         <input class="form-control" type="text" name="DescuentoPlazo" value="0" readonly="readonly">
       </td>
       <td> 
-       <input class="form-control" type="text" name="PrecioPlazo" value= <?php echo number_format($precioPlazo, 0, '.', ''); ?> readonly="readonly">
+       <input class="form-control" type="text" name="PrecioPlazo" value= <?php echo number_format($precioPlazo, 2, '.', ''); ?> readonly="readonly">
      </td>
 
-     <td><input type="text" name="reserva" value=<?php echo $reserva ?> readonly="readonly" class="form-control"></td>
+     <td><input type="text" name="reserva" value=<?php echo $reserva ?> readonly="readonly" class="form-control">
+      <input type="hidden" name="reservaBolivano" value=<?php echo $reservaBs ?> readonly="readonly" class="form-control"></td>
      <td><input type="text" class="form-control" name="totalPagado"  readonly="readonly"></td>
 
    </tr>
@@ -519,7 +535,22 @@ number_format($pagoInicialReserva, 0, '.', '');//esto es lo qe tiene q pagar com
 
     <input type="number" onchange="CompletarPago(this,2)" name="montoEfectivo" placeholder="Monto Efectivo"  class="form-control">
   </div>
+
 </div>
+<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+  <div  class="form-group" style="">
+    <label>PAGO USD</label>
+    <input type="number" name="pagoUsd" class="form-control" id="pagoUsd" onchange="pagoBolivanoDolar(this,1)">
+  </div>
+  <div  class="form-group" style="">
+    <label>PAGO BOLIVIANO</label>
+    <input type="number" name="pagoBs" class="form-control" readonly="" id="pagoBs" onchange ="pagoBolivanoDolar(this,0)">
+  </div>
+  <label>CAMBIOS</label><br> <span id="spanCambioDolar">00.00</span> Usd.&nbsp;| &nbsp;<span id="spanCambioBs">00.0</span> Bs.
+<input type="hidden" name="inputCambioUsd">
+<input type="hidden" name="inputCambioBs">
+</div>
+
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
   <div class="form-group">
     <label for="glosa">Detalle de transacción (*):</label>

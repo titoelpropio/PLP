@@ -248,7 +248,8 @@ function CargarTabla(radio){
   montoEfectivo=$('input[name=montoEfectivo]');
 montoBanco.val("");
 montoEfectivo.val("");
-
+$('#pagoUsd').val("");
+$('#pagoBs').val("");
   if ($(radio).val()=='c') {
    $('#TablaContado').css('display','block');
   $('#TablaPlazo').css('display','none');
@@ -302,7 +303,6 @@ function Verificar(){
 }
 function PagoInicial(select){//este viene del select calculando el pago inicial
   $('input[name=sumarDecimal]').val("");
-  
     // pagominimo=parseInt($('input[name=pago]').val());
 CuotaMinima=$('input[name=CuotaMinima]').val();//porcentaje cuota minima
     // pago=$('input[name=pago]').val();
@@ -312,6 +312,7 @@ CuotaMinima=$('input[name=CuotaMinima]').val();//porcentaje cuota minima
   tipoCambio=$('input[name=TipoDeCambio]').val();
 PrecioPlazo=$('input[name=PrecioPlazo]').val();
 pagoInicial=$('input[name=pagoInicial]');
+pagoInicialBs=$('input[name=pagoInicialBs]');
 totalPagado=$('input[name=totalPagado]');
 cuotaMensual=$('input[name=cuotaMensual]');
 reserva=$('input[name=reserva]').val();
@@ -320,10 +321,20 @@ PagoInicialReserva=CuatoInicial+parseInt(reserva);
    
 seleccion=$(select).val();
 if (seleccion=='0') {
-  pagoInicial.css('display','block');
-  pagoInicial.attr('readonly',true);
-pagoInicial.val(CuatoInicial);
+  if ($('#tipoMonedaBoliviano').prop('checked')) {
+  pagoInicial.css('display','none');
+  pagoInicialBs.css('display','block');
 
+}else{
+  pagoInicial.css('display','block');
+  pagoInicialBs.css('display','none');
+
+}
+ 
+  pagoInicial.attr('readonly',true);
+  pagoInicialBs.attr('readonly',true);
+pagoInicial.val(CuatoInicial);
+pagoInicialBs.val((CuatoInicial*tipoCambio).toFixed(2));
 totalPagado.val(PagoInicialReserva);
       
         PrecioTotalMenosCuota=PrecioPlazo-PagoInicialReserva;
@@ -348,7 +359,7 @@ totalPagado.val(PagoInicialReserva);
 else{
   $('input[name=pagoInicial]').attr('readonly',false);
 totalPagado.val("");
-  $('input[name=pagoInicial]').css('display','block');
+
   $('input[name=cuotaMensual]').val("");
 }
 }
@@ -533,4 +544,74 @@ else{
 }
 
 
+}
+
+function convertirMoneda(input){
+if ($(input).val()=="BOLIVIANO") {
+  //tipo de pago contado
+  $('input[name=PrecioLoteBolivano]').attr('type','text');
+  $('input[name=PrecioLote]').attr('type','hidden');
+  $('input[name=PrecioContadoBolivano]').attr('type','text');
+  $('input[name=PrecioContado]').attr('type','hidden');
+  $('input[name=PCMR]').attr('type','hidden');
+  $('input[name=PCMRBs]').attr('type','text');
+  $('input[name=reserva]').attr('type','hidden');
+  $('input[name=reservaBolivano]').attr('type','text');
+  $('input[name=pagoInicial]').css('display','none');
+  $('input[name=pagoInicialBs]').css('display','block');
+
+$('#tdPrecioLoteTipoPlazo').text($('input[name=PrecioLoteBolivano]').val());
+  $('#tdReserva').text($('input[name=reservaBolivano]').val());
+  $('#pagoBs').attr("readonly",false);
+  $('#pagoUsd').attr("readonly",true);
+
+}else{
+  //tipo de pago contado
+$('input[name=PrecioLoteBolivano]').attr('type','hidden');
+  $('input[name=PrecioLote]').attr('type','text');
+  $('input[name=PrecioContadoBolivano]').attr('type','hidden');
+  $('input[name=PrecioContado]').attr('type','text');
+  $('input[name=PCMR]').attr('type','text');
+  $('input[name=PCMRBs]').attr('type','hidden');
+$('input[name=reserva]').attr('type','text');
+  $('input[name=reservaBolivano]').attr('type','hidden');
+  $('#tdReserva').text($('input[name=reserva]').val());
+  $('#pagoBs').attr("readonly",true);
+  $('#pagoUsd').attr("readonly",false);
+$('#tdPrecioLoteTipoPlazo').text($('input[name=PrecioLote]').val());
+
+}
+}
+
+function pagoBolivanoDolar(input,tipo){//si tipo =0 entonces boliviano, si es =1 dolar
+  if (tipo==0) {
+
+    if ($('#tipoPagoc').prop('checked')) {
+
+
+valor=$(input).val();
+valorDolar=(valor/tipoDecambioVenta).toFixed(2);
+$('#pagoUsd').val(valorDolar);
+totalPagarContadoBs=$('input[name=PCMRBs]').val();
+totalPagarContadoUsd=$('input[name=PCMR]').val();
+cambioBs=(valor-totalPagarContadoBs).toFixed(2);
+cambioDolar=(valorDolar-totalPagarContadoUsd).toFixed(2);
+$('#spanCambioBs').text(cambioBs);
+$('#spanCambioDolar').text(cambioDolar);
+}else{
+
+}
+}else{
+  valorDolar=$(input).val();
+valor=(valorDolar*tipoDecambioVenta).toFixed(2);
+$('#pagoBs').val(valor);
+totalPagarContadoBs=$('input[name=PCMRBs]').val();
+totalPagarContadoUsd=$('input[name=PCMR]').val();
+cambioBs=(valor-totalPagarContadoBs).toFixed(2);
+cambioDolar=(valorDolar-totalPagarContadoUsd).toFixed(2);
+$('#spanCambioBs').text(cambioBs);
+$('#spanCambioDolar').text(cambioDolar);
+}
+$('input[name=inputCambioUsd]').val($('#spanCambioDolar').text());
+$('input[name=inputCambioBs]').val($('#spanCambioBs').text());
 }
