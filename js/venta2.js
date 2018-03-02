@@ -277,6 +277,8 @@ function CalcularPagos(select){
   cuota=PrecioTotal/plazo;
 // cuotaBs=tipoCambio*cuota;
   $('input[name=cuotaMensual]').val((cuota).toFixed(2));
+  $('input[name=cuotaMensualBs]').val((cuota*tipoCambio).toFixed(2));
+
       }
       else{
         PrecioTotal=PrecioLote*Superficie;
@@ -286,11 +288,14 @@ function CalcularPagos(select){
 
         if (cuota % 1 == 0) {
          $('input[name=cuotaMensual]').val(cuota)  ;
+  $('input[name=cuotaMensualBs]').val((cuota*tipoCambio).toFixed(2));
          
     }
     else{
          cuotaTotal=Math.trunc(cuota)+1;
           $('input[name=cuotaMensual]').val(cuotaTotal)  ;
+  $('input[name=cuotaMensualBs]').val((cuota*tipoCambio).toFixed(2));
+
     }
        
       
@@ -315,9 +320,11 @@ pagoInicial=$('input[name=pagoInicial]');
 pagoInicialBs=$('input[name=pagoInicialBs]');
 totalPagado=$('input[name=totalPagado]');
 cuotaMensual=$('input[name=cuotaMensual]');
+cuotaMensualBs=$('input[name=cuotaMensualBs]');
 reserva=$('input[name=reserva]').val();
+totalPagadoBs=$('input[name=totalPagadoBs]');
  CuatoInicial=(PrecioPlazo*CuotaMinima/100).toFixed(0)-reserva;
-PagoInicialReserva=CuatoInicial+parseInt(reserva);
+PagoInicialReserva=CuatoInicial+parseFloat(reserva);
    
 seleccion=$(select).val();
 if (seleccion=='0') {
@@ -336,12 +343,13 @@ if (seleccion=='0') {
 pagoInicial.val(CuatoInicial);
 pagoInicialBs.val((CuatoInicial*tipoCambio).toFixed(2));
 totalPagado.val(PagoInicialReserva);
-      
+      totalPagadoBs.val((PagoInicialReserva*tipoCambio).toFixed(2));
         PrecioTotalMenosCuota=PrecioPlazo-PagoInicialReserva;
         cuota=PrecioTotalMenosCuota/plazo;
 
         if (cuota % 1 == 0) {
         cuotaMensual.val(cuota)  ;
+        cuotaMensualBs.val((cuota*tipoCambio).toFixed(2));
        
     }
     else{
@@ -350,6 +358,7 @@ totalPagado.val(PagoInicialReserva);
  sumarDecimal(cuota,cuotaTotal);
 
           cuotaMensual.val(cuotaTotal)  ;
+          cuotaMensualBs.val((cuota*tipoCambio).toFixed(2))  ;
 
     }
 
@@ -357,10 +366,17 @@ totalPagado.val(PagoInicialReserva);
 
 }
 else{
-  $('input[name=pagoInicial]').attr('readonly',false);
+  if ($('#tipoMonedaBoliviano').prop('checked')) {
+  $('input[name=totalPagadoBs]').attr('readonly',false);
 totalPagado.val("");
 
   $('input[name=cuotaMensual]').val("");
+}else{
+  $('input[name=totalPagado]').attr('readonly',false);
+totalPagadoBs.val("");
+
+  $('input[name=cuotaMensual]').val("");
+}
 }
 }
 
@@ -406,11 +422,13 @@ return;
   }
 
 
-function VerificarPagoInicial(input){//este se encarga e verificar que el pago sea mayor al minimo
-     // pagominimo=parseInt($('input[name=pago]').val());
+function VerificarPagoInicial(input,moneda){//este se encarga e verificar que el pago sea mayor al minimo
+     // pagominimo=parseInt($('input[name=pago]').val());// si la moneda 0 es bolivano, si 1 es dolar
+     if (moneda==1) {
+
 CuotaMinima=$('input[name=CuotaMinima]').val();//porcentaje cuota minima
     // pago=$('input[name=pago]').val();
-  plazo=$('input[name=meses]').val();
+plazo=$('input[name=meses]').val();
 PrecioPlazo=$('input[name=PrecioPlazo]').val();
 pagoInicial=$('input[name=pagoInicial]').val();
 cuotaMensual=$('input[name=cuotaMensual]').val();
@@ -421,7 +439,7 @@ PagoInicialReserva=parseInt(pagoInicial)+parseInt(reserva);
  totalPagado= $('input[name=totalPagado]').val("");
 pago=parseInt($(input).val());
 
-if (parseInt(pagoInicial)<CuatoInicial) {//este verifica que el pago sea mayor al minimo
+if (parseFloat(pagoInicial)<CuatoInicial) {//este verifica que el pago sea mayor al minimo
   toastr.error('El pago tiene que ser mayor al minimo');
           $('input[name=cuotaMensual]').val("")  ;
 
@@ -450,6 +468,9 @@ else{
 
     totalPagado.val(PagoInicialReserva);
 }
+     }else{
+      
+     }
 }
 
 function sumarDecimal(numero,entero){
@@ -564,8 +585,10 @@ $('#tdPrecioLoteTipoPlazo').text($('input[name=PrecioLoteBolivano]').val());
   $('#tdReserva').text($('input[name=reservaBolivano]').val());
   $('#pagoBs').attr("readonly",false);
   $('#pagoUsd').attr("readonly",true);
-
+   $('input[name=totalPagadoBs]').attr('type','text');
+   $('input[name=totalPagado]').attr('type','hidden');
 }else{
+
   //tipo de pago contado
 $('input[name=PrecioLoteBolivano]').attr('type','hidden');
   $('input[name=PrecioLote]').attr('type','text');
@@ -579,7 +602,10 @@ $('input[name=reserva]').attr('type','text');
   $('#pagoBs').attr("readonly",true);
   $('#pagoUsd').attr("readonly",false);
 $('#tdPrecioLoteTipoPlazo').text($('input[name=PrecioLote]').val());
-
+ $('input[name=totalPagadoBs]').attr('type','hidden');
+   $('input[name=totalPagado]').attr('type','text');
+   $('input[name=pagoInicial]').css('display','block');
+  $('input[name=pagoInicialBs]').css('display','none');
 }
 }
 
@@ -599,9 +625,20 @@ cambioDolar=(valorDolar-totalPagarContadoUsd).toFixed(2);
 $('#spanCambioBs').text(cambioBs);
 $('#spanCambioDolar').text(cambioDolar);
 }else{
-
+totalPagadoBs=$('input[name=pagoInicialBs]').val();
+totalPagadoUsd=$('input[name=pagoInicial]').val();
+valor=$(input).val();
+valorDolar=(valor/tipoDecambioVenta).toFixed(2);
+$('#pagoUsd').val(valorDolar);
+totalPagarPlazoBs=totalPagadoBs;
+totalPagarPlazoUsd=totalPagadoUsd;
+cambioBs=(valor-totalPagarPlazoBs).toFixed(2);
+cambioDolar=(valorDolar-totalPagarPlazoUsd).toFixed(2);
+$('#spanCambioBs').text(cambioBs);
+$('#spanCambioDolar').text(cambioDolar);
 }
 }else{
+     if ($('#tipoPagoc').prop('checked')) {
   valorDolar=$(input).val();
 valor=(valorDolar*tipoDecambioVenta).toFixed(2);
 $('#pagoBs').val(valor);
@@ -611,6 +648,19 @@ cambioBs=(valor-totalPagarContadoBs).toFixed(2);
 cambioDolar=(valorDolar-totalPagarContadoUsd).toFixed(2);
 $('#spanCambioBs').text(cambioBs);
 $('#spanCambioDolar').text(cambioDolar);
+}else{
+  totalPagadoBs=$('input[name=pagoInicialBs]').val();
+totalPagadoUsd=$('input[name=pagoInicial]').val();
+valor=$(input).val();
+valorBs=(valor*tipoDecambioVenta).toFixed(2);
+$('#pagoBs').val(valorBs);
+totalPagarPlazoBs=totalPagadoBs;
+totalPagarPlazoUsd=totalPagadoUsd;
+cambioBs=(valorBs-totalPagarPlazoBs).toFixed(2);
+cambioDolar=(valor-totalPagarPlazoUsd).toFixed(2);
+$('#spanCambioBs').text(cambioBs);
+$('#spanCambioDolar').text(cambioDolar);
+}
 }
 $('input[name=inputCambioUsd]').val($('#spanCambioDolar').text());
 $('input[name=inputCambioBs]').val($('#spanCambioBs').text());

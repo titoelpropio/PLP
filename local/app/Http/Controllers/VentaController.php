@@ -276,8 +276,7 @@ public function store(Request $request) {
                   //----------------------------------- fin Contabilidad -----------------------------------------------------//
                   
                   $venta=Venta::create([
-                    'cuotaInicial'=>$request['pagoInicial'],
-                    'precio'=>$request['PrecioLotePlazo'],
+                    'precio'=>$request['PrecioLote'],
                     'estado'=>'c',
                     'tipoPago'=>$request['tipoDepositoC'],
                     'descuento'=>$request['DescuentoPlazo'],
@@ -286,7 +285,16 @@ public function store(Request $request) {
                     'idEmpleado'=>Session::get('idEmpleado'),
                     'idLote'=>$request->id_lote,
                     'idTipoCambio'=>$request->idTipoCambio,
-                    'idAsiento'=>$asiento['id']
+                    'idAsiento'=>$asiento['id'],
+                    'pagoBs'=>$request['pagoBs'],
+                    'pagoUsd'=>$request['pagoUsd'],
+                    'totalapagar'=>$request['pagoInicial'],
+                    'totalapagarBs'=>$request['pagoInicialBs'],
+                    'cambioBs'=>$request['inputCambioBs'],
+                    'cambioUsd'=>$request['inputCambioUsd'],
+                    'precioBs'=>$request['PrecioLoteBolivano'],
+                    'moneda'=>$request['tipoMoneda'],
+                    'reservaBs'=>$request['reservaBolivano']
                   ]);
 
                   $PlanDePago=PlanDePago::create([
@@ -294,7 +302,9 @@ public function store(Request $request) {
                     'estado'=>'d',
                     'nroCuotas'=>$request['meses'],
                     'idVenta'=>$venta['id'],
-                    'idTipoCambio'=>$request->idTipoCambio,
+                    'cuotaInicialUsd'=>$request->pagoInicial,
+                    'cuotaInicialBs'=>$request->pagoInicialBs,
+                    'montoTotalBs'=>number_format($request->PrecioPlazo*$tipocambio[0]->monedaVenta, 2, '.', '')
                   ]);
 
                   $mes=date('n');
@@ -467,9 +477,8 @@ public function store(Request $request) {
                   //----------------------------------- fin Contabilidad -----------------------------------------------------//
                   echo $request['PCMRBs']."dfadfadfadfadfadf";
                   $venta=Venta::create([
-                    'cuotaInicial'=>$request['PrecioContado'],
                     'precio'=>$request['PrecioLote'],
-                   
+
                     'estado'=>'p',
                     'tipoPago'=>$request['tipoDepositoC'],
                     'descuento'=>$request['descuentoContado'],
@@ -484,8 +493,8 @@ public function store(Request $request) {
                     'totalapagar'=>$request['PCMR'],
                     'totalapagarBs'=>$request['PCMRBs'],
 
-                     'cambioBs'=>$request['inputCambioBs'],
-                     'cambioUsd'=>$request['inputCambioUsd'],
+                    'cambioBs'=>$request['inputCambioBs'],
+                    'cambioUsd'=>$request['inputCambioUsd'],
                     'precioBs'=>$request['PrecioLoteBolivano'],
                     'moneda'=>$request['tipoMoneda'],
                     'reservaBs'=>$request['reservaBolivano']
@@ -594,7 +603,7 @@ public function store(Request $request) {
                 }
 
               if ($request['tipoPago']=='p') {//reporte pdf plan de pago
-                $cliente=DB::select("select cliente.expedido, ( venta.reserva+venta.cuotaInicial)as cuotaInicial, venta.reserva,lote.superficie,cliente.nombre,cliente.apellidos,cliente.ci,cliente.expedido,venta.precio,venta.fecha,lote.nroLote,lote.manzano,lote.fase,proyecto.nombre as nombreProyecto    from cliente,venta, plandepago,lote,proyecto where venta.id=plandepago.idVenta and cliente.id=venta.idCliente and venta.id=".$venta['id']." and venta.idLote=lote.id and proyecto.id=lote.idProyecto");
+                $cliente=DB::select("select cliente.expedido, plandepago.cuotaInicialUsd as cuotaInicial, venta.reserva,lote.superficie,cliente.nombre,cliente.apellidos,cliente.ci,cliente.expedido,venta.precio,venta.fecha,lote.nroLote,lote.manzano,lote.fase,proyecto.nombre as nombreProyecto    from cliente,venta, plandepago,lote,proyecto where venta.id=plandepago.idVenta and cliente.id=venta.idCliente and venta.id=".$venta['id']." and venta.idLote=lote.id and proyecto.id=lote.idProyecto");
                 $cuotas=DB::select("select cuotas.monto,cuotas.estado,cuotas.fechaLimite,@num:=@num+1 as num  from (select @num:=0) r, cliente,venta, plandepago, cuotas where venta.id=plandepago.idVenta and plandepago.id =cuotas.idPlandePago and cliente.id=venta.idCliente and venta.id=".$venta['id']);
                 $totalCuotas=DB::select("SELECT sum(cuotas.monto) as totalCuotas FROM venta,cuotas,plandepago where venta.id=plandepago.idVenta and plandepago.id=cuotas.idPlandePago  and venta.id=".$venta['id']);
 

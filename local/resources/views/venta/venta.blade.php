@@ -454,14 +454,15 @@ number_format($pagoInicialReserva, 2, '.', '');//esto es lo qe tiene q pagar com
 <table class="table table-striped table-bordered table-condensed table-hover" style="display: none ;     border: 1px solid;" id="TablaPlazo">
  <thead>
    <th>PRECIO DEL LOTE DE TERRENO</th>
+    <th>% DESCUENTO</th>
+   <th>PRECIO DEL LOTE CON DESCUENTO
+  
+   <th>PLAZOS</th>
+   <th>DIA DE PAGO</th>
+   <th>CUOTA MENSUAL</th>
    <th>CUOTA iNICIAl</th>
-   <th>Plazos</th>
-   <th>Día de Pago</th>
-   <th>Cuota MENSUAL</th>
-   <th>% Descuento</th>
-   <th>Total a Pagar 
-     <th>Reserva</th>
-     <th>Total</th>
+     <th>RESERVA</th>
+     <th>TOTAL A PAGAR INICIAL</th>
    </thead>
    <tbody>
      <tr>
@@ -469,18 +470,13 @@ number_format($pagoInicialReserva, 2, '.', '');//esto es lo qe tiene q pagar com
        echo number_format($precioVenta, 2, '.', ''); ?> 
         <input type="hidden" name="PrecioLotePlazo" value= <?php $precioVenta=($lote[0]->precio*$lote[0]->superficie);
        echo number_format($precioVenta, 2, '.', ''); ?> readonly="readonly" class="form-control">
-       <td><!-- <input class="form-control" type="hidden" name="pago" value=<?php echo number_format($pagoInicialReserva, 2, '.', '');; ?>> -->
-        <select name="SelectPagoInicial" onchange="PagoInicial(this)" style="display: none" class="form-control">
-
-          <option >seleccione</option>
-
-          <option value="0">Calcular</option>
-          <option value="1">Ingresar</option>
-
-        </select>
-        <input class="form-control" type="number" name="pagoInicial" style="display: none" onchange="VerificarPagoInicial(this)" >
-        <input class="form-control" type="number" name="pagoInicialBs" style="display: none;" onchange="VerificarPagoInicial(this)" >
+       <td>
+        <input class="form-control" type="text" name="DescuentoPlazo" value="0" readonly="readonly">
       </td>
+      <td> 
+       <input class="form-control" type="text" name="PrecioPlazo" value= <?php echo number_format($precioPlazo, 2, '.', ''); ?> readonly="readonly">
+     </td>
+      
       <td><input type="number" name="meses" class="form-control" onchange="verificarPlazo(this)">
        <td><select class="form-control" name="diaMes">
         <?php for ($i=1; $i <29 ; $i++) { 
@@ -489,18 +485,29 @@ number_format($pagoInicialReserva, 2, '.', '');//esto es lo qe tiene q pagar com
       </select>
 
       <td><input type="number" name="cuotaMensual" readonly="readonly" class="form-control">
+        <input type="hidden" name="cuotaMensualBs" readonly="readonly" class="form-control">
         <input type="hidden" name="sumarDecimal" readonly="readonly" class="form-control">
       </td>
-      <td>
-        <input class="form-control" type="text" name="DescuentoPlazo" value="0" readonly="readonly">
-      </td>
-      <td> 
-       <input class="form-control" type="text" name="PrecioPlazo" value= <?php echo number_format($precioPlazo, 2, '.', ''); ?> readonly="readonly">
-     </td>
+      
+       <td><!-- <input class="form-control" type="hidden" name="pago" value=<?php echo number_format($pagoInicialReserva, 2, '.', '');; ?>> -->
+        <select name="SelectPagoInicial" onchange="PagoInicial(this)" style="display: none" class="form-control">
 
+          <option >seleccione</option>
+
+          <option value="0">Calcular</option>
+          <!-- <option value="1">Ingresar</option> -->
+
+        </select>
+       <input type="text" class="form-control" name="totalPagado"  readonly="readonly" onchange="VerificarPagoInicial(this,1)">
+      <input type="hidden" class="form-control" name="totalPagadoBs"  readonly="readonly" onchange="VerificarPagoInicial(this,0)">
+      </td>
      <td><input type="text" name="reserva" value=<?php echo $reserva ?> readonly="readonly" class="form-control">
       <input type="hidden" name="reservaBolivano" value=<?php echo $reservaBs ?> readonly="readonly" class="form-control"></td>
-     <td><input type="text" class="form-control" name="totalPagado"  readonly="readonly"></td>
+     <td>
+       <input class="form-control" type="number" name="pagoInicial" style="display: none"  >
+        <input class="form-control" type="number" name="pagoInicialBs" style="display: none"  >
+
+     </td>
 
    </tr>
  </tbody>
@@ -517,7 +524,7 @@ number_format($pagoInicialReserva, 2, '.', '');//esto es lo qe tiene q pagar com
     <input type="radio" name="tipoDepositoC" value='b'onclick="cargarBanco(this)">Banco
   </label>  
   <label>
-    <input type="radio" name="tipoDepositoC" value='be'onclick="cargarBanco(this)">Banco y Efectivo
+    <!-- <input type="radio" name="tipoDepositoC" value='be'onclick="cargarBanco(this)">Banco y Efectivo -->
   </label>
   <br>
   <div id="divBanco" class="form-group" style="display: none">
