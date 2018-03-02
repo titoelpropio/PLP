@@ -43,6 +43,7 @@ function reporte_libro_venta(verificar) {
             for (var i = 0; i < total_filas; i++) {
 
                 tabla.append("<tr >\n\
+                <td style='display:none;'>" + 3 + "</td>\n\
                 <td>" + fila + "</td>\n\
                 <td>" + response[i].fecha_factura + "</td>\n\
                 <td style = 'text-align: right;'>" + response[i].nro_factura + "</td>\n\
@@ -94,6 +95,7 @@ function reporte_libro_compra(verificar) {
             for (var i = 0; i < total_filas; i++) {
 
                 tabla.append("<tr >\n\
+                <td style='display:none;'>" + 1 + "</td>\n\
                 <td>" + fila + "</td>\n\
                 <td>" + response[i].fecha_factura_DUI + "</td>\n\
                 <td style = 'text-align: right;'>" + response[i].nit_proveedor + "</td>\n\
@@ -1133,4 +1135,33 @@ function balance_general(verificar) {
 
         $('#loading').css("display", "none");
     });
+}
+
+function ExportarExcel(tabla,nombre) {
+
+    var ExportButtons = document.getElementById(tabla);
+    var instance = new TableExport(ExportButtons, {
+        filename: nombre,
+        formats: ['xlsx'],
+        exportButtons: false
+    });
+    var exportData = instance.getExportData()[tabla]['xlsx'];
+    instance.export2file(exportData.data, exportData.mimeType, exportData.filename, exportData.fileExtension);
+    instance.remove();
+}
+
+function ExportarTxt(tabla,nombre) {
+
+    var ExportButtons = document.getElementById(tabla);
+    TableExport.prototype.formatConfig.txt.separator = "|";
+    var instance = new TableExport(ExportButtons, {
+        headers: false,
+        filename: nombre,
+        formats: ['txt'],
+        exportButtons: false
+    });
+    
+    var exportData = instance.getExportData()[tabla]['txt'];
+    instance.export2file(exportData.data, exportData.mimeType, exportData.filename, exportData.fileExtension);
+    instance.remove();
 }

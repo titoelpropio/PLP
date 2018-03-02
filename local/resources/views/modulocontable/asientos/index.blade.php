@@ -182,7 +182,7 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
-                    <label for="agregar_LV">Agregar a Libro de Venta:</label><br>
+                    <label for="agregar_LV">Agregar a Libro de Ventas:</label><br>
                     <label class="radio-inline"><input type="radio" value="1" name="agregar_LV" id="agregar_LV_si" onchange="agregar_libro_venta(this.value)">Si</label>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <label class="radio-inline"><input type="radio" value="0" name="agregar_LV" id="agregar_LV_no" onchange="agregar_libro_venta(this.value)" checked>No</label>
@@ -197,7 +197,7 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" >
-                    <label for="agregar_LC">Agregar a Libro de Compra:</label><br>
+                    <label for="agregar_LC">Agregar a Libro de Compras:</label><br>
                     <label class="radio-inline"><input type="radio" value="1" name="agregar_LC" id="agregar_LC_si" onchange="agregar_libro_compra(this.value)">Si</label>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <label class="radio-inline"><input type="radio" value="0" name="agregar_LC" id="agregar_LC_no" onchange="agregar_libro_compra(this.value)" checked>No</label>

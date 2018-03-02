@@ -3,7 +3,7 @@
     <div class="modal-content">
       <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title">LIBRO DE VENTA</h4>
+	        <h4 class="modal-title">LIBRO DE VENTAS</h4>
 	        <H5 class="modal-title">(AGREGAR MOTOS EN BOLIVIANOS)</H5>
       </div>
 
@@ -115,7 +115,7 @@
     <div class="modal-content">
       <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title">LIBRO DE COMPRA</h4>
+	        <h4 class="modal-title">LIBRO DE COMPRAS</h4>
 	        <H5 class="modal-title">(AGREGAR MOTOS EN BOLIVIANOS)</H5>
       </div>
 
