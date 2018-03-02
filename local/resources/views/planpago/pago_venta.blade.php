@@ -61,7 +61,7 @@
                                     <span class="negritaTabla">Nro. Lote:</span> '.$lis[0]->nroLote.'</td>';
 
                                  ?>
-                                 <td>{{$lis[0]->cuotaInicial}}</td>
+                                 <td></td>
                                     <?php if ($lis[0]->estado_venta==='c'):
                                     echo '<td>Plazo';
                                 else:
@@ -71,8 +71,8 @@
                                     <?php endif ?>
                                     <td>{{$lis[0]->precio*$lis[0]->monedaVenta}}</td>
                                     <td>{{$lis[0]->precio}}</td>
-                                    <td>{{$lis[0]->TotalPagado+$lis[0]->cuotaInicial}}</td>
-                                    <td>{{$lis[0]->precio-($lis[0]->TotalPagado+$lis[0]->cuotaInicial)}}</td>
+                                    <td>{{$lis[0]->TotalPagado}}</td>
+                                    <td>{{$lis[0]->precio-$lis[0]->TotalPagado}}</td>
 
                                     <td>{{$lis[0]->fecha}}</td>
 
@@ -86,7 +86,7 @@
                                     <?php endif ?>
                                     <td><a href="{!!URL::to('PlanPago')!!}<?php echo "/".$lis[0]->id ?>" class="btn-sm btn-success" >PAGAR</a>
                                         <a data-toggle="modal" style="cursor: pointer;" data-target="#DetalleCuota" href="#" onclick="CargarCuotas(<?php echo $lis[0]->id ?>)" class="btn-sm btn-info" >DETALLE</a>
-                                    </td>                        
+                                    </td>
                                     </tr>
 
                

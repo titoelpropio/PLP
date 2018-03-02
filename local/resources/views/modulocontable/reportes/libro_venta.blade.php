@@ -33,36 +33,43 @@
     </div>
     <div class="col-lg-3 col-md-3 col-sm-5 col-xs-12 pull-right">
         <center>
-        <span style="font-size: 15pt ">Gestion Actual:&nbsp;
-        <?php
-            if (count($gestion)==1) {
-        ?>
-        <span style="font-size:20pt; color: #00A65A;">{{$gestion[0]->nombre_gestion}}</span>
-        </span><br>
-        <input id="fecha_inicial" type="hidden" value="{{$gestion[0]->fecha_inicio}}">
-        <input id="fecha_fin" type="hidden" value="{{$gestion[0]->fecha_fin}}">
-        <div class="form-group" >
-            <button class="btn btn-success" onclick="reporte_libro_venta(0)">Gestion actual</button>
-        </div>
-        <?php
-            }
-            else {
-               echo "<span style='font-size:20pt; color: #DD4B39;'>Ninguna</span></span><br>";
-            }
-        ?>
+            <span style="font-size: 15pt ">Gestion Actual:&nbsp;
+            <?php
+                if (count($gestion)==1) {
+            ?>
+            <span style="font-size:20pt; color: #00A65A;">{{$gestion[0]->nombre_gestion}}</span>
+            </span><br>
+            <input id="fecha_inicial" type="hidden" value="{{$gestion[0]->fecha_inicio}}">
+            <input id="fecha_fin" type="hidden" value="{{$gestion[0]->fecha_fin}}">
+            <div class="form-group" >
+                <button class="btn btn-success" onclick="reporte_libro_venta(0)">Gestion actual</button>
+            </div>
+            <?php
+                }
+                else {
+                   echo "<span style='font-size:20pt; color: #DD4B39;'>Ninguna</span></span><br>";
+                }
+            ?>
+        </center>
+        <center>
+            <div class="form-group" >
+                <button class="btn btn-default" onclick="ExportarExcel('tabla_LV','LibroVentas')" title="Exportar a Excel"><img src="images/excel.png"></button>
+                <button class="btn btn-default" onclick="ExportarTxt('tabla_LV','LibroVentas')" title="Exportar a Txt"><img src="images/txt.png"></button>
+            </div>
         </center>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="table-responsive">
                 
-            <table class="table table-striped table-bordered table-condensed table-hover">
+            <table class="table table-striped table-bordered table-condensed table-hover" name="tabla_LV" id="tabla_LV">
                 <thead style='background-color: #8CDF33'>
+                <th style="display:none;"><CENTER>ESPECIFICACIÓN</CENTER></th>
                 <th style="white-space: nowrap;"><CENTER>N°</CENTER></th>
                 <th style="white-space: nowrap;"><CENTER>FECHA DE LA FACTURA</CENTER></th>
                 <th style="white-space: nowrap;"><CENTER>N° DE LA FACTURA</CENTER></th>	
                 <th style="white-space: nowrap;"><CENTER>N° DE AUTORIZACIÓN</CENTER></th>	
                 <th style="white-space: nowrap;"><CENTER>ESTADO</CENTER></th>
-                <th style="white-space: nowrap;"><CENTER>NIT/CI CLIENTE</CENTER></th>  
+                <th style="white-space: nowrap;"><CENTER>NIT/CI CLIENTE</CENTER></th>
                 <th style="white-space: nowrap;"><CENTER>NOMBRE O RAZÓN SOCIAL</CENTER></th>
                 <th style="white-space: nowrap;"><CENTER>IMPORTE TOTAL DE LA VENTA</CENTER></th>
                 <th style="white-space: nowrap;"><CENTER>IMPORTE ICE/IEHD/IPJ/TASAS/OTROS NO SUJETOS AL IVA</CENTER></th>
@@ -92,5 +99,8 @@
 </div><!-- /.box-body -->
 @endsection
 @section ('javascript')
+{!!Html::script('exportar/js/xlsx.core.min.js')!!}
+{!!Html::script('exportar/js/FileSaver.min.js')!!}
+{!!Html::script('exportar/js/tableexport.min.js')!!}
 {!!Html::script('js/reportes.js')!!}
 @endsection
