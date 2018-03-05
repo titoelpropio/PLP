@@ -525,10 +525,10 @@ public function store(Request $request) {
                       'idBanco'=>$request['bancoC'],
                       'idCuenta'=>$request['cuentaC'],
                       'nroDocumento'=>$request['nroDocumentoC'],
-                      'monto'=>$venta['cuotaInicial'],
+                      'monto'=>$venta['PCMR'],
                       'fecha'=>$request['fechaDeposito'],
                     ]);
-
+                    
                       //---------------------------------- Contabilidad BANCO----------------------------------------------------//
                     $montoBancoBs = $venta['cuotaInicial'] * $tipocambio[0]->monedaVenta;
                     $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Bancos'");

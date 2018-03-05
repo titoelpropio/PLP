@@ -665,3 +665,51 @@ $('#spanCambioDolar').text(cambioDolar);
 $('input[name=inputCambioUsd]').val($('#spanCambioDolar').text());
 $('input[name=inputCambioBs]').val($('#spanCambioBs').text());
 }
+
+function validarVenta(){
+  ci=$('#ci').val();
+  glosa=$('#glosa').val();
+  lugarProcedencia=$('input[name=lugarProcedencia]').val();
+  nombre=$('input[name=nombre]').val();
+  apellidos=$('input[name=apellidos]').val();
+  ocupacion=$('input[name=ocupacion]').val();
+  domicilio=$('input[name=domicilio]').val();
+  celular=$('input[name=celular]').val();
+  celular_ref=$('input[name=celular_ref]').val();
+  nit=$('input[name=nit]').val();
+  fechaNacimiento=$('input[name=fechaNacimiento]').val();
+
+var error="";
+  if (validar('entero',ci) || ci=="0" || ci=="") {
+   error+="EL CAMPO CI NO TIENE QUE ESTAR VACIO, NI TAMPOCO TENER CARACTERES DE TIPO LETRA \n";
+  }
+  if (validar('texto',nombre) || nombre=="") {
+   error+="EL CAMPO NOMBRE NO TIENE QUE ESTAR VACIO, NI TAMPOCO TENER CARACTERES DE TIPO NUMERO \n";
+  }
+   if (validar('texto',apellidos) || nombre=="") {
+   error+="EL CAMPO APELLIDOS NO TIENE QUE ESTAR VACIO, NI TAMPOCO TENER CARACTERES DE TIPO NUMERO \n";
+  }
+   if (validar('texto',ocupacion) || ocupacion=="") {
+   error+="EL CAMPO OCUPACION NO TIENE QUE ESTAR VACIO, NI TAMPOCO TENER CARACTERES DE TIPO NUMERO. \n";
+  }
+  if (validar('entero',celular_ref) && celular_ref!="") {
+   error+="EL CAMPO CELULAR REF. NO TIENE QUE TENER CARACTERES TIPO LETRA. \n";
+  }
+  if (validar('entero',nit) && nit!="") {
+   error+="EL CAMPO NIT REF. NO TIENE QUE TENER CARACTERES TIPO LETRA. \n";
+  }
+  if (domicilio=="") {
+   error+="EL CAMPO DOMICILIO NO TIENE QUE ESTAR VACIO. \n";
+  }
+  if (glosa=="") {
+   error+="EL CAMPO DETALLE DE TRANSACCIÓN NO TIENE QUE ESTAR VACIO. \n";
+
+  }
+  if (validar('entero',celular) || ci=="") {}
+  if (error!="") {
+    alert(error);
+  }else{
+    return true;
+  }
+  return false;
+}

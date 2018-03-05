@@ -20,9 +20,9 @@
 </section>
 <script type="text/javascript">
   tipoDecambioVenta='<?php echo $tipoCambio[0]->monedaVenta; ?>';
-          monedaReserva=0;
-          subTotalReservaBs=0;
-          subTotalReservaDolar=0;
+  monedaReserva=0;
+  subTotalReservaBs=0;
+  subTotalReservaDolar=0;
 
 </script>
 <div class="col-md-12">
@@ -54,7 +54,7 @@
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
           <div class="panel panel-success" style="text-transform: uppercase;">
             <div class="panel-heading">
-              {!!Form::open(['route'=>'Venta.store', 'method'=>'POST','onKeypress'=>'if(event.keyCode == 13) event.returnValue = false;'])!!}
+              {!!Form::open(['route'=>'Venta.store', 'method'=>'POST','onKeypress'=>'if(event.keyCode == 13) event.returnValue = false;','onsubmit'=>'javascript: return validarVenta()'])!!}
 
               <strong>DATOS DEL CLIENTE</strong>  
               <div class="form-group pull-right">
@@ -111,28 +111,69 @@
                       } ?>
                     </select>
                   </div>        
-                </div>     
+                </div>    
                 <div class="col-sm-3 ">
                   <div class="form-group">
+                    <label for="ocupacion">Ocupacion</label>
+                    <input  type="text"  class="form-control" name="ocupacion"  placeholder="Cargo " >  
+                  </div>        
+                </div> 
+                
 
-                   <div class="form-group">
-                    <label>Fecha Nac. *</label>
+                <div class="col-sm-3 ">
+                  <div class="form-group">
+                    <label for="lugarProcedencia">Ciudad de Procedencia*</label>
+                    <input  type="text"  class="form-control" name="lugarProcedencia" placeholder="" >  
+                  </div>        
+                </div>
 
-                    <div class="input-group date">
-                      <div class="input-group-addon">
-                        <i class="fa fa-calendar"></i>
-                      </div>
-                      <input type="text" name="fechaNacimiento" class="form-control pull-right" id="datepicker">
-                    </div>
-                    <!-- /.input group -->
-                  </div>
-                </div>        
-              </div>
+              </section>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <section>
 
-              <div class="col-sm-3 ">
+
+                <div class="col-sm-3 ">
+                  <div class="form-group">
+                    <label for="nombre">Nombres *</label>
+                    <input  type="text"  class="form-control" name="nombre" placeholder="" >  
+                  </div>        
+                </div>
+                <div class="col-sm-3 ">
+                  <div class="form-group">
+                    <label for="apellidos">Apellidos *</label>
+                    <input type="text"  class="form-control" name="apellidos" >  
+                  </div>        
+                </div>
+                <div class="col-sm-2 ">
+                  <div class="form-group">
+                    <label for="estadoCivil">Estado Civil *</label>
+                    <select name="estadoCivil" class="form-control" id="estadoCivil">
+                     <option value="s">SOLTERO (A)</option>
+                     <option value="c">CASADO (A)</option>
+                     <option value="d">DIVORCIADO (A)</option>
+                     <option value="v">VIUDO (A)</option>
+
+                   </select>
+                 </div>        
+               </div>
+               <div class="col-sm-4 ">
                 <div class="form-group">
-                  <label for="lugarProcedencia">Ciudad de Procedencia*</label>
-                  <input  type="text"  class="form-control" name="lugarProcedencia" placeholder="" >  
+                  <label for="genero">Genero *</label>
+                  <div class="radio">
+                    <label>
+                      <input type="radio" name="genero" value="m" id="m" checked="">
+                      Masculino
+
+
+                    </label>
+                    <label>
+
+                      <input type="radio" name="genero" value="f"  id="f">
+                      Femenino
+
+                    </label>
+                  </div>
                 </div>        
               </div>
 
@@ -140,60 +181,20 @@
           </div>
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <section>
-
-
               <div class="col-sm-3 ">
                 <div class="form-group">
-                  <label for="nombre">Nombres *</label>
-                  <input  type="text"  class="form-control" name="nombre" placeholder="" >  
-                </div>        
-              </div>
-              <div class="col-sm-3 ">
-                <div class="form-group">
-                  <label for="apellidos">Apellidos *</label>
-                  <input type="text"  class="form-control" name="apellidos" >  
-                </div>        
-              </div>
-              <div class="col-sm-2 ">
-                <div class="form-group">
-                  <label for="estadoCivil">Estado Civil *</label>
-                  <select name="estadoCivil" class="form-control" id="estadoCivil">
-                   <option value="s">SOLTERO (A)</option>
-                   <option value="c">CASADO (A)</option>
-                   <option value="d">DIVORCIADO (A)</option>
-                   <option value="v">VIUDO (A)</option>
 
-                 </select>
-               </div>        
-             </div>
-             <div class="col-sm-4 ">
-              <div class="form-group">
-                <label for="genero">Genero *</label>
-                <div class="radio">
-                  <label>
-                    <input type="radio" name="genero" value="m" id="m" checked="">
-                    Masculino
+                 <div class="form-group">
+                  <label>Fecha Nac. *</label>
 
-
-                  </label>
-                  <label>
-
-                    <input type="radio" name="genero" value="f"  id="f">
-                    Femenino
-
-                  </label>
+                  <div class="input-group date">
+                    <div class="input-group-addon">
+                      <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" name="fechaNacimiento" class="form-control pull-right" id="datepicker">
+                  </div>
+                  <!-- /.input group -->
                 </div>
-              </div>        
-            </div>
-
-          </section>
-        </div>
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-          <section>
-            <div class="col-sm-3 ">
-              <div class="form-group">
-                <label for="ocupacion">Ocupacion</label>
-                <input  type="text"  class="form-control" name="ocupacion"  placeholder="Cargo " >  
               </div>        
             </div>
             <div class="col-sm-3 ">
@@ -425,7 +426,7 @@ number_format($pagoInicialReserva, 2, '.', '');//esto es lo qe tiene q pagar com
 
    <th>RESERVA</th>
    <th>TOTAL A PAGAR</th>
-  
+   
  </thead>
  <tbody>
    <tr>
@@ -438,84 +439,84 @@ number_format($pagoInicialReserva, 2, '.', '');//esto es lo qe tiene q pagar com
       <td>
         <input type="text" name="PrecioContado" value=  <?php echo number_format($precioContado, 2, '.', '');  ?> readonly="readonly" class="form-control">
         <input type="hidden" name="PrecioContadoBolivano" value=  <?php echo number_format($precioContado*$tipoCambio[0]->monedaVenta, 2, '.', '');  ?> readonly="readonly" class="form-control">
-       <td id="tdReserva">
-        <input type="hidden" name="descuentoContado" value=<?php echo $lote[0]->descuento ?> readonly="readonly" class="form-control">
-        <?php echo $reserva ?>
-      </td>
+        <td id="tdReserva">
+          <input type="hidden" name="descuentoContado" value=<?php echo $lote[0]->descuento ?> readonly="readonly" class="form-control">
+          <?php echo $reserva ?>
+        </td>
 
-      <td> <input type="text" name="PCMR" value=  <?php echo number_format($precioContadoMenoReserva, 2, '.', '');  ?> readonly="readonly" class="form-control">
-        <input type="hidden" name="PCMRBs" value='<?php echo number_format($precioContadoBsMenosReserva, 2, '.', '');  ?>' readonly="readonly" class="form-control">
-      </td>
+        <td> <input type="text" name="PCMR" value=  <?php echo number_format($precioContadoMenoReserva, 2, '.', '');  ?> readonly="readonly" class="form-control">
+          <input type="hidden" name="PCMRBs" value='<?php echo number_format($precioContadoBsMenosReserva, 2, '.', '');  ?>' readonly="readonly" class="form-control">
+        </td>
+        
+
+      </tr>
+    </tbody>
+  </table>
+  <table class="table table-striped table-bordered table-condensed table-hover" style="display: none ;     border: 1px solid;" id="TablaPlazo">
+   <thead>
+     <th>PRECIO DEL LOTE DE TERRENO</th>
+     <th>% DESCUENTO</th>
+     <th>PRECIO DEL LOTE CON DESCUENTO
       
-
-   </tr>
- </tbody>
-</table>
-<table class="table table-striped table-bordered table-condensed table-hover" style="display: none ;     border: 1px solid;" id="TablaPlazo">
- <thead>
-   <th>PRECIO DEL LOTE DE TERRENO</th>
-    <th>% DESCUENTO</th>
-   <th>PRECIO DEL LOTE CON DESCUENTO
-  
-   <th>PLAZOS</th>
-   <th>DIA DE PAGO</th>
-   <th>CUOTA MENSUAL</th>
-   <th>CUOTA iNICIAl</th>
-     <th>RESERVA</th>
-     <th>TOTAL A PAGAR INICIAL</th>
-   </thead>
-   <tbody>
-     <tr>
-       <td id="tdPrecioLoteTipoPlazo"><?php $precioVenta=($lote[0]->precio*$lote[0]->superficie);
-       echo number_format($precioVenta, 2, '.', ''); ?> 
-        <input type="hidden" name="PrecioLotePlazo" value= <?php $precioVenta=($lote[0]->precio*$lote[0]->superficie);
-       echo number_format($precioVenta, 2, '.', ''); ?> readonly="readonly" class="form-control">
-       <td>
-        <input class="form-control" type="text" name="DescuentoPlazo" value="0" readonly="readonly">
-      </td>
-      <td> 
-       <input class="form-control" type="text" name="PrecioPlazo" value= <?php echo number_format($precioPlazo, 2, '.', ''); ?> readonly="readonly">
-     </td>
-      
-      <td><input type="number" name="meses" class="form-control" onchange="verificarPlazo(this)">
-       <td><select class="form-control" name="diaMes">
-        <?php for ($i=1; $i <29 ; $i++) { 
-          echo "<option value=".$i.">".$i;
-        } ?>
-      </select>
-
-      <td><input type="number" name="cuotaMensual" readonly="readonly" class="form-control">
-        <input type="hidden" name="cuotaMensualBs" readonly="readonly" class="form-control">
-        <input type="hidden" name="sumarDecimal" readonly="readonly" class="form-control">
-      </td>
-      
-       <td><!-- <input class="form-control" type="hidden" name="pago" value=<?php echo number_format($pagoInicialReserva, 2, '.', '');; ?>> -->
-        <select name="SelectPagoInicial" onchange="PagoInicial(this)" style="display: none" class="form-control">
-
-          <option >seleccione</option>
-
-          <option value="0">Calcular</option>
-          <!-- <option value="1">Ingresar</option> -->
-
+       <th>PLAZOS</th>
+       <th>DIA DE PAGO</th>
+       <th>CUOTA MENSUAL</th>
+       <th>CUOTA iNICIAl</th>
+       <th>RESERVA</th>
+       <th>TOTAL A PAGAR INICIAL</th>
+     </thead>
+     <tbody>
+       <tr>
+         <td id="tdPrecioLoteTipoPlazo"><?php $precioVenta=($lote[0]->precio*$lote[0]->superficie);
+         echo number_format($precioVenta, 2, '.', ''); ?> 
+         <input type="hidden" name="PrecioLotePlazo" value= <?php $precioVenta=($lote[0]->precio*$lote[0]->superficie);
+         echo number_format($precioVenta, 2, '.', ''); ?> readonly="readonly" class="form-control">
+         <td>
+          <input class="form-control" type="text" name="DescuentoPlazo" value="0" readonly="readonly">
+        </td>
+        <td> 
+         <input class="form-control" type="text" name="PrecioPlazo" value= <?php echo number_format($precioPlazo, 2, '.', ''); ?> readonly="readonly">
+       </td>
+       
+       <td><input type="number" name="meses" class="form-control" onchange="verificarPlazo(this)">
+         <td><select class="form-control" name="diaMes">
+          <?php for ($i=1; $i <29 ; $i++) { 
+            echo "<option value=".$i.">".$i;
+          } ?>
         </select>
-       <input type="text" class="form-control" name="totalPagado"  readonly="readonly" onchange="VerificarPagoInicial(this,1)">
-      <input type="hidden" class="form-control" name="totalPagadoBs"  readonly="readonly" onchange="VerificarPagoInicial(this,0)">
-      </td>
-     <td><input type="text" name="reserva" value=<?php echo $reserva ?> readonly="readonly" class="form-control">
-      <input type="hidden" name="reservaBolivano" value=<?php echo $reservaBs ?> readonly="readonly" class="form-control"></td>
-     <td>
-       <input class="form-control" type="number" name="pagoInicial" style="display: none"  >
-        <input class="form-control" type="number" name="pagoInicialBs" style="display: none"  >
 
-     </td>
+        <td><input type="number" name="cuotaMensual" readonly="readonly" class="form-control">
+          <input type="hidden" name="cuotaMensualBs" readonly="readonly" class="form-control">
+          <input type="hidden" name="sumarDecimal" readonly="readonly" class="form-control">
+        </td>
+        
+        <td><!-- <input class="form-control" type="hidden" name="pago" value=<?php echo number_format($pagoInicialReserva, 2, '.', ''); ?>> -->
+          <select name="SelectPagoInicial" onchange="PagoInicial(this)" style="display: none" class="form-control">
 
-   </tr>
- </tbody>
-</table>
+            <option >seleccione</option>
+
+            <option value="0">Calcular</option>
+            <!-- <option value="1">Ingresar</option> -->
+
+          </select>
+          <input type="text" class="form-control" name="totalPagado"  readonly="readonly" onchange="VerificarPagoInicial(this,1)">
+          <input type="hidden" class="form-control" name="totalPagadoBs"  readonly="readonly" onchange="VerificarPagoInicial(this,0)">
+        </td>
+        <td><input type="text" name="reserva" value=<?php echo $reserva ?> readonly="readonly" class="form-control">
+          <input type="hidden" name="reservaBolivano" value=<?php echo $reservaBs ?> readonly="readonly" class="form-control"></td>
+          <td>
+           <input class="form-control" type="number" name="pagoInicial" style="display: none"  >
+           <input class="form-control" type="number" name="pagoInicialBs" style="display: none"  >
+
+         </td>
+
+       </tr>
+     </tbody>
+   </table>
 
 
-</div>
-<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+ </div>
+ <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
   <label>TIPO DE PAGO</label><br>
   <label>
     <input type="radio" name="tipoDepositoC"   value='e' onclick="cargarBanco(this)" checked="">Efectivo
@@ -547,15 +548,15 @@ number_format($pagoInicialReserva, 2, '.', '');//esto es lo qe tiene q pagar com
 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
   <div  class="form-group" style="">
     <label>PAGO USD</label>
-    <input type="number" name="pagoUsd" class="form-control" id="pagoUsd" onchange="pagoBolivanoDolar(this,1)">
+    <input type="number" name="pagoUsd" class="form-control" id="pagoUsd" onchange="pagoBolivanoDolar(this,1)" step="0.001">
   </div>
   <div  class="form-group" style="">
     <label>PAGO BOLIVIANO</label>
-    <input type="number" name="pagoBs" class="form-control" readonly="" id="pagoBs" onchange ="pagoBolivanoDolar(this,0)">
+    <input type="number" name="pagoBs" class="form-control" readonly="" id="pagoBs" onchange ="pagoBolivanoDolar(this,0)" step="0.001">
   </div>
   <label>CAMBIOS</label><br> <span id="spanCambioDolar">00.00</span> Usd.&nbsp;| &nbsp;<span id="spanCambioBs">00.0</span> Bs.
-<input type="hidden" name="inputCambioUsd">
-<input type="hidden" name="inputCambioBs">
+  <input type="hidden" name="inputCambioUsd">
+  <input type="hidden" name="inputCambioBs">
 </div>
 
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -601,6 +602,7 @@ number_format($pagoInicialReserva, 2, '.', '');//esto es lo qe tiene q pagar com
 
  </script>
  {!!Html::script('js/venta2.js')!!}
+ {!!Html::script('js/plugins/HERRAMIENTAS.js')!!}
 
  <!-- {!!Html::script('js/venta.js')!!} -->
  @endsection
