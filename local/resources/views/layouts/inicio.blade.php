@@ -303,6 +303,9 @@
                             <ul  id="gestiones" class="treeview-menu">
                                 <li><a href="{!!URL::to('ReporteVenta')!!}"><i class="fa fa-circle-o"></i>REPORTE VENTAS</a></li>
                                 <li><a href="{!!URL::to('ReporteReserva')!!}"><i class="fa fa-circle-o"></i>REPORTE RESERVA</a></li>
+                                 <li><a href="{!!URL::to('ReporteReserva')!!}"><i class="fa fa-circle-o"></i>R. PARA VENDEDORES</a></li>
+                                 <li><a href="{!!URL::to('ReporteReserva')!!}"><i class="fa fa-circle-o"></i>FLUJO DE CAJA</a></li>
+                                 <li><a href="{!!URL::to('ReporteReserva')!!}"><i class="fa fa-circle-o"></i>R. FLUJO DE CAJA</a></li>
                             </ul>
                         </li>
 

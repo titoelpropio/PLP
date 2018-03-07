@@ -70,7 +70,10 @@ WHERE venta.id=plandepago.idVenta and plandepago.id=cuotas.idPlandePago and cuot
     }
 
     public function reprogramar($idVenta){
-        $resultado=DB::select('SELECT *from plandepago where ');
+        $resultado=DB::select('select venta.idCliente, venta.id,(sum(detallecuota.monto)+plandepago.cuotaInicialUsd),plandepago.id as idPlanpago from plandepago,venta,cuotas,detallecuota where venta.id=plandepago.idVenta and plandepago.id=cuotas.idPlandePago
+and detallecuota.idCuota=cuotas.id and venta.id='.$idVenta);
+         return view('reprogramacion.venta', compact('resultado2', $resultado2));
+        
     }
    
 }
