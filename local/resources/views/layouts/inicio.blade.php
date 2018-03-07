@@ -181,7 +181,7 @@
                                 <i class="fa fa-angle-left pull-right"></i>
                             </a>
                             <ul id="listacategoria1" class="treeview-menu">
-                            <li><a href="{!!URL::to('Venta')!!}"><i class="fa fa-circle-o"></i>REPROGRAMAR</a></li>
+                            <li><a href="{!!URL::to('Reprogramacion')!!}"><i class="fa fa-circle-o"></i>REPROGRAMAR</a></li>
                                 <li><a href="{!!URL::to('PagoVenta')!!}"><i class="fa fa-circle-o"></i>TRASPASO</a></li>
                                   
                              

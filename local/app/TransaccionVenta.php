@@ -20,7 +20,7 @@ class TransaccionVenta extends Authenticatable
      */
       protected $table = 'transaccionventa';
     protected $fillable = [
-        'idVenta', 'idBanco','idCuenta','monto','nroDocumento','tipo','fecha'
+        'idVenta', 'idBanco','idCuenta','monto','nroDocumento','tipo','fecha','montoBs'
     ];
 
     /**

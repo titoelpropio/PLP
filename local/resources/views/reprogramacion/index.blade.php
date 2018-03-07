@@ -59,11 +59,11 @@
           <td class="sorting_1" ><span class="negritaTabla">Nombre:</span> '.$resultado2[$i][0]->nombreCliente.' '.$resultado2[$i][0]->apellidoCliente.' <br><span class="negritaTabla">CI:</span>  '.$resultado2[$i][0]->ci_cliente.' '.$resultado2[$i][0]->expedido.' <br><span class="negritaTabla">Telefono:</span> '.$resultado2[$i][0]->celular.' <br></td>
        <td > <span class="negritaTabla">Urbanizacion:</span> '.$resultado2[$i][0]->nombreProyecto.' <br><span class="negritaTabla">Manzano:</span> '.$resultado2[$i][0]->manzano.'<br><span class="negritaTabla">Lote:</span> '.$resultado2[$i][0]->nroLote.' <br> </td>
         <td >'.$resultado2[$i][0]->fecha.'</td>
-         <td >'.$resultado2[$i][0]->cuotaInicial.'</td><td>'.$resultado2[$i][0]->montoTotal.'</td><td>'.$resultado2[$i][0]->total.'</td>
-        <td><a class="btn btn-primary" >REPROGRAMAR</a><a class="btn btn-warning">TRASPASO</a></td></td>
-         </tr>';
-                                } ?>
-
+         <td >'.$resultado2[$i][0]->cuotaInicial.'</td><td>'.$resultado2[$i][0]->montoTotal.'</td><td>'.$resultado2[$i][0]->total.'</td>';
+                                ?>
+<td><a class="btn btn-primary" href="{!!URL::to('reprogramar')!!}<?php echo "/".$resultado2[$i][0]->idVenta ?>">REPROGRAMAR</a><a class="btn btn-warning">TRASPASO</a></td></td>
+         </tr>
+         <?php } ?>
                             </tbody>
                             <tfoot>
                                 <tr>

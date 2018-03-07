@@ -370,7 +370,8 @@ public function store(Request $request) {
                       'idCuenta'=>$request['cuentaC'],
                       'fecha'=>$request['fechaDeposito'],
                       'nroDocumento'=>$request['nroDocumentoC'],
-                      'monto'=>$venta['cuotaInicial'],
+                      'monto'=>$venta['pagoUsd'],
+                      'montoBs'=>$venta['pagoBs']
                     ]);
 
                       //---------------------------------- Contabilidad BANCO----------------------------------------------------//
@@ -466,7 +467,7 @@ public function store(Request $request) {
                     'nro_asiento'=>$nroAs + 1,
                     'tipo'=>3,// 1 = Ingreso, 2 = Egreso, 3 = Traspaso
                     'glosa'=>$request['glosa'],
-                    'fecha_transaccion'=>$fecha_transaccion,
+                    'fecha_transaccion'=>'"$fecha_transaccion"',
                     'cambio_tipo'=>$tipocambio[0]->monedaVenta,
                     'estado'=>1,
                     'id_categoria'=>$categoria[0]->id,
@@ -475,7 +476,6 @@ public function store(Request $request) {
                     'id_usuario'=>Session::get('idEmpleado')
                   ]);
                   //----------------------------------- fin Contabilidad -----------------------------------------------------//
-                  echo $request['PCMRBs']."dfadfadfadfadfadf";
                   $venta=Venta::create([
                     'precio'=>$request['PrecioLote'],
 
@@ -525,7 +525,8 @@ public function store(Request $request) {
                       'idBanco'=>$request['bancoC'],
                       'idCuenta'=>$request['cuentaC'],
                       'nroDocumento'=>$request['nroDocumentoC'],
-                      'monto'=>$venta['PCMR'],
+                      'monto'=>$venta['pagoUsd'],
+                      'montoBs'=>$venta['pagoBs'],
                       'fecha'=>$request['fechaDeposito'],
                     ]);
                     

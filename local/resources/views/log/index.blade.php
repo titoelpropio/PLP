@@ -195,14 +195,7 @@ body:before {
  
     <input type="text" placeholder="username" name="email" />
     <input type="password" placeholder="password" name="password" />
-    <select name='idProyecto' class = 'form-control' >
-    <?php $proyecto=DB::select('select * from proyecto');
-          foreach ($proyecto as $key => $value) {
-            echo '<option value = '.$value->id.'>'.$value->nombre;
-          }
-     ?>
-      
-    </select>
+   
     <br>
     <button>login</button>
     

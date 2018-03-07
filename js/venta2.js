@@ -236,7 +236,7 @@ function cargarCuenta(select){
     $('select[name=cuentaC]').empty();
     $.get('../cargarCuenta/'+idBanco,function(res){
         for (var i = 0; i < res.length; i++) {
-           $('select[name=cuentaC]').append('<option value='+res[i].id+'>'+res[i]. nroCuenta) ;
+           $('select[name=cuentaC]').append('<option value='+res[i].id+'>'+res[i]. nroCuenta+"  -  "+res[i].moneda) ;
         }
     $('#loading').css('display','none');      
 
