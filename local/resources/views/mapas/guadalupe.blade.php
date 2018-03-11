@@ -507,7 +507,31 @@ case "3":
 
       }  $contador=0;
       ?>  onclick="divLogin(this,2)" class="cls-5" x="460.59" y="777.71" width="21.85" height="54.61" transform="translate(45.51 -24.99) rotate(3.19)"/>
-      <polygon onclick="divLogin(this,0)" class="cls-5" points="502.56 834.56 480.86 833 483.91 778.25 505.92 779.48 502.56 834.56"/>
+      <polygon onclick="divLogin(this,0)"
+      <?php 
+      foreach ($tablalote as $key => $value) {
+        if($value->point=='502.56 834.56 480.86 833 483.91 778.25 505.92 779.48 502.56 834.56'){
+          if($value->estado==0 && !is_null($value->estado)){
+            echo 'style="fill:#f49e25; cursor: pointer" data-status=0  '; 
+          }
+          if($value->estado==1 && !is_null($value->estado)){
+            echo 'style="fill:#85f793; cursor: pointer" data-status=1  ';
+          }
+          if($value->estado==2 && !is_null($value->estado)){
+            echo 'style="fill:#85f793; cursor: pointer"  data-status=2  ';
+          }
+          if($value->estado==3 && !is_null($value->estado)){
+            echo 'style="fill:#ef3939; cursor: pointer"  data-status=3  ';
+          }
+          $contador=1;
+          break;
+        }                
+      }
+      if($contador==0){
+        echo 'style="fill:#f49e25; cursor: pointer " data-status=4  ';
+
+      }  $contador=0;
+      ?>  class="cls-5" points="502.56 834.56 480.86 833 483.91 778.25 505.92 779.48 502.56 834.56"/>
       <rect <?php 
       foreach ($tablalote as $key => $value) {
         if($value->point=='translate(45.75 -27.41) rotate(3.19)'){

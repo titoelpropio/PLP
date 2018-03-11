@@ -420,6 +420,7 @@ Route::resource('libro_mayor','ReportesController@libro_mayor');
 Route::resource('sumas_saldos','ReportesController@sumas_saldos');
 Route::resource('estado_resultado','ReportesController@estado_resultado');
 Route::resource('balance_general','ReportesController@balance_general');
+Route::resource('reporteVendedor','ReportesController@reporteVendedor');
 
 //reportes
 Route::get('reporte_libro_venta/{fecha1}/{fecha2}','ReportesController@reporte_libro_venta');

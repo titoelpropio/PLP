@@ -203,5 +203,10 @@ class ReportesController extends Controller
         return response()->json( array('Activo' => $balance_general_activo, 'Pasivo' => $balance_general_pasivo, 'Patrimonio' => $balance_general_patrimonio) );
     }
 
+    public function reporteVendedor(){
+         //$gestion=DB::select('SELECT * FROM gestion where estado=1');
+        return view('reportes.reportevista.reporte_vendedores');
+    }
+
 }
 
