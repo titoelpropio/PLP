@@ -395,3 +395,4 @@ function tipo_factura_compra()
         $("#codigo_control_LC").prop('readonly', false);
     }
 }
+

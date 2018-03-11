@@ -40,7 +40,7 @@ class AsientoController extends Controller {
            return view('modulocontable.asientos.index', compact('cuenta', 'gestion', 'tipocambio', 'tipo_asiento', 'centrocosto', 'moneda'));
         }
         else if ($verificargestion[0]->count != 1 ) {
-           Session::flash('error-gestion','DEBE APERTURAR UNA GESTIÓN PARA PODER AGREGAR COMPROBANTES');
+           Session::flash('error-gestion','DEBE APERTURAR UNA GESTIÃ“N PARA PODER AGREGAR COMPROBANTES');
            return Redirect::to('index');
         }
     }
@@ -73,7 +73,7 @@ class AsientoController extends Controller {
                 'id_moneda'=>$request->moneda
             ]);
             $nro_detalle = 1;
-            $tamaño = count($request['id']);
+            $tamaÃ±o = count($request['id']);
             $id_cuenta = $request['id'];
             $tipo_fila = $request['tipo'];
             $debe_bs = $request['debe_bs'];
@@ -81,7 +81,7 @@ class AsientoController extends Controller {
             $debe_sus = $request['debe_sus'];
             $haber_sus = $request['haber_sus'];
             $id_centro_costo = $request['id_centro_costo'];
-            for ($i=0; $i < $tamaño-1; $i++) {
+            for ($i=0; $i < $tamaÃ±o-1; $i++) {
                 if ($tipo_fila[$i] == 1) {
                      $tipo = $tipo_fila[$i];
                      $montoSus = $debe_sus[$i];
