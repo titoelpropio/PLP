@@ -65,6 +65,10 @@ class ReportesController extends Controller
         
         return response()->json($resultado);
     }
+    function flujoCaja(){
+        return view('reportes.reportevista.reporte_flujo_caja');
+
+    }
 
     function reporte_libro_diario($fecha1, $fecha2, Request $request) {
         $resultado = DB::select('SELECT asiento.tipo as tipo_asiento, asiento.nro_asiento, asiento.fecha_transaccion, asiento.glosa, cuenta.codigo, cuenta.nombre, detalle.tipo as tipo_detalle, detalle.nro_detalle, detalle.montoSus, detalle.montoBs fROM cuenta, detalle, asiento WHERE cuenta.id=detalle.id_cuenta and detalle.id_asiento=asiento.id and asiento.fecha_transaccion BETWEEN "'.$fecha1.'" AND "'.$fecha2.'" ORDER BY asiento.fecha_transaccion, asiento.nro_asiento,
@@ -207,6 +211,19 @@ class ReportesController extends Controller
          //$gestion=DB::select('SELECT * FROM gestion where estado=1');
         return view('reportes.reportevista.reporte_vendedores');
     }
+    public function reporteVendedoresDadaFecha(Request $request){
+        $resultado=DB::select("select CONCAT(empleado.nombre,' ' ,empleado.apellido) as vendedor,concat(cliente.nombre,' ',cliente.apellidos ) cliente,lote.nroLote,
+lote.manzano,proyecto.nombre,venta.fecha as fechaVenta,prereserva.fecha fechaReserva,venta.tipoVenta,
+venta.precio,venta.descuento,
+venta.precio-(venta.precio*venta.descuento/100) as precioDescuentoSus,
+(venta.precio-(venta.precio*venta.descuento/100))* 0.10 as diezPorciento
+from cliente,lote,prereserva,venta,empleado,detalleprereserva,proyecto,cuotaminima
+where lote.id=venta.idLote and detalleprereserva.idLote=lote.id and 
+detalleprereserva.idPreReserva=prereserva.id and empleado.id=prereserva.idEmpleado 
+AND venta.idCliente=cliente.id and detalleprereserva.idLote=venta.idLote and proyecto.id=lote.idProyecto  
+AND venta.fecha BETWEEN  '$request->fechaIni' AND DATE_SUB('$request->fechaFin',INTERVAL -1 DAY) and cuotaminima.idProyecto=proyecto.id");
+        return response()->json(array('resultado'=>$resultado));
 
+    }
 }
 

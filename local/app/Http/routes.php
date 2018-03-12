@@ -421,6 +421,7 @@ Route::resource('sumas_saldos','ReportesController@sumas_saldos');
 Route::resource('estado_resultado','ReportesController@estado_resultado');
 Route::resource('balance_general','ReportesController@balance_general');
 Route::resource('reporteVendedor','ReportesController@reporteVendedor');
+Route::resource('flujoCaja','ReportesController@flujoCaja');
 
 //reportes
 Route::get('reporte_libro_venta/{fecha1}/{fecha2}','ReportesController@reporte_libro_venta');
@@ -429,6 +430,7 @@ Route::get('reporte_libro_diario/{fecha1}/{fecha2}','ReportesController@reporte_
 Route::get('reporte_libro_mayor/{fecha1}/{fecha2}','ReportesController@reporte_libro_mayor');
 Route::get('reporte_sumas_saldos/{fecha1}/{fecha2}','ReportesController@reporte_sumas_saldos');
 Route::get('reporte_estado_resultado/{fecha1}/{fecha2}','ReportesController@reporte_estado_resultado');
+Route::get('reporteVendedoresDadaFecha','ReportesController@reporteVendedoresDadaFecha');
 Route::get('reporte_balance_general/{fecha1}/{fecha2}','ReportesController@reporte_balance_general');
 
 //ufv

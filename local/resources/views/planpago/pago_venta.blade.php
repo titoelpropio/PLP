@@ -26,7 +26,7 @@
         </div>
 <div class="box-body">
 <div class="row">
-
+<?php echo json_encode($lista); ?>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="table-responsive">
             <table id="example1" class="table table-bordered table-striped">
@@ -46,9 +46,11 @@
                 <th>ESTADO</th>
                 <th>OPCION</th>
                 </thead>
-                @foreach ($lista as $lis)
+              
 
                 <tbody id="idTbody">
+                      @foreach ($lista as $lis)
+
                                 <?php
                                  
                                     echo '<tr>
@@ -61,7 +63,8 @@
                                     <span class="negritaTabla">Nro. Lote:</span> '.$lis[0]->nroLote.'</td>';
 
                                  ?>
-                                 <td></td>
+
+                                 <td>{{$lis[0]->cuotaInicialUsd}}</td>
                                     <?php if ($lis[0]->estado_venta==='c'):
                                     echo '<td>Plazo';
                                 else:

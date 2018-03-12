@@ -294,6 +294,7 @@ public function store(Request $request) {
                     'cambioUsd'=>$request['inputCambioUsd'],
                     'precioBs'=>$request['PrecioLoteBolivano'],
                     'moneda'=>$request['tipoMoneda'],
+                    'tipoVenta'=>'PLAZO',
                     'reservaBs'=>$request['reservaBolivano']
                   ]);
 
@@ -497,6 +498,7 @@ public function store(Request $request) {
                     'cambioUsd'=>$request['inputCambioUsd'],
                     'precioBs'=>$request['PrecioLoteBolivano'],
                     'moneda'=>$request['tipoMoneda'],
+                    'tipoVenta'=>'CONTADO',
                     'reservaBs'=>$request['reservaBolivano']
 
 
@@ -757,7 +759,7 @@ public function store(Request $request) {
     $cuotaMinima=DB::select('select *from cuotaminima where deleted_at IS NULL');
     $vendedor=DB::select('select empleado.codigo,nombre,id from empleado where codigo IS NOT NULL and deleted_at IS NULL GROUP by codigo');
 
-    return view('venta.venta',['ci'=>$prereserva[0]->ci,'cliente' => $cliente,'id_lote'=>$prereserva[0]->idLote,'reserva'=>0,'idReserva'=>0,'idPreReserva'=>$id],compact('lote','descuento','tipoCambio','cuotaMinima','meses','vendedor','nacionalidad'));
+    return view('venta.venta',['ci'=>$prereserva[0]->ci,'cliente' => $cliente,'id_lote'=>$prereserva[0]->idLote,'reserva'=>0,'idReserva'=>0,'idPreReserva'=>$id,'reservaBs'=>0],compact('lote','descuento','tipoCambio','cuotaMinima','meses','vendedor','nacionalidad'));
 
   }
   public function vendedores(){

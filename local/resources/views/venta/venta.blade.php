@@ -37,6 +37,7 @@
       <div class="row">
 
         <?php if ($idReserva>0) {
+          echo $idReserva;
          if ($moneda=="BOLIVIANO") {
            $reserva=number_format($reservaBs/$tipoCambio[0]->monedaVenta, 2, '.', '');
          }else{

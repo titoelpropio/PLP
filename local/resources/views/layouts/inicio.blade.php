@@ -305,7 +305,7 @@
                                 <li><a href="{!!URL::to('ReporteReserva')!!}"><i class="fa fa-circle-o"></i>REPORTE RESERVA</a></li>
                                  <li><a href="{!!URL::to('ReporteReserva')!!}"><i class="fa fa-circle-o"></i>R. PRE RESERVA</a></li>
                                  <li><a href="{!!URL::to('reporteVendedor')!!}"><i class="fa fa-circle-o"></i>R. PARA VENDEDORES</a></li>
-                                 <li><a href="{!!URL::to('ReporteReserva')!!}"><i class="fa fa-circle-o"></i>R. FLUJO DE CAJA</a></li>
+                                 <li><a href="{!!URL::to('flujoCaja')!!}"><i class="fa fa-circle-o"></i>R. FLUJO DE CAJA</a></li>
                             </ul>
                         </li>
 
@@ -449,6 +449,7 @@
         {!!Html::script('js/bootstrap/bootstrap-datepicker.js')!!}
         {!!Html::script('js/bootstrap/daterangepicker.js')!!}
         <!-- DataTables -->
+
           {!!Html::script('datatables/jquery.dataTables.min.js')!!}
           {!!Html::script('datatables/dataTables.bootstrap.min.js')!!}
 

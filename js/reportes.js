@@ -1165,3 +1165,41 @@ function ExportarTxt(tabla,nombre) {
     instance.export2file(exportData.data, exportData.mimeType, exportData.filename, exportData.fileExtension);
     instance.remove();
 }
+
+
+function reporteVendedores(){
+    fechaIni=$('#fechaIni').val();
+    fechaFin=$('#fechaFin').val();
+            $('#tbodyVendedor').empty();
+
+    $.get('reporteVendedoresDadaFecha',{fechaIni:fechaIni,fechaFin,fechaFin},function(res){
+        for (var i = res.resultado.length - 1; i >= 0; i--) {
+            $('#tbodyVendedor').append('<tr>'+
+                '<td>'+res.resultado[i].vendedor+
+                '<td>'+res.resultado[i].cliente+
+                '<td><span style="font-weight:bold">Nº Lote:</span>'+res.resultado[i].nroLote+
+                '<br><span style="font-weight:bold">Nº Manzano:</span>'+res.resultado[i].manzano+
+                '<br><span style="font-weight:bold">Urbanizacion:</span>'+res.resultado[i].nombre+
+                '<br><span style="font-weight:bold">PRECIO VENTA:</span>'+parseFloat(res.resultado[i].precioDescuentoSus).toFixed(2)+
+                '<td>'+res.resultado[i].tipoVenta+
+                '<td>'+res.resultado[i].fechaReserva+
+
+                '<td>'+res.resultado[i].fechaVenta+
+                '<td>'+parseFloat(res.resultado[i].diezPorciento).toFixed(2)
+                );
+        }
+        paginadorTableVendedores();
+    });
+}
+function paginadorTableVendedores(){
+    $('#tableVendedor').DataTable({
+        "pagingType": "full_numbers",
+        "destroy": true,
+        "order": [[0, "asc"]],
+        "scrollY": "418px",
+        "scrollCollapse": true,
+        "paging": false,
+        retrieve: true
+
+    });
+}

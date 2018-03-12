@@ -25,7 +25,7 @@ class Venta extends Authenticatable implements AuthenticatableContract,
       protected $table = 'venta';
     protected $fillable = [
         'fecha', 'cuotaInicial', 'precio','estado','tipoPago','idEmpleado','idCliente','idLote','idTipoCambio','descuento','reserva','idAsiento','idAsiento','pagoBs','pagoUsd',
-        'totalapagar','totalapagarBs','cambioBs','cambioUsd','precioBs','moneda','reservaBs'
+        'totalapagar','totalapagarBs','cambioBs','cambioUsd','precioBs','moneda','reservaBs','tipoVenta'
     ];
 
     /**
