@@ -40,6 +40,7 @@
                     </span>
                             </div>
                         </div> -->
+                        <?php echo json_encode($resultado2); ?>
                         <table id="example1" class="table table-bordered table-striped">
                             <thead>
                                 <tr>

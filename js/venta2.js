@@ -427,17 +427,21 @@ function VerificarPagoInicial(input,moneda){//este se encarga e verificar que el
      if (moneda==1) {
 
 CuotaMinima=$('input[name=CuotaMinima]').val();//porcentaje cuota minima
+
     // pago=$('input[name=pago]').val();
+    pagoIni=$('input[name=pagoInicial]');
 plazo=$('input[name=meses]').val();
-PrecioPlazo=$('input[name=PrecioPlazo]').val();
-pagoInicial=$('input[name=pagoInicial]').val();
-cuotaMensual=$('input[name=cuotaMensual]').val();
-reserva=$('input[name=reserva]').val();
+PrecioPlazo=$('input[name=PrecioPlazo]').val();//precio del lote a plazo
+pagoInicial=$('input[name=totalPagado]').val();//este seria el total a pagar 
+cuotaMensual=$('input[name=cuotaMensual]').val();//cuotas mensuales
+reserva=$('input[name=reserva]').val();//reserva si tiene
  CuatoInicial=(PrecioPlazo*CuotaMinima/100).toFixed(0)-reserva;
 PagoInicialReserva=parseInt(pagoInicial)+parseInt(reserva);
+
+
   $('input[name=sumarDecimal]').val("");
- totalPagado= $('input[name=totalPagado]').val("");
-pago=parseInt($(input).val());
+
+pago=parseFloat($(input).val()).toFixed(2);
 
 if (parseFloat(pagoInicial)<CuatoInicial) {//este verifica que el pago sea mayor al minimo
   toastr.error('El pago tiene que ser mayor al minimo');
@@ -446,12 +450,13 @@ if (parseFloat(pagoInicial)<CuatoInicial) {//este verifica que el pago sea mayor
 $(input).val("");
 }
 else{
-
+pagoIni.css('display','block');
+pagoIni.val(PagoInicialReserva);
   toastr.success('Pago Permitido');
     
     
 
-     PrecioTotalMenosCuota=PrecioPlazo-pagoInicial;
+     PrecioTotalMenosCuota=PrecioPlazo-PagoInicialReserva;
           
         cuota=PrecioTotalMenosCuota/plazo;
 
@@ -466,7 +471,6 @@ else{
           $('input[name=cuotaMensual]').val(cuotaTotal)  ;
     }
 
-    totalPagado.val(PagoInicialReserva);
 }
      }else{
       

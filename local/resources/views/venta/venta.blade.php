@@ -497,7 +497,7 @@ number_format($pagoInicialReserva, 2, '.', '');//esto es lo qe tiene q pagar com
             <option >seleccione</option>
 
             <option value="0">Calcular</option>
-            <!-- <option value="1">Ingresar</option> -->
+            <option value="1">Ingresar</option>
 
           </select>
           <input type="text" class="form-control" name="totalPagado"  readonly="readonly" onchange="VerificarPagoInicial(this,1)">
