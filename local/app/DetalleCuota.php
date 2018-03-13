@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 use Illuminate\Database\Eloquent\Model;
-//use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -13,8 +13,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 class DetalleCuota extends Authenticatable implements AuthenticatableContract,
-                                    AuthorizableContract
-                                    
+                                    AuthorizableContract                                 
 {
     use  Authorizable;//, SoftDeletes;
     /**
@@ -22,9 +21,8 @@ class DetalleCuota extends Authenticatable implements AuthenticatableContract,
      *
      * @var array
      */
-      protected $table = 'detallecuota';
-    protected $fillable = [
-        'monto','idCuota','tipoPago','fecha'
+    protected $table = 'detallecuota';
+    protected $fillable = ['id','monto','idCuota','tipoPago','fecha'
     ];
 
     /**
@@ -32,7 +30,5 @@ class DetalleCuota extends Authenticatable implements AuthenticatableContract,
      *
      * @var array
      */
-   // protected $dates = ['deleted_at'];
-    
-    
+    protected $dates = ['deleted_at'];
 }

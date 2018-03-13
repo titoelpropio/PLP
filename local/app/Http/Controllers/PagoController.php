@@ -57,112 +57,170 @@ var   $puedeModificar=0;
       return view('planpago.index', compact('pago'));
   }
 
-   public function store(Request $request) {
-    try {
+public function store(Request $request)
+{
+    try
+    {
       DB::beginTransaction();              
-      $monto = $request['monto'] + $request['montoBanco'];
-      switch ($request['tipoPago']) {
-      case 'e':
-        if ($request['monto'] == "") {
-          DB::rollback();
-          Session::flash('message-error', 'INTRODUSCA LOS DATOS REQUERIDOS');
-          return Redirect::to('PlanPago/'.$request['idVenta']);           
-        }
-        break;
-      case 'b':
-        if ($request['montoBanco'] == "" || $request['nroDocumento'] == "" || $request['banco'] == 0 || $request['cuenta'] == 0) {
-          DB::rollback();
-          Session::flash('message-error', 'INTRODUSCA LOS DATOS REQUERIDOS');
-          return Redirect::to('PlanPago/'.$request['idVenta']);           
-        }   
-        break;        
-      case 'be':
-        if ($request['monto'] == "" || $request['montoBanco'] == "" || $request['nroDocumento'] == "" || $request['banco'] == 0 || $request['cuenta'] == 0) {
-          DB::rollback();
-          Session::flash('message-error', 'INTRODUSCA LOS DATOS REQUERIDOS');
-          return Redirect::to('PlanPago/'.$request['idVenta']);           
-        }         
-        break;        
-      }      
-        $pago=DB::select("SELECT (IFNULL(SUM(detallecuota.monto),0) + ".$monto.")as monto FROM cuotas,plandepago,venta,detallecuota WHERE detallecuota.idCuota=cuotas.id and cuotas.idPlandePago=plandepago.id and plandepago.idVenta=venta.id and plandepago.idVenta=".$request['idVenta']);// LA SUMA DE LA TABLA DE PAGO DE ESA VENTA MAS LO Q ESTA INTRODUCIENDO EN EL TEXTO
-        $cuota=DB::select("SELECT SUM(cuotas.monto)as cuota from cuotas,plandepago,venta WHERE cuotas.idPlandePago=plandepago.id and plandepago.idVenta=venta.id and  plandepago.idVenta=".$request['idVenta']);//LA SUMA DE TODO EL PLAN DE PAGO DE ESA VENTA
-        $cuota_pago=DB::select("SELECT *from  cuotas,plandepago,venta WHERE cuotas.idPlandePago=plandepago.id and plandepago.idVenta=venta.id and  plandepago.idVenta=".$request['idVenta']." LIMIT 1");//OBTENGO LA CUOTA Q SE PAGA POR MES
-
-        if ($pago[0]->monto > $cuota[0]->cuota) { //EN CASO Q SEA MAYOR L MONTO Q INTRODUJO Q LA CUOTA A PAGAR
-          Session::flash('message-error', 'LA CANTIDAD A COBRAR ES MAYOR AL MONTO A PAGAR');
-          return Redirect::to('PlanPago/'.$request['idVenta']);             
-        } else {//SI NO HACE TODA LA OPERACION DE PAGAR CUOTA
-          if ($pago[0]->monto == $cuota[0]->cuota) {//CUANDO YA SE PAGO TODO LA CUOTA
-            $debe=DB::select("SELECT cuotas.id,cuotas.monto from cuotas,plandepago,venta WHERE cuotas.estado='d' AND cuotas.idPlandePago=plandepago.id and plandepago.idVenta=venta.id and plandepago.idVenta=".$request['idVenta']);                
-            foreach ($debe as $key => $value) { //ENTRA AL FOREACH Y ACTUALIZA EL ESTADO DEL PLAN DE PAGO  
-              $det_cuota=DB::select("SELECT IFNULL(SUM(detallecuota.monto),0)as monto FROM detallecuota WHERE detallecuota.idCuota=".$value->id);            
-              $restante=abs($det_cuota[0]->monto - $value->monto);
-              $Pago=DetalleCuota::create(['monto'=>$restante,'tipoPago'=>$request['tipoPago'],'idCuota'=>$value->id ]);//CREO EN LA 
-              $cuotas = Cuotas::find($value->id);
-              $cuotas->fill(['estado' => 'p' ]);
-              $cuotas->save();                                                         
-            }
- 
-            $plandepago=DB::select("SELECT plandepago.id FROM plandepago,venta WHERE plandepago.idVenta=venta.id and plandepago.idVenta=".$request['idVenta']);
-            $planpago = PlanDePago::find($plandepago[0]->id);//SE ACTUALIZA EL PLAN DE PAGO a "p" PAGADO
-            $planpago->fill(['estado' => 'p' ]);
-            $planpago->save();   
-
-            $venta = Venta::find($request['idVenta']);//ACTUALIZO EL ESTADO DE LA TABLA VENTA 
-            $venta->fill(['estado' => 'p']);
-            $venta->save();                           
-          }else{
-              $verificar=$pago[0]->monto / $cuota_pago[0]->monto; 
-             // return "pago-monto".$pago[0]->monto ." cuotapago".$cuota_pago[0]->monto;
-              $pagado=DB::select("SELECT COUNT(*)as contador FROM cuotas,plandepago,venta WHERE  plandepago.idVenta=venta.id and cuotas.estado='p' AND cuotas.idPlandePago=plandepago.id and venta.id=".$request['idVenta']);
-              if (intval($verificar) > $pagado[0]->contador) {
-                $limit = intval($verificar) - $pagado[0]->contador;
-
-                $debe=DB::select("SELECT cuotas.id,cuotas.monto FROM cuotas,plandepago,venta WHERE  plandepago.idVenta=venta.id and cuotas.idPlandePago=plandepago.id and plandepago.idVenta=".$request['idVenta']." AND cuotas.estado='d' LIMIT ".$limit);        
-                foreach ($debe as $key => $value) { //ENTRA AL FOREACH Y ACTUALIZA EL ESTADO DEL PLAN DE PAGO
-                  $det_cuota=DB::select("SELECT IFNULL(SUM(detallecuota.monto),0)as monto FROM detallecuota WHERE detallecuota.idCuota=".$value->id);            
-                  $restante=abs($det_cuota[0]->monto - $value->monto);
-                  $Pago=DetalleCuota::create(['monto'=>$restante,'tipoPago'=>$request['tipoPago'],'idCuota'=>$value->id ]);//CREO EN LA 
-                  $cuotas = Cuotas::find($value->id);
-                  $cuotas->fill(['estado' => 'p' ]);
-                  $cuotas->save();                                             
-                  $monto=$monto-$restante;
-                }
-
-                if ($monto != 0) {
-                  $debe=DB::select("SELECT cuotas.id,cuotas.monto FROM cuotas,plandepago,venta WHERE plandepago.idVenta=venta.id and cuotas.idPlandePago=plandepago.id and plandepago.idVenta=".$request['idVenta']." AND cuotas.estado='d' LIMIT 1");        
-                  foreach ($debe as $key => $value) { //ENTRA AL FOREACH Y ACTUALIZA EL ESTADO DEL PLAN DE PAGO EL SOBRANTE
-                    $det_cuota=DB::select("SELECT IFNULL(SUM(detallecuota.monto),0)as monto FROM detallecuota WHERE detallecuota.idCuota=".$value->id);            
-                    $Pago=DetalleCuota::create(['monto'=>$monto,'tipoPago'=>$request['tipoPago'],'idCuota'=>$value->id ]);
-                  }                    
-                }                
-              } else {
-                $debe=DB::select("SELECT cuotas.id,cuotas.monto FROM cuotas,plandepago,venta WHERE plandepago.idVenta=venta.id and cuotas.idPlandePago=plandepago.id and plandepago.idVenta=".$request['idVenta']." AND cuotas.estado='d' LIMIT 1");        
-                foreach ($debe as $key => $value) { //ENTRA AL FOREACH Y ACTUALIZA EL ESTADO DEL PLAN DE PAGO EL SOBRANTE
-                  $det_cuota=DB::select("SELECT IFNULL(SUM(detallecuota.monto),0)as monto FROM detallecuota WHERE detallecuota.idCuota=".$value->id);            
-                  $Pago=DetalleCuota::create(['monto'=>$monto,'tipoPago'=>$request['tipoPago'],'idCuota'=>$value->id ]);
-                }                
+      $monto = $request['montoSus'] + $request['montoBancoSus'];
+      switch ($request['tipoPago'])
+      {
+        case 'e':
+              if ($request['montoSus'] == "")
+              {
+                DB::rollback();
+                Session::flash('message-error', 'INTRODUSCA LOS DATOS REQUERIDOS');
+                return Redirect::to('PlanPago/'.$request['idVenta']);           
               }
-          }
-          if ($request['tipoPago'] != 'e') { //Cuando es distinto de 'e' significa q escogio banco o banco-efectivo por lo tanto igual se crea en la tabla transaccion pago
-            TransaccionPago::create(['idPago'=>$Pago['id'], 'idBanco'=>$request['banco'],'idCuenta'=>$request['cuenta'],'nroDocumento'=>$request['nroDocumento'],'monto'=>$request['montoBanco'], 'fecha'=>$request['fecha'] ]); //SE CREA EN LA TABLA TRANSACCIONPAGO CUANDO ELIGE TIPO BANCO                            
-          } 
-          
-          if(Session::get('idPerfilAutorizacion')!=null){
-            AutorizacionPago::create(['idEmpleado'=>Session::get('idPerfilAutorizacion'), 'moneda'=>$request['compra_aux'],'idPago'=>$Pago['id'] ]);
-            Session::put('idPerfilAutorizacion', null);  
+              break;
+        case 'b':
+              if ($request['montoBancoSus'] == "" || $request['nroDocumento'] == "" || $request['banco'] == 0 || $request['cuenta'] == 0)
+              {
+                DB::rollback();
+                Session::flash('message-error', 'INTRODUSCA LOS DATOS REQUERIDOS');
+                return Redirect::to('PlanPago/'.$request['idVenta']);           
+              }   
+              break;        
+        case 'be':
+              if ($request['montoSus'] == "" || $request['montoBancoSus'] == "" || $request['nroDocumento'] == "" || $request['banco'] == 0 || $request['cuenta'] == 0)
+              {
+                DB::rollback();
+                Session::flash('message-error', 'INTRODUSCA LOS DATOS REQUERIDOS');
+                return Redirect::to('PlanPago/'.$request['idVenta']);           
+              }         
+              break;        
+      }      
+      $pago=DB::select("SELECT (IFNULL(SUM(detallecuota.monto),0) + ".$monto.")as monto FROM cuotas,plandepago,venta,detallecuota WHERE detallecuota.idCuota=cuotas.id and cuotas.idPlandePago=plandepago.id and plandepago.idVenta=venta.id and plandepago.idVenta=".$request['idVenta']);// LA SUMA DE LA TABLA DE PAGO DE ESA VENTA MAS LO Q ESTA INTRODUCIENDO EN EL TEXTO
+      $cuota=DB::select("SELECT SUM(cuotas.monto)as cuota from cuotas,plandepago,venta WHERE cuotas.idPlandePago=plandepago.id and plandepago.idVenta=venta.id and  plandepago.idVenta=".$request['idVenta']);//LA SUMA DE TODO EL PLAN DE PAGO DE ESA VENTA
+      $cuota_pago=DB::select("SELECT *from  cuotas,plandepago,venta WHERE cuotas.idPlandePago=plandepago.id and plandepago.idVenta=venta.id and  plandepago.idVenta=".$request['idVenta']." LIMIT 1");//OBTENGO LA CUOTA Q SE PAGA POR MES
+
+      if ($pago[0]->monto > $cuota[0]->cuota)
+      { //EN CASO Q SEA MAYOR L MONTO Q INTRODUJO Q LA CUOTA A PAGAR
+        Session::flash('message-error', 'LA CANTIDAD A COBRAR ES MAYOR AL MONTO A PAGAR');
+        return Redirect::to('PlanPago/'.$request['idVenta']);             
+      }
+      else
+      {//SI NO HACE TODA LA OPERACION DE PAGAR CUOTA
+        if ($pago[0]->monto == $cuota[0]->cuota)
+        {//CUANDO YA SE PAGO TODO LA CUOTA
+          $debe=DB::select("SELECT cuotas.id,cuotas.monto from cuotas,plandepago,venta WHERE cuotas.estado='d' AND cuotas.idPlandePago=plandepago.id and plandepago.idVenta=venta.id and plandepago.idVenta=".$request['idVenta']);                
+          foreach ($debe as $key => $value)
+          { //ENTRA AL FOREACH Y ACTUALIZA EL ESTADO DEL PLAN DE PAGO  
+            $det_cuota=DB::select("SELECT IFNULL(SUM(detallecuota.monto),0)as monto FROM detallecuota WHERE detallecuota.idCuota=".$value->id);            
+            $restante=abs($det_cuota[0]->monto - $value->monto);
+            $Pago=DetalleCuota::create([
+              'monto'=>$restante,
+              'tipoPago'=>$request['tipoPago'],
+              'idCuota'=>$value->id
+            ]);//CREO EN LA 
+            $cuotas = Cuotas::find($value->id);
+            $cuotas->fill([
+              'estado'=>'p'
+            ]);
+            $cuotas->save();                                              
           }
 
-          DB::commit();
-          Session::flash('message', 'GUARDADO CORRECTAMENTE');
-          return Redirect::to('PlanPago/'.$request['idVenta']);            
+          $plandepago=DB::select("SELECT plandepago.id FROM plandepago,venta WHERE plandepago.idVenta=venta.id and plandepago.idVenta=".$request['idVenta']);
+          $planpago = PlanDePago::find($plandepago[0]->id);//SE ACTUALIZA EL PLAN DE PAGO a "p" PAGADO
+          $planpago->fill([
+            'estado'=>'p'
+          ]);
+          $planpago->save();   
+
+          $venta = Venta::find($request['idVenta']);//ACTUALIZO EL ESTADO DE LA TABLA VENTA 
+          $venta->fill([
+            'estado'=>'p'
+          ]);
+          $venta->save();                           
         }
-    } catch (Exception $e) {
+        else
+        {
+            $verificar=$pago[0]->monto / $cuota_pago[0]->monto;
+            // return "pago-monto".$pago[0]->monto ." cuotapago".$cuota_pago[0]->monto;
+            $pagado=DB::select("SELECT COUNT(*)as contador FROM cuotas,plandepago,venta WHERE  plandepago.idVenta=venta.id and cuotas.estado='p' AND cuotas.idPlandePago=plandepago.id and venta.id=".$request['idVenta']);
+            if (intval($verificar) > $pagado[0]->contador)
+            {
+              $limit = intval($verificar) - $pagado[0]->contador;
+
+              $debe=DB::select("SELECT cuotas.id,cuotas.monto FROM cuotas,plandepago,venta WHERE  plandepago.idVenta=venta.id and cuotas.idPlandePago=plandepago.id and plandepago.idVenta=".$request['idVenta']." AND cuotas.estado='d' LIMIT ".$limit);        
+              foreach ($debe as $key => $value)
+              { //ENTRA AL FOREACH Y ACTUALIZA EL ESTADO DEL PLAN DE PAGO
+                $det_cuota=DB::select("SELECT IFNULL(SUM(detallecuota.monto),0)as monto FROM detallecuota WHERE detallecuota.idCuota=".$value->id);            
+                $restante=abs($det_cuota[0]->monto - $value->monto);
+                $Pago=DetalleCuota::create([
+                  'monto'=>$restante,
+                  'tipoPago'=>$request['tipoPago'],
+                  'idCuota'=>$value->id
+                ]);//CREO EN LA 
+                $cuotas = Cuotas::find($value->id);
+                $cuotas->fill([
+                  'estado'=>'p'
+                ]);
+                $cuotas->save();                                             
+                $monto=$monto-$restante;
+              }
+
+              if ($monto != 0)
+              {
+                $debe=DB::select("SELECT cuotas.id,cuotas.monto FROM cuotas,plandepago,venta WHERE plandepago.idVenta=venta.id and cuotas.idPlandePago=plandepago.id and plandepago.idVenta=".$request['idVenta']." AND cuotas.estado='d' LIMIT 1");        
+                foreach ($debe as $key => $value)
+                { //ENTRA AL FOREACH Y ACTUALIZA EL ESTADO DEL PLAN DE PAGO EL SOBRANTE
+                  $det_cuota=DB::select("SELECT IFNULL(SUM(detallecuota.monto),0)as monto FROM detallecuota WHERE detallecuota.idCuota=".$value->id);            
+                  $Pago=DetalleCuota::create([
+                    'monto'=>$monto,
+                    'tipoPago'=>$request['tipoPago'],
+                    'idCuota'=>$value->id
+                  ]);
+                }                    
+              }                
+            }
+            else 
+            {
+              $debe=DB::select("SELECT cuotas.id,cuotas.monto FROM cuotas,plandepago,venta WHERE plandepago.idVenta=venta.id and cuotas.idPlandePago=plandepago.id and plandepago.idVenta=".$request['idVenta']." AND cuotas.estado='d' LIMIT 1");        
+              foreach ($debe as $key => $value) { //ENTRA AL FOREACH Y ACTUALIZA EL ESTADO DEL PLAN DE PAGO EL SOBRANTE
+                $det_cuota=DB::select("SELECT IFNULL(SUM(detallecuota.monto),0)as monto FROM detallecuota WHERE detallecuota.idCuota=".$value->id);
+                $Pago=DetalleCuota::create([
+                  'monto'=>$monto,
+                  'tipoPago'=>$request['tipoPago'],
+                  'idCuota'=>$value->id
+                ]);
+              }                
+            }
+        }
+        if ($request['tipoPago'] != 'e')
+        { //Cuando es distinto de 'e' significa q escogio banco o banco-efectivo por lo tanto igual se crea en la tabla transaccion pago
+          TransaccionPago::create([
+            'idPago'=>$Pago['id'],//deberia ir el id de la tabla 'pago' pero esta agarrando el id de 'detallecuota'
+            'idBanco'=>$request['banco'],
+            'idCuenta'=>$request['cuenta'],
+            'nroDocumento'=>$request['nroDocumento'],
+            'monto'=>$request['montoBancoSus'],
+            'fecha'=>$request['fecha']
+          ]); //SE CREA EN LA TABLA TRANSACCIONPAGO CUANDO ELIGE TIPO BANCO
+        } 
+        
+        if(Session::get('idPerfilAutorizacion')!=null){
+          AutorizacionPago::create([
+            'idEmpleado'=>Session::get('idPerfilAutorizacion'),
+            'moneda'=>$request['compra_aux'],
+            'idPago'=>$Pago['id']
+          ]);
+          Session::put('idPerfilAutorizacion', null);  
+        }
+
+        DB::commit();
+        Session::flash('message', 'GUARDADO CORRECTAMENTE');
+        return Redirect::to('PlanPago/'.$request['idVenta']);            
+      }
+    }
+    catch (Exception $e)
+    {
       DB::rollback();
       Session::flash('message-error', 'ERROR, INTENTE NUEVAMENTE');
       return Redirect::to('PlanPago/'.$request['idVenta']);           
     }
-  }
+}
+
   function PagoVenta(Request $request){
       $lista=array();
       $fecha=DB::select("SELECT curdate()as fecha"); // %H:%i:%s
