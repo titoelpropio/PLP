@@ -5,7 +5,7 @@ use App\Http\Requests;
 use App\Http\Requests\ConsumoRequest;
 use App\DetalleCuota;
 use App\Cuotas;
-use App\Pago;
+use App\PagoCuota;
 use App\PlanPago;
 use App\PlanDePago;
 use App\TransaccionPago;
@@ -187,10 +187,31 @@ public function store(Request $request)
               }                
             }
         }
+
+        date_default_timezone_set('America/La_Paz');
+        ini_set('date.timezone','America/La_Paz');
+        $fecha = date("Y-m-d H:i:s");
+
+        $saldoDeuda=DB::select("SELECT ABS((SELECT IFNULL(SUM(detallecuota.monto),0)as monto FROM plandepago,cuotas,detallecuota WHERE plandepago.id=cuotas.idPlandePago AND cuotas.id=detallecuota.idCuota AND plandepago.idVenta=".$request['idVenta'].") - (SELECT SUM(cuotas.monto) FROM plandepago,cuotas WHERE plandepago.id=cuotas.idPlandePago AND plandepago.idVenta=".$request['idVenta'].")) as cuota");
+
+        $pagoCuota=PagoCuota::create([
+            'totalPagoBs'=>$request['txtTotalpagoBs'],
+            'totalPagoUsd'=>$request['txtTotalpagoSus'],
+            'pagoBs'=>$request['pagoBs'],
+            'pagoUsd'=>$request['pagoSus'],
+            'cambioUsd'=>$request['txtCambioBs'],
+            'cambioBs'=>$request['txtCambioSus'],
+            'fecha'=>$fecha,
+            'moneda'=>$request['tipoMoneda'],
+            'tipoPago'=>$request['tipoPago'],
+            'saldoDeuda'=>$saldoDeuda[0]->cuota,
+            'idPlandePago'=>$request['id_plan_pago']
+          ]);
+
         if ($request['tipoPago'] != 'e')
         { //Cuando es distinto de 'e' significa q escogio banco o banco-efectivo por lo tanto igual se crea en la tabla transaccion pago
           TransaccionPago::create([
-            'idPago'=>$Pago['id'],//deberia ir el id de la tabla 'pago' pero esta agarrando el id de 'detallecuota'
+            'idPago'=>$pagoCuota['id'],
             'idBanco'=>$request['banco'],
             'idCuenta'=>$request['cuenta'],
             'nroDocumento'=>$request['nroDocumento'],

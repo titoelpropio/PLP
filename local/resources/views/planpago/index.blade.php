@@ -122,8 +122,8 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <input type="hidden" name="txtTotalpagoBs">
-                        <input type="hidden" name="txtTotalpagoSus">
+                        <input type="hidden" name="txtTotalpagoBs" id="txtTotalpagoBs">
+                        <input type="hidden" name="txtTotalpagoSus" id="txtTotalpagoSus">
 
                         <table class="table table-striped table-bordered table-condensed table-hover">
                             <thead>
@@ -141,8 +141,8 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <input type="hidden" name="txtCambioBs">
-                        <input type="hidden" name="txtCambioSus">
+                        <input type="hidden" name="txtCambioBs" id="txtCambioBs">
+                        <input type="hidden" name="txtCambioSus" id="txtCambioSus">
 
                         @foreach ($cantidad as $pag)
                         <input type="hidden" name="id_plan_pago" value="{{$pag->id_plan_pago}}">

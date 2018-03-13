@@ -15,7 +15,7 @@ alter table plandepago add COLUMN cuotaInicialUsd decimal(12,2),
 add COLUMN cuotaInicialBs decimal(12,2),
 add COLUMN montoTotalBs decimal(12,2),
 
-create table pagoCuota(
+create table pagocuota(
     id int PRIMARY key AUTO_INCREMENT,
     totalPagoBs decimal(12,2),
     totalPagoUsd decimal(12,2),
@@ -23,9 +23,9 @@ create table pagoCuota(
     pagoUsd decimal(12,2),
     cambioUsd decimal(12,2),
     cambioBs decimal(12,2),
-    fecha date,
+    fecha datetime,                  //cambiado
     moneda varchar(10),
-    tipoPago tinyint,
+    tipoPago char(4),                //cambiado
     saldoDeuda decimal(9,2),
     idPlandePago int,
     foreing key(idPlandePago) references plandepago(id)
@@ -39,3 +39,6 @@ ALTER TABLE `reserva` ADD `formaPago` VARCHAR(11) NULL AFTER `moneda`;
 
 ALTER TABLE `cuenta` ADD `id_moneda` INT(11) NULL AFTER `utilizable`;
 ALTER TABLE `cuenta` ADD foreign key(id_moneda) references moneda(id);
+
+ALTER TABLE `transaccionpago` DROP FOREIGN KEY `transaccionpago_ibfk_1`;
+ALTER TABLE `transaccionpago` ADD foreign key(idPago) references pagocuota(id);
