@@ -51,7 +51,9 @@ hijo int(11) NOT NULL,
 nombre varchar(60) DEFAULT NULL,
 estado tinyint(4) DEFAULT NULL,
 utilizable tinyint(4) DEFAULT NULL,
-deleted_at datetime DEFAULT NULL
+id_moneda int(11) DEFAULT NULL,
+deleted_at datetime DEFAULT NULL,
+foreign key(id_moneda) references moneda(id)
 );
 
 CREATE TABLE centrocosto(

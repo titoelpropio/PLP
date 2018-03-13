@@ -16,10 +16,10 @@ add COLUMN cuotaInicialBs decimal(12,2),
 add COLUMN montoTotalBs decimal(12,2),
 
 create table pagoCuota(
-id int PRIMARY key AUTO_INCREMENT,
+    id int PRIMARY key AUTO_INCREMENT,
     totalPagoBs decimal(12,2),
     totalPagoUsd decimal(12,2),
-	pagoBs decimal(12,2),
+    pagoBs decimal(12,2),
     pagoUsd decimal(12,2),
     cambioUsd decimal(12,2),
     cambioBs decimal(12,2),
@@ -27,10 +27,15 @@ id int PRIMARY key AUTO_INCREMENT,
     moneda varchar(10),
     tipoPago tinyint,
     saldoDeuda decimal(9,2),
-    idPlandePago int
+    idPlandePago int,
+    foreing key(idPlandePago) references plandepago(id)
+);
 
-)
 ALTER TABLE `transaccionventa` ADD `montoBs` DECIMAL(12,2) NULL AFTER `monto`;
 ALTER TABLE `venta` ADD `tipoVenta` VARCHAR(11) NULL AFTER `reservaBs`;
-
+ALTER TABLE `reserva` ADD `moneda` VARCHAR(10) NULL AFTER `montoTotalBs`;
 ALTER TABLE `reserva` ADD `formaPago` VARCHAR(11) NULL AFTER `moneda`;
+
+
+ALTER TABLE `cuenta` ADD `id_moneda` INT(11) NULL AFTER `utilizable`;
+ALTER TABLE `cuenta` ADD foreign key(id_moneda) references moneda(id);

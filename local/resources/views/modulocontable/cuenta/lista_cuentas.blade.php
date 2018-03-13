@@ -53,6 +53,7 @@
                 <th><CENTER>CUENTA SUPERIOR</CENTER></th>
                 <th><CENTER>ESTADO</CENTER></th>
                 <th><CENTER>UTILIZABLE</CENTER></th>
+                <th><CENTER>MONEDA</CENTER></th>
                 <th><CENTER>OPCIÓN</CENTER></th>
 
                 </thead>
@@ -100,6 +101,7 @@
                       }
                     ?>
                 </CENTER></td>
+                <td><CENTER>{{$result->moneda}}</CENTER></td>
                 <td><CENTER>
                     <button class="btn btn-primary" onclick="{{$result->id}}" data-toggle='modal' data-target='#myModaledit'>Editar</button>
                     </CENTER></td>

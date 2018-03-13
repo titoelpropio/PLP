@@ -39,7 +39,16 @@
                     {!!Form::hidden('estadohijo',null,['id'=>'estadohijo'])!!}
                     {!!Form::label('Padre','Cuenta Superior:')!!}
                     {!!Form::text('padre',null,['id'=>'padre','class'=>'form-control','readonly'])!!}
-        </div>
+                </div>
+
+                <div class="form-group" >
+                    <label for="moneda">Cuenta en moneda:</label>
+                    <select class="form-control" name="moneda" id="moneda">
+                        @foreach($moneda as $mon)
+                        <option value="{{$mon->id}}" >{{$mon->nombre}}</option> 
+                        @endforeach
+                    </select>
+                </div>
 
             </div>
 
@@ -89,9 +98,17 @@
                 </div>
                
                  <div class="form-group" >
-            <label>padre</label>
+                    <label>padre</label>
+                 </div>
 
-        </div>
+                 <div class="form-group" >
+                    <label for="moneda">Cuenta en moneda:</label>
+                    <select class="form-control" name="moneda" id="moneda">
+                        @foreach($moneda as $mon)
+                        <option value="{{$mon->id}}" >{{$mon->nombre}}</option> 
+                        @endforeach
+                    </select>
+                </div>
 
             </div>
 

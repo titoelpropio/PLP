@@ -31,7 +31,7 @@ use SoftDeletes;
      *
      * @var array
      */
-    protected $fillable = ['id','codigo','id_padre','hijo','nombre','estado','utilizable'];
+    protected $fillable = ['id','codigo','id_padre','hijo','nombre','estado','utilizable','id_moneda'];
 
     /**
      * The attributes excluded from the model's JSON form.

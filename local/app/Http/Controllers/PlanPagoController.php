@@ -252,8 +252,8 @@ if ($texto!="") {
      
       $debe=DB::select("SELECT * FROM cuotas,plandepago,venta WHERE cuotas.estado='d' AND cuotas.idPlandePago=plandepago.id and plandepago.idVenta=venta.id and plandepago.idVenta=".$id." ORDER BY cuotas.fechaLimite LIMIT 10");//lista de cuotas que deben en bruto
       $pago=DB::select("SELECT * FROM cuotas,plandepago,venta WHERE cuotas.estado='p'and plandepago.idVenta=venta.id AND cuotas.idPlandePago=plandepago.id  and plandepago.idVenta=".$id." ORDER BY cuotas.fechaLimite DESC LIMIT 10");
-    $monto_pagar=DB::select("SELECT ABS((SELECT IFNULL(SUM(detallecuota.monto),0)as monto FROM plandepago,cuotas,detallecuota WHERE plandepago.id=cuotas.idPlandePago AND cuotas.id=detallecuota.idCuota AND plandepago.idVenta=".$id.") - (SELECT SUM(cuotas.monto) FROM plandepago,cuotas WHERE plandepago.id=cuotas.idPlandePago AND plandepago.idVenta=".$id.")) as cuota");
-      $cantidad=DB::select("SELECT COUNT(*)as contador FROM cuotas,plandepago,venta WHERE cuotas.estado='d' AND cuotas.idPlandePago=plandepago.id and plandepago.idVenta=venta.id and plandepago.idVenta=".$id);
+      $monto_pagar=DB::select("SELECT ABS((SELECT IFNULL(SUM(detallecuota.monto),0)as monto FROM plandepago,cuotas,detallecuota WHERE plandepago.id=cuotas.idPlandePago AND cuotas.id=detallecuota.idCuota AND plandepago.idVenta=".$id.") - (SELECT SUM(cuotas.monto) FROM plandepago,cuotas WHERE plandepago.id=cuotas.idPlandePago AND plandepago.idVenta=".$id.")) as cuota");
+      $cantidad=DB::select("SELECT COUNT(*)as contador, plandepago.id as id_plan_pago FROM cuotas,plandepago,venta WHERE cuotas.estado='d' AND cuotas.idPlandePago=plandepago.id and plandepago.idVenta=venta.id and plandepago.idVenta=".$id);
 
       $monto_debe=DB::select("SELECT SUM(cuotas.monto)as cuota FROM cuotas,plandepago,venta WHERE cuotas.estado='d' AND cuotas.idPlandePago=plandepago.id and plandepago.idVenta=venta.id and  plandepago.idVenta=".$id);
       $cuota_pago=DB::select("SELECT *from  cuotas,plandepago,venta WHERE cuotas.idPlandePago=plandepago.id and plandepago.idVenta=venta.id and  plandepago.idVenta=".$id." LIMIT 1");

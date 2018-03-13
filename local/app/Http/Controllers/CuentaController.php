@@ -22,15 +22,16 @@ class CuentaController extends Controller {
     }
     function index(Request $request) {
 
+        $moneda=DB::select('SELECT * FROM moneda where deleted_at IS NULL');
         if ($request->cuenta == ""){
-           $cuenta= DB::select("select c1.*, (select nombre from cuenta c2 where c2.id = c1.id_padre) as nombre_padre from cuenta c1 order by c1.codigo");
+           $cuenta= DB::select("select c1.*, (select nombre from cuenta c2 where c2.id = c1.id_padre) as nombre_padre, (select nombre from moneda where moneda.id = c1.id_moneda) as moneda from cuenta c1 order by c1.codigo");
         }
         else{
-           $cuenta= DB::select("select c1.*, (select nombre from cuenta c2 where c2.id = c1.id_padre) as nombre_padre from cuenta c1 where c1.nombre like '".$request->cuenta."%' order by c1.codigo");
+           $cuenta= DB::select("select c1.*, (select nombre from cuenta c2 where c2.id = c1.id_padre) as nombre_padre, (select nombre from moneda where moneda.id = c1.id_moneda) as moneda from cuenta c1 where c1.nombre like '".$request->cuenta."%' order by c1.codigo");
         }
         
        
-        return view('modulocontable.cuenta.lista_cuentas',  compact('cuenta'));
+        return view('modulocontable.cuenta.lista_cuentas',  compact('cuenta', 'moneda'));
 
     }
 
@@ -54,7 +55,8 @@ class CuentaController extends Controller {
                  'hijo'=>$request->valorhijo,
                  'nombre'=>$request->nombre,
                  'utilizable'=>$request->utilizable,
-                 'estado'=>$request->estado
+                 'estado'=>$request->estado,
+                 'id_moneda'=>$request->moneda
                  ]);
              if($request->estadohijo == "0"){
                 $cuenta = Cuenta::find($request->idpadre);
@@ -99,6 +101,7 @@ class CuentaController extends Controller {
         return Redirect::to('/consumo');
     }
      public function  plan_cuenta(){
+        $moneda=DB::select('SELECT * FROM moneda where deleted_at IS NULL');
         $Elementos = array('Hijo' => array(),'Padre' => array());
         $cuenta= DB::select("select*from cuenta order by id_padre,codigo");
         foreach ($cuenta as $items) 
@@ -106,7 +109,7 @@ class CuentaController extends Controller {
             $Elementos['Hijo'][$items->id] = $items;
             $Elementos['Padre'][$items->id_padre][] = $items->id;
         }
-        return view('modulocontable.cuenta.index', compact('Elementos')); 
+        return view('modulocontable.cuenta.index', compact('Elementos', 'moneda'));
     }
 
     public function  buscarcuenta($id){

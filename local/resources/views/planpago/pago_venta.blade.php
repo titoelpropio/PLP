@@ -26,7 +26,6 @@
         </div>
 <div class="box-body">
 <div class="row">
-<?php echo json_encode($lista); ?>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="table-responsive">
             <table id="example1" class="table table-bordered table-striped">
