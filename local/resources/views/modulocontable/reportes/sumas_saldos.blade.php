@@ -50,11 +50,16 @@
                              }
                              ?>
                          </center>
+                        <center>
+                            <div class="form-group" >
+                                <button class="btn btn-default" onclick="ExportarExcel('tabla_BCSS','BalanceComprobacionSumasYSaldos')" title="Exportar a Excel"><img src="images/excel.png"></button>
+                            </div>
+                        </center>
                      </div>	
                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="table-responsive">	
                          
-                            <table class="table table-striped table-bordered table-condensed table-hover">
+                            <table class="table table-striped table-bordered table-condensed table-hover" name="tabla_BCSS" id="tabla_BCSS">
                                 <thead style='background-color: #8CDF33'>
                                     <tr>
                                         <th style="vertical-align: middle;" rowspan="2"><CENTER>CÓDIGO</CENTER></th>
@@ -93,5 +98,8 @@
 </div><!-- /.box-body -->
 @endsection
 @section ('javascript')
+{!!Html::script('exportar/js/xlsx.core.min.js')!!}
+{!!Html::script('exportar/js/FileSaver.min.js')!!}
+{!!Html::script('exportar/js/tableexport.min.js')!!}
 {!!Html::script('js/reportes.js')!!}
 @endsection

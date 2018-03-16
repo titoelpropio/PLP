@@ -5,27 +5,36 @@ $(document).ready(function(){
 function Validar_Plan_Pago(){          
   switch($('select[name=tipoPago]').val()) {
   case 'e':
-    if ($('input[name=montoSus]').val() == "") { toastr.error('El campo Monto no debe estar vacio'); $('#loading').css('display','none'); $("#btn_registrar").show(); return false; }
+    if ($('input[name=montoSus]').val() == "" || $('#glosa').val() == "") 
+    { 
+      if ($('input[name=montoSus]').val()=="") { toastr.error('El campo Monto no debe estar vacio'); }
+      if ($('#glosa').val()=="") { toastr.error('El campo Detalle de Transaccion no debe estar vacio'); }
+      $('#loading').css('display','none');
+      $("#btn_registrar").show();
+      return false;
+    }
     else{ toastr.success('GUARDADO CORRECTAMENTE'); return true; }    
     break;
   case 'b':     
-    if ($('input[name=montoBancoSus]').val() == "" || $('select[name=banco]').val() == 0 || $('select[name=cuenta]').val() == 0 || $('input[name=nroDocumento]').val() == "") {
+    if ($('input[name=montoBancoSus]').val() == "" || $('#glosa').val() == "" || $('select[name=banco]').val() == 0 || $('select[name=cuenta]').val() == 0 || $('input[name=nroDocumento]').val() == "") {
       if ($('input[name=montoBancoSus]').val()=="") { toastr.error('El campo Monto Banco no debe estar vacio'); }                           
       if ($('input[name=nroDocumento]').val()=="") { toastr.error('El campo Nro de Documento no debe estar vacio'); }  
       if ($('select[name=banco]').val()==0) { toastr.error('No Selecciono un Banco'); }                      
-      if ($('select[name=cuenta]').val()==0) { toastr.error('No Selecciono una Cuenta'); }                                        
+      if ($('select[name=cuenta]').val()==0) { toastr.error('No Selecciono una Cuenta'); } 
+      if ($('#glosa').val()=="") { toastr.error('El campo Detalle de Transaccion no debe estar vacio'); }                                       
       $('#loading').css('display','none'); 
       $("#btn_registrar").show();        
       return false; 
     }else{ toastr.success('GUARDADO CORRECTAMENTE'); return true; }
     break;
   case 'be':   
-    if ($('input[name=montoSus]').val() == "" || $('input[name=montoBancoSus]').val() == "" || $('select[name=banco]').val() == 0 || $('select[name=cuenta]').val() == 0 || $('input[name=nroDocumento]').val() == "") {
+    if ($('input[name=montoSus]').val() == "" || $('#glosa').val() == "" || $('input[name=montoBancoSus]').val() == "" || $('select[name=banco]').val() == 0 || $('select[name=cuenta]').val() == 0 || $('input[name=nroDocumento]').val() == "") {
       if ($('input[name=montoBancoSus]').val()=="") { toastr.error('El campo Monto Banco no debe estar vacio'); }
       if ($('input[name=montoSus]').val()=="") { toastr.error('El campo Monto Efectivo no debe estar vacio'); }
       if ($('input[name=nroDocumento]').val()=="") { toastr.error('El campo Nro de Documento no debe estar vacio'); }  
       if ($('select[name=banco]').val()==0) { toastr.error('No Selecciono un Banco'); }                      
-      if ($('select[name=cuenta]').val()==0) { toastr.error('No Selecciono una Cuenta'); }                                        
+      if ($('select[name=cuenta]').val()==0) { toastr.error('No Selecciono una Cuenta'); }  
+      if ($('#glosa').val()=="") { toastr.error('El campo Detalle de Transaccion no debe estar vacio'); }                                      
       $('#loading').css('display','none'); 
       $("#btn_registrar").show();          
       return false; 

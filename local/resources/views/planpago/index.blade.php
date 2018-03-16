@@ -195,6 +195,13 @@
         </div>
 
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <label for="glosa">Detalle de transacción (*):</label>
+            <textarea class="form-control" rows="3" id="glosa" name="glosa" placeholder="Ej: Pago de cuota Nro 2 de lote pagado en efectivo segun documento Nro 0012"></textarea>
+          </div>
+        </div>
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                 <div align="right">
                 <?php if ($monto_pagar[0]->cuota != 0): ?>
