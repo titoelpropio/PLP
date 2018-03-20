@@ -35,24 +35,26 @@ $tablalote=DB::select('SELECT point,estado FROM `lote` where fase=1 ');
 
 <div class="panel panel-success">
      <div class="panel-heading">
-<h2 style="font-weight: bold;text-align:center">FASE 1</h2>
+<h2 style="font-weight: bold;text-align:center">FASE 1 LA BARRANCA</h2>
 
           
         
     </div>  
   <div class="panel-body">
-                 <ul class="nav nav-pills">
-           <li class=" pull-left">  <a  href="../seccion1/1" id='btnActualizar' class="btn btn-primary" >FASE 1</a></li>
-                 
-           <li class=" pull-left">  <a  href="../seccion2/1" id='btnActualizar' class="btn btn-primary" >FASE 2</a></li>
-        <li  class=" pull-left"> <a href="../seccion3/1" id='btnActualizar' class="btn btn-primary" >FASE 3</a></li>
-        <li  class=" pull-right"> <a href="../" id='btnAgregar' class="btn btn-warning"  >VOLVER</a></li>
-               
-         
+  	<ul class="nav nav-pills">
+  		<li class=" pull-left">  <a  href="../seccion1/1" id='btnActualizar' class="btn btn-primary" >FASE 1</a></li>
 
-
-       
-        </ul>    
+  		<li class=" pull-left">  <a  href="../seccion2/1" id='btnActualizar' class="btn btn-primary" >FASE 2</a></li>
+  		<li  class=" pull-left"> <a href="../seccion3/1" id='btnActualizar' class="btn btn-primary" >FASE 3</a></li>
+  		<li  class=" pull-right"> <a href="../" id='btnAgregar' class="btn btn-warning"  >VOLVER</a></li>
+  	</ul>    
+  	<ul class="nav nav-pills">
+  		<li class=" pull-left">  <a  href="../seccion1/1" id='btnActualizar' class="btn btn-primary" >FASE 1</a></li>
+  		
+  		<li class=" pull-left">  <a  href="../seccion2/1" id='btnActualizar' class="btn btn-primary" >FASE 2</a></li>
+  		<li  class=" pull-left"> <a href="../seccion3/1" id='btnActualizar' class="btn btn-primary" >FASE 3</a></li>
+  		<li  class=" pull-right"> <a href="../" id='btnAgregar' class="btn btn-warning"  >VOLVER</a></li>
+  	</ul>    
 </div>
 <!--   <div class="panel-footer">Pie del panel</div> -->
 </div>
