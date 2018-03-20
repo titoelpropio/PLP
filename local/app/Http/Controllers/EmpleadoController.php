@@ -54,16 +54,16 @@ class EmpleadoController extends Controller {
 
     function index() {
 
-        $empleado =DB::table('empleado')
+        // $empleado =DB::table('empleado')
 
-        ->join('cargo','empleado.idCargo','=','cargo.id')
-        ->join('turno','empleado.idTurno','=','turno.id')
+        // ->join('cargo','empleado.idCargo','=','cargo.id')
+        // ->join('turno','empleado.idTurno','=','turno.id')
 
-        ->select('empleado.id','empleado.codigo','empleado.nombre','empleado.apellido','empleado.id as idEmp','empleado.direccion','empleado.ci','empleado.celular','empleado.genero','empleado.estado','cargo.nombre as nombreCargo','turno.nombre as nombreTurno')
-        ->where('empleado.deleted_at')
-        ->orderby('empleado.id','desc')
-        ->paginate(20);
-      // $empleado=DB::select('select empleado.id, empleado.nombre,empleado.apellido,empleado.ci,empleado.direccion,empleado.celular, empleado.estado,empleado.genero,cargo.nombre as nombreCargo, turno.nombre as nombreTurno from empleado,cargo,turno where empleado.idCargo=cargo.id and empleado.idTurno=turno.id');
+        // ->select('empleado.id','empleado.codigo','empleado.nombre','empleado.apellido','empleado.id as idEmp','empleado.direccion','empleado.ci','empleado.celular','empleado.genero','empleado.estado','cargo.nombre as nombreCargo','turno.nombre as nombreTurno')
+        // ->where('empleado.deleted_at')
+        // ->orderby('empleado.id','desc')
+        // ->paginate(500);
+      $empleado=DB::select('select empleado.id,empleado.codigo, empleado.nombre,empleado.apellido,empleado.ci,empleado.direccion,empleado.celular, empleado.estado,empleado.genero,cargo.nombre as nombreCargo, turno.nombre as nombreTurno from empleado,cargo,turno where  empleado.deleted_at IS NULL AND empleado.idCargo=cargo.id and empleado.idTurno=turno.id');
         return view('empleado.index',compact('empleado'));
     }
 

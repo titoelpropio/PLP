@@ -40,12 +40,12 @@
 
         </div>  
          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pull-right"> 
-            {!! Form::open(['route' => 'BuscarEmpleado', 'method' => 'post', 'novalidate', 'class' => 'form-inline']) !!}
+         <!--    {!! Form::open(['route' => 'BuscarEmpleado', 'method' => 'post', 'novalidate', 'class' => 'form-inline']) !!} -->
 
-            <div class="pull-right">
+           <!--  <div class="pull-right">
                 <button  type="submit" class="btn btn-info"><i class="fa fa-search" aria-hidden="true"></i></button>
-            </div>        
-                <div class="pull-right">{!!Form::number('ci',null,['class'=>'form-control ','placeholder'=>'Coloque el CI a buscar'])!!}</div>
+            </div>         -->
+                <!-- <div class="pull-right">{!!Form::number('ci',null,['class'=>'form-control ','placeholder'=>'Coloque el CI a buscar'])!!}</div> -->
           
         </div>    
  
@@ -56,7 +56,7 @@
 	<div class="table-responsive">
 		  
 
-		<table class="table table-striped table-bordered table-condensed table-hover">
+		<table id="example1" class="table table-striped table-bordered table-condensed table-hover">
 		<thead>
 		<th><CENTER>Nombre</CENTER></th>
 		<th><CENTER>Apellido</CENTER></th>
@@ -97,7 +97,7 @@
 		</table>
 
 	</div>
-	{!!$empleado->render()!!}
+	
 	<script type="text/javascript">
 		function cargarDatos(id){
 				$('input[name=idEmpleado]').val(id);

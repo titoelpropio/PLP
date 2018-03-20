@@ -83,7 +83,7 @@ function index(){
 
 
   public function show($id){
-    $datos=DB::select("SELECT lote.id as idLote,lote.nroLote,lote.fase,lote.manzano,lote.superficie, categorialote.categoria,categorialote.descripcion, proyecto.nombre as proyecto,detallereserva.id as idDetalleReserva,detallereserva.subTotal, reserva.id as idReserva,  cliente.id as idCliente,cliente.nombre,cliente.apellidos,cliente.ci FROM proyecto,categorialote,lote,reserva,detallereserva,cliente WHERE proyecto.id=categorialote.idProyecto AND proyecto.id=lote.idProyecto AND categorialote.id=lote.idCategoriaLote AND lote.id=detallereserva.idLote AND detallereserva.idReserva=reserva.id AND cliente.id=reserva.idCliente AND detallereserva.id=".$id);
+    $datos=DB::select("SELECT lote.id as idLote,lote.nroLote,lote.fase,lote.manzano,lote.superficie, categorialote.categoria,categorialote.descripcion, proyecto.nombre as proyecto,detallereserva.id as idDetalleReserva,detallereserva.subTotal, reserva.id as idReserva,  cliente.id as idCliente,cliente.nombre,cliente.apellidos,cliente.ci,proyecto.id idProyecto FROM proyecto,categorialote,lote,reserva,detallereserva,cliente WHERE proyecto.id=categorialote.idProyecto AND proyecto.id=lote.idProyecto AND categorialote.id=lote.idCategoriaLote AND lote.id=detallereserva.idLote AND detallereserva.idReserva=reserva.id AND cliente.id=reserva.idCliente AND detallereserva.id=".$id);
     return view('devolucion_reserva.devolucion_reserva',compact('datos')); 
   }
 

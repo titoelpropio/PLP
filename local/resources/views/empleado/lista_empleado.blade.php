@@ -26,7 +26,7 @@
 
     
 
-        <table class="table table-striped table-bordered table-condensed table-hover">
+        <table id="example1" class="table table-striped table-bordered table-condensed table-hover">
         <thead>
             <th><CENTER>C.I.</CENTER></th>
             <th><CENTER>EMPLEADO</CENTER></th>

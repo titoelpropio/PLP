@@ -7,12 +7,13 @@
       <div class="panel panel-success">
         <div class="panel-heading"><b>DATOS DEL CLIENTE</b></div>        
         <div class="panel-body">
-            <div class="col-sm-2">
+            <div class="col-sm-4">
+                
 			{!!Form::label('Carnet:')!!}
 			{!!Form::text('ci',$datos[0]->ci,['class'=>'form-control ','disabled'])!!}
 			{!!Form::hidden('idCliente',$datos[0]->idCliente,['class'=>'form-control'])!!}
             </div>        
-            <div class="col-sm-10">
+            <div class="col-sm-8">
 			{!!Form::label('Cliente:')!!}
 			{!!Form::text('cliente',$datos[0]->nombre.' '.$datos[0]->apellidos,['class'=>'form-control ','disabled'])!!}
             </div>                                                    
@@ -21,7 +22,7 @@
     </div>   
 
 
-<?php $porcentaje=DB::select("SELECT *FROM porcentajedevolucionreserva WHERE porcentajedevolucionreserva.deleted_at IS NULL AND porcentajedevolucionreserva.idProyecto=".Session::get('idProyecto')); 
+<?php $porcentaje=DB::select("SELECT *FROM porcentajedevolucionreserva WHERE porcentajedevolucionreserva.deleted_at IS NULL AND porcentajedevolucionreserva.idProyecto=".$datos[0]->idProyecto); 
 $monto = $datos[0]->subTotal*($porcentaje[0]->porcentaje / 100);
 ?>  
     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
