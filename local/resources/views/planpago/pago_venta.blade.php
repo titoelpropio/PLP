@@ -46,57 +46,55 @@
                 <th>OPCION</th>
                 </thead>
               
-
+<?php // echo json_encode($lista); ?>
                 <tbody id="idTbody">
                       @foreach ($lista as $lis)
 
                                 <?php
                                  
                                     echo '<tr>
-                                    <td><span class="negritaTabla">Nombre:</span> '.$lis[0]->cliente.'<br>
-                                    <span class="negritaTabla">CI:</span> '.$lis[0]->ci_cliente.' '.$lis[0]->expedido.'.<br>
-                                    <span class="negritaTabla">Telefono:</span> '.$lis[0]->celular.'</td>
+                                    <td><span class="negritaTabla">Nombre:</span> '.$lis->cliente.'<br>
+                                    <span class="negritaTabla">CI:</span> '.$lis->ci_cliente.' '.$lis->expedido.'.<br>
+                                    <span class="negritaTabla">Telefono:</span> '.$lis->celular.'</td>
                                     
-                                    <td><span class="negritaTabla">Urbanizacion:</span> '.$lis[0]->nombre.'<br>
-                                    <span class="negritaTabla">Manzano:</span> '.$lis[0]->manzano.' <br>
-                                    <span class="negritaTabla">Nro. Lote:</span> '.$lis[0]->nroLote.'</td>';
+                                    <td><span class="negritaTabla">Urbanizacion:</span> '.$lis->nombre.'<br>
+                                    <span class="negritaTabla">Manzano:</span> '.$lis->manzano.' <br>
+                                    <span class="negritaTabla">Nro. Lote:</span> '.$lis->nroLote.'</td>';
 
                                  ?>
 
-                                 <td>{{$lis[0]->cuotaInicialUsd}}</td>
-                                    <?php if ($lis[0]->estado_venta==='c'):
-                                    echo '<td>Plazo';
+                                 <td>{{$lis->cuotaInicialUsd}}</td>
+                                    <?php if ($lis->tipoVenta==='PLAZO'):
+                                    echo '<td>PLAZO';
                                 else:
-                                    echo '<td>Contado';
+                                    echo '<td>CONTADO';
                                          ?>
                                         
                                     <?php endif ?>
-                                    <td>{{$lis[0]->precio*$lis[0]->monedaVenta}}</td>
-                                    <td>{{$lis[0]->precio}}</td>
-                                    <td>{{$lis[0]->TotalPagado}}</td>
-                                    <td>{{$lis[0]->precio-$lis[0]->TotalPagado}}</td>
+                                    <td>{{number_format($lis->precioBs, 2, '.', '')}}</td>
+                                    <td>{{number_format($lis->precio, 2, '.', '')}}</td>
+                                    <td>{{number_format($lis->totalPagadoUsd, 2, '.', '')}}</td>
+                                    <td>{{number_format($lis->saldoUsd, 2, '.', '')}}</td>
 
-                                    <td>{{$lis[0]->fecha}}</td>
+                                    <td>{{$lis->fecha}}</td>
 
 
-                                    <?php if ($lis[0]->estado_venta==='c'):
+                                    <?php if ($lis->estado_venta==='d'):
                                     echo '<td><span style="color:red">Pendiente</span>';
                                 else:
                                     echo '<td><span style="color:green">Pagado</span>';
                                          ?>
                                         
                                     <?php endif ?>
-                                    <td><a href="{!!URL::to('PlanPago')!!}<?php echo "/".$lis[0]->id ?>" class="btn-sm btn-success" >PAGAR</a>
-                                        <a data-toggle="modal" style="cursor: pointer;" data-target="#DetalleCuota" href="#" onclick="CargarCuotas(<?php echo $lis[0]->id ?>)" class="btn-sm btn-info" >DETALLE</a>
+                                    <td><a href="{!!URL::to('PlanPago')!!}<?php echo "/".$lis->id ?>" class="btn-sm btn-success" >PAGAR</a>
+                                        <a data-toggle="modal" style="cursor: pointer;" data-target="#DetalleCuota" href="#" onclick="CargarCuotas(<?php echo $lis->id ?>)" class="btn-sm btn-info" >DETALLE</a>
                                     </td>
                                     </tr>
 
                
                                 
                
-                    <!--td align=center>{{$lis[0]->precio}}</td-->
-                    <!--td align=center>{{$lis[0]->ci_empleado}}</td>
-                    <td align=center>{{$lis[0]->empleado}}</td-->
+       
                    
                                
 

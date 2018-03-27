@@ -60,8 +60,8 @@
                 <th><center>NRO MANZANO</center></th>
                 <th><center>NRO LOTE</center></th>
                 <th><center>DETALLE</center></th>
-                <th><center>PRECIO</center></th>
-                 <th><center>TIPO DE PAGO</center></th>
+                <th><center>MONTO</center></th>
+                 <th><center>FORMA DE PAGO</center></th>
                 
                  <th><center>ELIMINAR</center></th>
 

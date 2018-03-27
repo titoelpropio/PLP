@@ -94,7 +94,7 @@ public function store(Request $request)
               }         
               break;        
       }      
-      $pago=DB::select("SELECT (IFNULL(SUM(detallecuota.monto),0) + ".$monto.")as monto FROM cuotas,plandepago,venta,detallecuota WHERE detallecuota.idCuota=cuotas.id and cuotas.idPlandePago=plandepago.id and plandepago.idVenta=venta.id and plandepago.idVenta=".$request['idVenta']);// LA SUMA DE LA TABLA DE PAGO DE ESA VENTA MAS LO Q ESTA INTRODUCIENDO EN EL TEXTO
+      $pago=DB::select("SELECT (IFNULL(SUM(detallecuota.monto),0) + ".$monto.")as monto,plandepago.saldoBs,plandepago.saldoUsd FROM cuotas,plandepago,venta,detallecuota WHERE detallecuota.idCuota=cuotas.id and cuotas.idPlandePago=plandepago.id and plandepago.idVenta=venta.id and plandepago.idVenta=".$request['idVenta']);// LA SUMA DE LA TABLA DE PAGO DE ESA VENTA MAS LO Q ESTA INTRODUCIENDO EN EL TEXTO
       $cuota=DB::select("SELECT SUM(cuotas.monto)as cuota from cuotas,plandepago,venta WHERE cuotas.idPlandePago=plandepago.id and plandepago.idVenta=venta.id and  plandepago.idVenta=".$request['idVenta']);//LA SUMA DE TODO EL PLAN DE PAGO DE ESA VENTA
       $cuota_pago=DB::select("SELECT *from  cuotas,plandepago,venta WHERE cuotas.idPlandePago=plandepago.id and plandepago.idVenta=venta.id and  plandepago.idVenta=".$request['idVenta']." LIMIT 1");//OBTENGO LA CUOTA Q SE PAGA POR MES
 
@@ -211,7 +211,8 @@ public function store(Request $request)
             'saldoDeuda'=>$saldoDeuda[0]->cuota,
             'idPlandePago'=>$request['id_plan_pago']
           ]);
-
+       
+        
         if ($request['tipoPago'] != 'e')
         { //Cuando es distinto de 'e' significa q escogio banco o banco-efectivo por lo tanto igual se crea en la tabla transaccion pago
           TransaccionPago::create([
@@ -354,15 +355,19 @@ public function store(Request $request)
   function PagoVenta(Request $request){
       $lista=array();
       $fecha=DB::select("SELECT curdate()as fecha"); // %H:%i:%s
-      $resultado=DB::select("SELECT cliente.expedido,venta.id as idVenta,DATE_FORMAT(venta.fecha,'%d/%m/%Y %H:%i:%s') AS fecha,venta.precio,venta.estado as estado_venta, empleado.ci as ci_empleado,CONCAT(empleado.nombre,' ',empleado.apellido)as empleado,cliente.nombre as nombreCliente,cliente.apellidos as apellidoCliente,cliente.ci as ci_cliente,cliente.celular,cliente.celular_ref,proyecto.nombre as nombreProyecto, categorialote.categoria,categorialote.descripcion, lote.nroLote,lote.manzano,lote.superficie,lote.uv,lote.matricula,lote.estado as estado_lote, preciocategoria.precio as precio_categoria from venta,empleado,cliente,lote,categorialote,proyecto,preciocategoria WHERE venta.idEmpleado=empleado.id AND venta.idCliente=cliente.id AND lote.id=venta.idLote AND categorialote.id=lote.idCategoriaLote AND venta.estado='c' and proyecto.id=categorialote.idProyecto and venta.fecha and  preciocategoria.idCategoria=categorialote.id AND preciocategoria.deleted_at IS NULL order by venta.fecha ");
+      // $resultado=DB::select("SELECT cliente.expedido,venta.id as idVenta,DATE_FORMAT(venta.fecha,'%d/%m/%Y %H:%i:%s') AS fecha,venta.precio,venta.estado as estado_venta, empleado.ci as ci_empleado,CONCAT(empleado.nombre,' ',empleado.apellido)as empleado,cliente.nombre as nombreCliente,cliente.apellidos as apellidoCliente,cliente.ci as ci_cliente,cliente.celular,cliente.celular_ref,proyecto.nombre as nombreProyecto, categorialote.categoria,categorialote.descripcion, lote.nroLote,lote.manzano,lote.superficie,lote.uv,lote.matricula,lote.estado as estado_lote, preciocategoria.precio as precio_categoria from venta,empleado,cliente,lote,categorialote,proyecto,preciocategoria WHERE venta.idEmpleado=empleado.id AND venta.idCliente=cliente.id AND lote.id=venta.idLote AND categorialote.id=lote.idCategoriaLote AND venta.estado='c' and proyecto.id=categorialote.idProyecto and venta.fecha and  preciocategoria.idCategoria=categorialote.id AND preciocategoria.deleted_at IS NULL order by venta.fecha ");
 
-      for ($i=0; $i <count($resultado) ; $i++) { 
-         $lista[]=DB::select("SELECT (Cuotas.TotalCuotas-sum(detallecuota.monto)) debe,Cuotas.TotalCuotas,sum(detallecuota.monto) as TotalPagado, sum(detallecuota.monto) as total,tipocambio.monedaVenta,cliente.expedido,venta.id,DATE_FORMAT(venta.fecha,'%d/%m/%Y') AS fecha,venta.precio,venta.estado as estado_venta, empleado.ci as ci_empleado,CONCAT(empleado.nombre,' ',empleado.apellido)as empleado, CONCAT(cliente.nombre,' ',cliente.apellidos)as cliente,cliente.ci as ci_cliente,cliente.celular,cliente.celular_ref,proyecto.nombre, categorialote.categoria,categorialote.descripcion, lote.nroLote,lote.manzano,lote.superficie,lote.uv,lote.matricula,lote.estado as estado_lote, preciocategoria.precio as precio_categoria ,plandepago.cuotaInicialUsd,plandepago.cuotaInicialBs,venta.moneda
-          from  cuotas,detallecuota,plandepago,tipocambio,venta,empleado,cliente,lote,categorialote,proyecto,preciocategoria,(select sum(cuotas.monto) as TotalCuotas, sum(detallecuota.monto) as montoTotal,venta.id as idVentaC
-     from cuotas,detallecuota,plandepago,venta
-     where venta.id=plandepago.idVenta and plandepago.id=cuotas.idPlandePago and cuotas.id=detallecuota.idCuota and DATE_FORMAT(venta.fecha,'%Y-%m-%d') <= DATE_FORMAT(NOW(),'%Y-%m-%d')  and   venta.id=".$resultado[$i]->idVenta.")  Cuotas WHERE 
-     venta.id=plandepago.idVenta and plandepago.id=cuotas.idPlandePago and cuotas.id=detallecuota.idCuota and venta.idEmpleado=empleado.id AND venta.idCliente=cliente.id AND lote.id=venta.idLote AND categorialote.id=lote.idCategoriaLote AND proyecto.id=categorialote.idProyecto and venta.id=".$resultado[$i]->idVenta."  AND preciocategoria.idCategoria=categorialote.id AND preciocategoria.deleted_at IS NULL AND venta.estado='c'  and venta.idTipoCambio=tipocambio.id");
-      }
+     //  for ($i=0; $i <count($resultado) ; $i++) { 
+     //     $lista[]=DB::select("SELECT (Cuotas.TotalCuotas-sum(detallecuota.monto)) debe,Cuotas.TotalCuotas,sum(detallecuota.monto) as TotalPagado, sum(detallecuota.monto) as total,tipocambio.monedaVenta,cliente.expedido,venta.id,DATE_FORMAT(venta.fecha,'%d/%m/%Y') AS fecha,venta.precio,venta.estado as estado_venta, empleado.ci as ci_empleado,CONCAT(empleado.nombre,' ',empleado.apellido)as empleado, CONCAT(cliente.nombre,' ',cliente.apellidos)as cliente,cliente.ci as ci_cliente,cliente.celular,cliente.celular_ref,proyecto.nombre, categorialote.categoria,categorialote.descripcion, lote.nroLote,lote.manzano,lote.superficie,lote.uv,lote.matricula,lote.estado as estado_lote, preciocategoria.precio as precio_categoria ,plandepago.cuotaInicialUsd,plandepago.cuotaInicialBs,venta.moneda
+     //      from  cuotas,detallecuota,plandepago,tipocambio,venta,empleado,cliente,lote,categorialote,proyecto,preciocategoria,(select sum(cuotas.monto) as TotalCuotas, sum(detallecuota.monto) as montoTotal,venta.id as idVentaC
+     // from cuotas,detallecuota,plandepago,venta
+     // where venta.id=plandepago.idVenta and plandepago.id=cuotas.idPlandePago and cuotas.id=detallecuota.idCuota and DATE_FORMAT(venta.fecha,'%Y-%m-%d') <= DATE_FORMAT(NOW(),'%Y-%m-%d')  and   venta.id=".$resultado[$i]->idVenta.")  Cuotas WHERE 
+     // venta.id=plandepago.idVenta and plandepago.id=cuotas.idPlandePago and cuotas.id=detallecuota.idCuota and venta.idEmpleado=empleado.id AND venta.idCliente=cliente.id AND lote.id=venta.idLote AND categorialote.id=lote.idCategoriaLote AND proyecto.id=categorialote.idProyecto and venta.id=".$resultado[$i]->idVenta."  AND preciocategoria.idCategoria=categorialote.id AND preciocategoria.deleted_at IS NULL AND venta.estado='c'  and venta.idTipoCambio=tipocambio.id");
+     //  }
+      $lista=DB::SELECT("SELECT venta.tipoVenta,venta.id,cliente.expedido, CONCAT(cliente.nombre,' ',cliente.apellidos)as cliente,cliente.celular,cliente.ci as ci_cliente,proyecto.nombre,plandepago.cuotaInicialUsd,plandepago.cuotaInicialBs,lote.nroLote,lote.manzano,lote.superficie,
+venta.precio -venta.precio*descuento/100 as precio,venta.precioBs,plandepago.saldoBs,plandepago.saldoUsd,venta.fecha,plandepago.estado as estado_venta,(venta.precioBs -venta.precioBs*descuento/100-saldoBs) as totalPagadoBs,(venta.precio -venta.precio*descuento/100-saldoUsd) as totalPagadoUsd
+FROM plandepago,venta,lote,cliente,proyecto where plandepago.idVenta=venta.id and venta.idCliente=cliente.id and venta.idLote=lote.id and proyecto.id=lote.idProyecto and 
+plandepago.estado='d'");
       return view('planpago.pago_venta', compact('lista'));
   }
 

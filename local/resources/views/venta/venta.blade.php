@@ -477,6 +477,7 @@ number_format($pagoInicialReserva, 2, '.', '');//esto es lo qe tiene q pagar com
         </td>
         <td> 
          <input class="form-control" type="text" name="PrecioPlazo" value= <?php echo number_format($precioPlazo, 2, '.', ''); ?> readonly="readonly">
+         <input class="form-control" type="hidden" name="PrecioPlazoBs" value= <?php echo number_format($precioPlazo*$tipoCambio[0]->monedaVenta, 2, '.', ''); ?> readonly="readonly">
        </td>
        
        <td><input type="number" name="meses" class="form-control" onchange="verificarPlazo(this)">
@@ -489,6 +490,7 @@ number_format($pagoInicialReserva, 2, '.', '');//esto es lo qe tiene q pagar com
         <td><input type="number" name="cuotaMensual" readonly="readonly" class="form-control">
           <input type="hidden" name="cuotaMensualBs" readonly="readonly" class="form-control">
           <input type="hidden" name="sumarDecimal" readonly="readonly" class="form-control">
+          <input type="hidden" name="sumarDecimalBs" readonly="readonly" class="form-control">
         </td>
         
         <td><!-- <input class="form-control" type="hidden" name="pago" value=<?php echo number_format($pagoInicialReserva, 2, '.', ''); ?>> -->

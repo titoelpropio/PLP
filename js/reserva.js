@@ -48,8 +48,9 @@ function agregar(){
           Proyecto: <font color="red" id="proyecto'+cont+'" size="3"> </font>\n\
         </td>\n\
         <td>\n\
-          <input name="subTotal[]" onchange=sumarTotal(this,'+cont+') id="subTotal'+cont+'" type="text" placeholder="Monto $us." size="7" style="text-align: center; margin-bottom: 5px" onkeypress="return numerosmasdecimal(event)" value="0">$us.<br>\n\
-          <input name="subTotalB[]" onchange=sumarTotalB(this,'+cont+') id="subTotal'+cont+'" type="text" placeholder="Monto Bs." size="7" style="text-align: center;" onkeypress="return numerosmasdecimal(event)" value="0">Bs.\n\
+        <label>DOLAR<input value="DOLAR" onclick="cambiarBSUSD(1,'+cont+')" checked="" type="radio" name="moneda" id="moneda'+cont+'"><lable/><br><label>BOLIVIANO<input value="BOLIVIANO" onclick="cambiarBSUSD(0,'+cont+')" type="radio" name="moneda" id="monedaB'+cont+'"><lable/><br>\n\
+          $us.<input class="form-control" name="subTotal[]" onchange=sumarTotal(this,'+cont+',1) id="subTotal'+cont+'" type="text" placeholder="Monto $us." size="7" style="text-align: center; margin-bottom: 5px" onkeypress="return numerosmasdecimal(event)" value="0"><br>\n\
+          Bs.<input readonly="" name="subTotalB[]" class="form-control" onchange=sumarTotal(this,'+cont+',0) id="subTotalB'+cont+'" type="text" placeholder="Monto Bs." size="7" style="text-align: center;" onkeypress="return numerosmasdecimal(event)" value="0">\n\
         </td>\n\
         <td>\n\
           <select onchange="cargarBanco(this,'+cont+')" name="tipoPago[]" class="form-control" id="tipoPago'+cont+'">\n\
@@ -60,16 +61,19 @@ function agregar(){
           </select><br>\n\
           <select  style="display:none" name="cuenta[]" class="form-control" id="cuenta'+cont+'">\n\
           </select><br>\n\
+          <input  style="display:none" class="form-control" type="date" name="fechaDeposito[]">\n\
           <input style="display:none" type="text" class="form-control" placeholder="Nro de documento" name="nroDocumento[]" id="nroDocumento'+cont+'" onkeypress="return bloqueo_de_punto(event)"><br>\n\
-          <input style="display:none" type="text" onchange=sumarTotal(this,'+cont+') class="form-control" placeholder="Monto Banco $us." name="MontoBanco[]" id="MontoBanco'+cont+'" value="0" onkeypress="return bloqueo_de_punto(event)"><br>\n\
-          <input style="display:none" type="text" onchange=sumarTotal(this,'+cont+') class="form-control" placeholder="Monto Banco Bs." name="MontoBancoB[]" id="MontoBancoB'+cont+'" value="0" onkeypress="return bloqueo_de_punto(event)">\n\
+          <!--<input style="display:none" type="text" onchange=sumarTotal(this,'+cont+') class="form-control" placeholder="Monto Banco $us." name="MontoBanco[]" id="MontoBanco'+cont+'" value="0" onkeypress="return bloqueo_de_punto(event)"><br>\n\
+          <input style="display:none" type="text" onchange=sumarTotal(this,'+cont+') class="form-control" placeholder="Monto Banco Bs." name="MontoBancoB[]" id="MontoBancoB'+cont+'" value="0" onkeypress="return bloqueo_de_punto(event)">-->\n\
         </td>\n\
         <td>\n\
           <button type="button" id="btn_eli'+cont+'" class="btn-sm btn-danger" title=Eliminar onclick="Eliminar_lista(' + cont + ')"><i class="fa fa-trash-o" aria-hidden="true"></i></button>\n\
         </td>\n\
-       </tr>';            
+       </tr>';      
+       
     $('#body_busqueda').append(fila);
     BuscarProyecto(cont);
+     cont++;     
 }
 
 function Eliminar_lista(index){
@@ -92,9 +96,20 @@ function Eliminar_lista(index){
   $("#btn_agre").show();   
   $('#fila' + index).remove();
 }
-
-function sumarTotal(input,h){
-    if( $(input).attr("id") == "subTotal"+h){
+function cambiarBSUSD(option,i){
+  if (option==1) {
+    
+     $('#subTotal'+i).prop('readonly', false);
+     $('#subTotalB'+i).prop('readonly', true);
+   
+  }else{
+ $('#subTotal'+i).prop('readonly', true);
+     $('#subTotalB'+i).prop('readonly', false);
+  }
+}
+tipoDeCambio=parseFloat($('#tipocambio').text());
+function sumarTotal(input,h,moneda){
+    if( moneda==1){
         var MontoSu = parseFloat($('#subTotal'+h).val());
         var Cambio = parseFloat($('#tipocambio').text());
         var Total = MontoSu * Cambio;
@@ -106,18 +121,24 @@ function sumarTotal(input,h){
         var Total = MontoBs / Cambio;
         $('#subTotal'+h).val(Total.toFixed(2));
     }
-    
+    if (MontoSu<50) {
+      alert("EL MONTO NO PUEDE SER MENOR A 50 DOLARES");
+      $('#subTotal'+h).val("");
+      $('#subTotalB'+h).val("");
+      return;
+    }
     sumar=0;
     montoBanco=0;
+   
     for (var i = 0; i < cont; i++) {
       if (!isNaN($('#subTotal'+i).val())) {
-        subtotal= $('#subTotal'+i).val();
+         subtotal= $('#subTotal'+i).val();
         sumar=sumar+parseFloat(subtotal);
       }
-      if (!isNaN($('#MontoBanco'+i).val())) {
-        montoBanco= $('#MontoBanco'+i).val();
-        sumar=sumar+parseFloat(montoBanco);
-      }  
+      // if (!isNaN($('#MontoBanco'+i).val())) {
+      //   montoBanco= $('#MontoBanco'+i).val();
+      //   sumar=sumar+parseFloat(montoBanco);
+      // }  
     }
     $('#montoTotal').val(sumar);
 
@@ -128,11 +149,12 @@ function sumarTotal(input,h){
         subtotalB= $('#subTotalB'+j).val();
         sumarB=sumarB+parseFloat(subtotalB);
       }
-      if (!isNaN($('#MontoBancoB'+j).val())) {
-        montoBancoB= $('#MontoBancoB'+j).val();
-        sumarB=sumarB+parseFloat(montoBancoB);
-      }  
+      // if (!isNaN($('#MontoBancoB'+j).val())) {
+      //   montoBancoB= $('#MontoBancoB'+j).val();
+      //   sumarB=sumarB+parseFloat(montoBancoB);
+      // }  
     }
+    $('#montoTotal').val(subtotal);
     $('#montoTotalB').val(sumarB);
 }
 
@@ -345,7 +367,7 @@ function Buscar_Lote(select,id){
             if (response[0].estado == 0) {
               $("#btn_agregar").show(); 
               $("#btn_eli"+id).show();
-              $("#btn_agre").show();                                                                           
+              //$("#btn_agre").show();                                                                           
               cont++;
             } else {
               $("#btn_agregar").hide();

@@ -290,16 +290,130 @@ var   $puedeModificar=0;
                 $idCliente = $verificar[0]->id;  
                 $idEmpleado = $verificar[0]->idEmpleado;  
             }
+              $Monto = "";
+                $MontoBs = "";
 
+                //---------------------------------- Contabilidad ----------------------------------------------------------//
+                $categoria = DB::select("SELECT * FROM categoriacuenta WHERE nombre='Asiento Diario'");
+                $gestion = DB::select("SELECT * FROM gestion WHERE estado=1");
+                $tipocambio=DB::select("SELECT * FROM tipocambio where deleted_at IS NULL");
+                $contAsiento=DB::select("SELECT count(*) as count from asiento where id_gestion=".$gestion[0]->id." order by id desc limit 1");
+                $nroAsiento=DB::select("SELECT * from asiento where id_gestion=".$gestion[0]->id." order by id desc limit 1");
+                $nroAs=0;
+                $nro_detalle = 1;
+                date_default_timezone_set('America/La_Paz');
+                ini_set('date.timezone','America/La_Paz');
+                $fecha_transaccion = date("Y-m-d H:i:s");
+
+                if($contAsiento[0]->count > 0)
+                {
+                  $nroAs = $nroAsiento[0]->nro_asiento;
+                }
+
+                $asiento=Asiento::create([
+                  'nro_asiento'=>$nroAs + 1,
+                  'tipo'=>1,// 1 = Ingreso, 2 = Egreso, 3 = Traspaso
+                  'glosa'=>$request['glosa'],
+                  'fecha_transaccion'=>$fecha_transaccion,
+                  'cambio_tipo'=>$tipocambio[0]->monedaVenta,
+                  'estado'=>1,
+                  'id_categoria'=>$categoria[0]->id,
+                  'id_gestion'=>$gestion[0]->id,
+                  'id_tipo_cambio'=>$tipocambio[0]->id,
+                  'id_usuario'=>Session::get('idEmpleado')
+                ]);
+                //----------------------------------- fin Contabilidad -----------------------------------------------------//
+                
+                if ($request['tipoPago'][0]=='e') {
+                    $Monto = $request['montoTotal'];
+                    $MontoBs = $request['montoTotalB'];
+                    //---------------------------------- Contabilidad CAJA----------------------------------------------------------//
+                    $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Caja'");
+                    Detalle::create([
+                      'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
+                      'id_asiento'=>$asiento['id'],
+                      'nro_detalle'=>$nro_detalle,
+                      'tipo'=>1,//1 = Debe, 2 = Haber
+                      'montoSus'=>$request['montoTotal'],
+                      'montoBs'=>$request['montoTotalB']
+                    ]);
+
+                    $nro_detalle++;
+                    //----------------------------------- fin Contabilidad -----------------------------------------------------//
+                }
+                
+                if ($request['tipoPago'][0] == "be") {
+                    $Monto = $request['monto']+$request['montoBanco'];
+                    $MontoBs = $request['montoBs']+$request['montoBancoBs'];
+                    //---------------------------------- Contabilidad BANCO CAJA------------------------------------------------//
+                    //CAJA
+                    $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Caja'");                      
+                    Detalle::create([
+                      'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
+                      'id_asiento'=>$asiento['id'],
+                      'nro_detalle'=>$nro_detalle,
+                      'tipo'=>1,//1 = Debe, 2 = Haber
+                      'montoSus'=>$request['monto'],
+                      'montoBs'=>$request['montoBs']
+                    ]);
+
+                    $nro_detalle++;
+
+                    //BANCO
+                    $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Bancos'");
+                    Detalle::create([
+                      'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
+                      'id_asiento'=>$asiento['id'],
+                      'nro_detalle'=>$nro_detalle,
+                      'tipo'=>1,//1 = Debe, 2 = Haber
+                      'montoSus'=>$request['montoBanco'],
+                      'montoBs'=>$request['montoBancoBs']
+                    ]);
+
+                    $nro_detalle++;
+                    //----------------------------------- fin Contabilidad -----------------------------------------------------//
+                }
+                if ($request['tipoPago'] == "b") {
+                    $Monto = $request['montoTotal'];
+                    $MontoBs = $request['montoTotalB'];
+                    //---------------------------------- Contabilidad BANCO----------------------------------------------------//
+                    $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Bancos'");
+                    Detalle::create([
+                      'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
+                      'id_asiento'=>$asiento['id'],
+                      'nro_detalle'=>$nro_detalle,
+                      'tipo'=>1,//1 = Debe, 2 = Haber
+                      'montoSus'=>$request['montoTotal'],
+                      'montoBs'=>$request['montoTotalB']
+                    ]);
+
+                    $nro_detalle++;
+                    //----------------------------------- fin Contabilidad -----------------------------------------------------//
+                }
+
+                //---------------------------------- Contabilidad INGRESO DIFERIDO----------------------------------------------//
+                $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Ingreso Diferido'");
+                Detalle::create([
+                  'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
+                  'id_asiento'=>$asiento['id'],
+                  'nro_detalle'=>$nro_detalle,
+                  'tipo'=>2,//1 = Debe, 2 = Haber
+                  'montoSus'=>$Monto,
+                  'montoBs'=>$MontoBs
+                ]);
+                //----------------------------------- fin Contabilidad -----------------------------------------------------//
             $idReserva=Reserva::create([
                 'idEmpleado' =>  Session::get('idEmpleado'),              
                 'idCliente' => $idCliente,  //ACA VA EL ID DEL CLIENTE Q ESTE LOGUEADO         
-                //'montoTotal' => $request['montoTotal'],       
+                'montoTotal' => $request['montoTotal'],       
+                'montoTotalBs' => $request['montoTotalB'],      
+               'moneda' => $request['moneda']
             ]);
 
             //SE REGISTRA EL DETALLE DE LAS PRE RESERVAS
             $id_lote = $request->get('id_lote');
             $subTotal  = $request->get('subTotal');
+            $subTotalBs  = $request->get('subTotalB');
             $nroLote  = $request->get('nro_lote');
             $nroManzano  = $request->get('nro_manzano');
             $tipoPago =$request->get('tipoPago');
@@ -325,6 +439,7 @@ var   $puedeModificar=0;
                         'idReserva'=> $idReserva['id'],
                         'subTotal'=> $subTotal[$cont],
                         'tipoPago'=> $tipoPago[$cont],
+                        'subTotalBs' => $subTotalBs[$cont],
                     ]);
                     $montoTotal=$montoTotal+$subTotal[$cont];
                      

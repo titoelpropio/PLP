@@ -111,42 +111,42 @@ public function store(Request $request) {
       }
     }
   }
-  if ($this->validar_texto(1,$request->nombre ) && $request->nombre!="") {
-   $texto.="No agregue numero en el campo nombre, ";
- }
- if ($request->nombre=="") {
-   $texto.="El campo nombre es obligatorio,   ";
- }
- if ($this->validar_texto(1,$request->apellidos ) && $request->apellidos!="") {
-   $texto.="No agregue numero en el campo apellido, ";
- }
- if ($request->apellidos=="") {
-   $texto.="El campo apellido es obligatorio,   ";
- }
- if ($this->validar_texto(0,$request->ci ) && $request->ci!="") {
-   $texto.="No agregue letra en el campo carnet, ";
- }
- if ($request->ci=="") {
-   $texto.="El campo Carnet es obligatorio,   ";
- }
- if ($request->domicilio=="") {
-   $texto.="El campo Domicilio es obligatorio,   ";
- }
- if ($this->validar_texto(0,$request->celular ) && $request->celular!="") {
-   $texto.="No agregue letras en el campo celular, ";
- }
- if ($request->celular=="") {
-   $texto.="El campo Celular es obligatorio,   ";
- }
- if ($this->validar_texto(0,$request->telefono ) && $request->telefono!="") {
-   $texto.="No agregue letras en el campo Celular ref, ";
- }
- if ($this->validar_texto(0,$request->nit ) && $request->nit!="") {
-   $texto.="No agregue letras en el campo Nit, ";
- }
- if ($request->glosa=="") {
-   $texto.="El campo Detalle de transacción es obligatorio,   ";
- }
+ //  if ($this->validar_texto(1,$request->nombre ) && $request->nombre!="") {
+ //   $texto.="No agregue numero en el campo nombre, ";
+ // }
+ // if ($request->nombre=="") {
+ //   $texto.="El campo nombre es obligatorio,   ";
+ // }
+ // if ($this->validar_texto(1,$request->apellidos ) && $request->apellidos!="") {
+ //   $texto.="No agregue numero en el campo apellido, ";
+ // }
+ // if ($request->apellidos=="") {
+ //   $texto.="El campo apellido es obligatorio,   ";
+ // }
+ // if ($this->validar_texto(0,$request->ci ) && $request->ci!="") {
+ //   $texto.="No agregue letra en el campo carnet, ";
+ // }
+ // if ($request->ci=="") {
+ //   $texto.="El campo Carnet es obligatorio,   ";
+ // }
+ // if ($request->domicilio=="") {
+ //   $texto.="El campo Domicilio es obligatorio,   ";
+ // }
+ // if ($this->validar_texto(0,$request->celular ) && $request->celular!="") {
+ //   $texto.="No agregue letras en el campo celular, ";
+ // }
+ // if ($request->celular=="") {
+ //   $texto.="El campo Celular es obligatorio,   ";
+ // }
+ // if ($this->validar_texto(0,$request->telefono ) && $request->telefono!="") {
+ //   $texto.="No agregue letras en el campo Celular ref, ";
+ // }
+ // if ($this->validar_texto(0,$request->nit ) && $request->nit!="") {
+ //   $texto.="No agregue letras en el campo Nit, ";
+ // }
+ // if ($request->glosa=="") {
+ //   $texto.="El campo Detalle de transacción es obligatorio,   ";
+ // }
 
  if ($texto!="") {
    Session::flash('message-error',$texto);
@@ -297,14 +297,24 @@ public function store(Request $request) {
                     'tipoVenta'=>'PLAZO',
                     'reservaBs'=>$request['reservaBolivano']
                   ]);
+                  if ($request['SelectPagoInicial']=='0') {
+                    $cuotaInicialUsd=$request['totalPagado'];
+                    $cuotaInicialBs=$request['totalPagadoBs'];
+                  }else{
+                    $cuotaInicialUsd=$request['pagoInicial'];
+                    $cuotaInicialBs=$request['pagoInicialBs'];
 
+                    
+                  }
                   $PlanDePago=PlanDePago::create([
                     'montoTotal'=>$request['PrecioPlazo'],
                     'estado'=>'d',
                     'nroCuotas'=>$request['meses'],
                     'idVenta'=>$venta['id'],
-                    'cuotaInicialUsd'=>$request->pagoInicial,
-                    'cuotaInicialBs'=>$request->pagoInicialBs,
+                    'cuotaInicialUsd'=>$cuotaInicialUsd,
+                    'cuotaInicialBs'=>$cuotaInicialBs,
+                    'saldoBs'=>($request->PrecioPlazo*$tipocambio[0]->monedaVenta)-$request->pagoInicialBs,
+                    'saldoUsd'=>$request->PrecioPlazo-$request->pagoInicial,
                     'montoTotalBs'=>number_format($request->PrecioPlazo*$tipocambio[0]->monedaVenta, 2, '.', '')
                   ]);
 
@@ -316,6 +326,7 @@ public function store(Request $request) {
                   for ($i=1; $i <=$request['meses'] ; $i++) {
                     if ($request['meses']==$i) {
                       $request['cuotaMensual']=$request['cuotaMensual']-$request['sumarDecimal'];
+                      $request['cuotaMensualBs']=$request['cuotaMensualBs']-$request['sumarDecimalBs'];
                     }
                     $nuevafecha = strtotime ( '+'.$i.' month' , strtotime ( $fecha ) ) ;
                     $nuevafecha = date ( 'Y-m-j' , $nuevafecha ); 
@@ -323,6 +334,7 @@ public function store(Request $request) {
                     $planpago=Cuotas::create([
                       'fechaLimite'=>$nuevafecha,
                       'monto'=>$request['cuotaMensual'],
+                      'montoBs'=>$request['cuotaMensualBs'],
                       'mora'=>0,
                       'idPlandePago'=>$PlanDePago['id'],
                       'estado'=>'d'
@@ -371,8 +383,8 @@ public function store(Request $request) {
                       'idCuenta'=>$request['cuentaC'],
                       'fecha'=>$request['fechaDeposito'],
                       'nroDocumento'=>$request['nroDocumentoC'],
-                      'monto'=>$venta['pagoUsd'],
-                      'montoBs'=>$venta['pagoBs']
+                      'monto'=>$cuotaInicialUsd,
+                      'montoBs'=>$cuotaInicialBs
                     ]);
 
                       //---------------------------------- Contabilidad BANCO----------------------------------------------------//

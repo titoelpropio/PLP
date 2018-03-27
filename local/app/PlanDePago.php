@@ -24,7 +24,7 @@ class PlanDePago extends Authenticatable implements AuthenticatableContract,
      */
       protected $table = 'plandepago';
     protected $fillable = [
-        'nroCuotas','idVenta','montoTotal','estado','cuotaInicialUsd','cuotaInicialBs','montoTotalBs'
+        'nroCuotas','idVenta','montoTotal','estado','cuotaInicialUsd','cuotaInicialBs','montoTotalBs','saldoBs','saldoUsd'
     ];
 
     /**
