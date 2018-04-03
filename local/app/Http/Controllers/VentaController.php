@@ -94,7 +94,7 @@ public function store(Request $request) {
   $verificargestion = DB::select("SELECT count(*) as count FROM gestion WHERE estado=1");
   $verificarcuentaporcobrar = DB::select("SELECT count(*) as count FROM cuentaautomatica WHERE nombre='Cuenta por Cobrar'");
   $verificarcaja = DB::select("SELECT count(*) as count FROM cuentaautomatica WHERE nombre='Caja'");
-  $verificarbanco = DB::select("SELECT count(*) as count FROM cuentaautomatica WHERE nombre='Bancos'");
+  $verificarbanco = DB::select("SELECT count(*) as count FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/N'");
   $verificaringresodiferido = DB::select("SELECT count(*) as count FROM cuentaautomatica WHERE nombre='Ingreso Diferido'");
 
   if ($verificar[0]->count==1 ) {
@@ -148,7 +148,7 @@ public function store(Request $request) {
  //   $texto.="El campo Detalle de transacción es obligatorio,   ";
  // }
 
- if ($texto!="") {
+  if ($texto!="") {
    Session::flash('message-error',$texto);
    return Redirect::to('VentaLote/'.$request->id_lote);
  }
@@ -389,7 +389,13 @@ public function store(Request $request) {
 
                       //---------------------------------- Contabilidad BANCO----------------------------------------------------//
                     $montoBancoBs = $venta['cuotaInicial'] * $tipocambio[0]->monedaVenta;
-                    $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Bancos'");
+                    if ($request['tipoMoneda']=="BOLIVIANO") {
+                      $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/N'");
+                    }else{
+                      $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/E'");
+                      
+                    }
+                    
                     Detalle::create([
                       'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
                       'id_asiento'=>$asiento['id'],
@@ -430,7 +436,12 @@ public function store(Request $request) {
 
                       //BANCO
                     $montoBancoBs = $request->montoBanco * $tipocambio[0]->monedaVenta;
-                    $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Bancos'");
+                    if ($request['tipoMoneda']=="BOLIVIANO") {
+                      $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/N'");
+                    }else{
+                      $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/E'");
+                      
+                    }
                     Detalle::create([
                       'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
                       'id_asiento'=>$asiento['id'],
@@ -546,7 +557,12 @@ public function store(Request $request) {
                     
                       //---------------------------------- Contabilidad BANCO----------------------------------------------------//
                     $montoBancoBs = $venta['cuotaInicial'] * $tipocambio[0]->monedaVenta;
-                    $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Bancos'");
+                    if ($request['tipoMoneda']=="BOLIVIANO") {
+                      $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/N'");
+                    }else{
+                      $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/E'");
+                      
+                    }
                     Detalle::create([
                       'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
                       'id_asiento'=>$asiento['id'],
@@ -588,7 +604,12 @@ public function store(Request $request) {
 
                       //BANCO
                     $montoBancoBs = $request->montoBanco * $tipocambio[0]->monedaVenta;
-                    $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Bancos'");
+                    if ($request['tipoMoneda']=="BOLIVIANO") {
+                      $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/N'");
+                    }else{
+                      $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/E'");
+                      
+                    }
                     Detalle::create([
                       'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
                       'id_asiento'=>$asiento['id'],

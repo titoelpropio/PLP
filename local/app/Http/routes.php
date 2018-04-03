@@ -386,8 +386,8 @@ Route::get('buscarultimocentrocosto','CentroCostoController@buscarultimocentroco
 
 //cuenta automatica
 Route::resource('cuentaautomatica','CuentaAutomaticaController');
-Route::get('guardar_cuenta_automatica/{id}/{nombre}','CuentaAutomaticaController@store');
-Route::get('modificar_cuenta_automatica/{id}/{nombre}','CuentaAutomaticaController@update');
+Route::get('guardar_cuenta_automatica','CuentaAutomaticaController@store');
+Route::get('modificar_cuenta_automatica','CuentaAutomaticaController@update');
 
 //cuenta grupo
 Route::resource('cuentagrupo','CuentaGrupoController');

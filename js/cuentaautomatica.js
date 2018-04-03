@@ -9,7 +9,7 @@ function GuardarCuentaAutomatica(id)
 {
     $('#loading').css('display','block');
     $('#myModal').modal('hide')
-    $.get('guardar_cuenta_automatica/'+id+'/'+Nombre, function(respuesta){
+    $.get('guardar_cuenta_automatica', {id:id,nombre:Nombre},function(respuesta){
         location.reload();
         $('#loading').css('display','none');
     });
@@ -19,7 +19,7 @@ function ModificarCuentaAutomatica(id)
 {
     $('#loading').css('display','block');
     $('#myModalEdit').modal('hide');
-    $.get('modificar_cuenta_automatica/'+id+'/'+Nombre, function(respuesta){
+    $.get('modificar_cuenta_automatica', {id:id,nombre:Nombre},function(respuesta){
         location.reload();
         $('#loading').css('display','none');
     });

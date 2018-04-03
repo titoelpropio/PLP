@@ -3,12 +3,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 id="titulogalpon" class="modal-title" ></h4>
+                 <H1>Cuentas disponibles</H1>
             </div>
 
             <div class="modal-body">
                
-               <H1>Cuentas disponibles</H1>
+            
                 <table class="table table-striped table-bordered table-condensed table-hover">
                     <thead>
                         <th><center>Nombre</center></th>
@@ -40,12 +40,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 id="titulogalpon" class="modal-title" ></h4>
+                 <H1>Cuentas disponibles</H1>
             </div>
 
             <div class="modal-body">
                
-               <H1>Cuentas disponibles</H1>
+             
                 <table class="table table-striped table-bordered table-condensed table-hover">
                     <thead>
                         <th><center>Nombre</center></th>

@@ -22,7 +22,7 @@ class CuentaAutomaticaController extends Controller {
     function index(Request $request) {
          $cuentaautomatica=DB::select("select cuentaautomatica.nombre, cuenta.nombre as cuenta, cuenta.codigo from cuentaautomatica, cuenta where cuentaautomatica.id_cuenta = cuenta.id");
          $cuenta=DB::select("select id, nombre, codigo from cuenta where utilizable = 1");
-         $nombre = array("Caja","Bancos","Cuenta por Cobrar","Ingreso Diferido");
+         $nombre = array("Caja","Cuenta Bancaria M/N","Cuenta Bancaria M/E","Cuenta por Cobrar","Ingreso Diferido");
          return view('modulocontable.cuentaautomatica.index',  compact('nombre','cuentaautomatica','cuenta'));
     }
 
@@ -35,12 +35,14 @@ class CuentaAutomaticaController extends Controller {
         echo "$consumo";
     }
 
-    public function store($id,$nombre) {
+    public function store(Request $request) {
+
         try {
-            $nom = str_replace("_", " ", $nombre);
+            $nom = str_replace("_", " ",$request['nombre']);
+
             CuentaAutomatica::create([
             'nombre'=>$nom,
-            'id_cuenta'=>$id,
+            'id_cuenta'=>$request['id']
             ]);
             DB::commit();
             Session::flash('message','GUARDADO CORRECTAMENTE');
@@ -60,12 +62,13 @@ class CuentaAutomaticaController extends Controller {
         return view('consumo.edit', compact('galpon', $galpon, 'silos', $silos), ['consumo' => $consumo]);
     }
 
-    public function update($id,$nombre) {
-        $nom = str_replace("_", " ", $nombre);
+    public function update(Request $request) {
+        $nom = str_replace("_", " ",  $request['nombre']);
+         
         $cuentaaut=DB::select("select id from cuentaautomatica where nombre = '".$nom."'");
         $cuentaautomatica = CuentaAutomatica::find($cuentaaut[0]->id);
         $cuentaautomatica->fill([
-        'id_cuenta' => $id
+        'id_cuenta' => $request['id']
         ]);
         $cuentaautomatica->save();
         Session::flash('message', 'ACTUALIZADO CORRECTAMENTE');

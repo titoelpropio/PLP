@@ -220,7 +220,8 @@ var   $puedeModificar=0;
                         'idCliente' => $request['idCliente'],  //ACA VA EL ID DEL CLIENTE Q ESTE LOGUEADO         
                         'montoTotal' => $Monto,
                         'montoTotalBs' => $MontoBs,
-                        'moneda' => $request['tipoMoneda']
+                        'moneda' => $request['tipoMoneda'],
+                        'idAsiento' => $asiento['id']
                     ]);
                     $reserva=DetalleReserva::create([
                         'idLote'=> $request['idLote'],
@@ -242,6 +243,7 @@ var   $puedeModificar=0;
                         $TrasaccionReserva->idCuenta=$request['cuenta'];
                         $TrasaccionReserva->nroDocumento=$request['nroDocumento'];
                         $TrasaccionReserva->monto=$request['montoBanco'];
+                        $TrasaccionReserva->montoBs=$request['montoBancoBs'];
                         $TrasaccionReserva->fecha=$request['fecha'];
                         $TrasaccionReserva->save();
                     }
@@ -407,7 +409,8 @@ var   $puedeModificar=0;
                 'idCliente' => $idCliente,  //ACA VA EL ID DEL CLIENTE Q ESTE LOGUEADO         
                 'montoTotal' => $request['montoTotal'],       
                 'montoTotalBs' => $request['montoTotalB'],      
-               'moneda' => $request['moneda']
+               'moneda' => $request['moneda'],
+               'idAsiento' => $asiento['id']
             ]);
 
             //SE REGISTRA EL DETALLE DE LAS PRE RESERVAS
@@ -452,6 +455,7 @@ var   $puedeModificar=0;
                         $TrasaccionReserva->idCuenta=$nroCuenta[$cont2];
                         $TrasaccionReserva->nroDocumento=$nroDocumento[$cont];
                         $TrasaccionReserva->monto=$subTotal[$cont];
+                        $TrasaccionReserva->montoBs=$subTotalBs[$cont];
 
                         $TrasaccionReserva->save();
                         $cont2++;
@@ -486,7 +490,7 @@ var   $puedeModificar=0;
 
     function ListaReserva(Request $request){
         $fecha=DB::select("SELECT curdate()as fecha");
-        $lista=DB::select("SELECT lote.id as idLote,lote.fase,reserva.id as idReserva,detallereserva.id as idDetalleReserva,DATE_FORMAT(reserva.fecha,'%d/%m/%Y %H:%i:%s') AS fecha ,DATE_FORMAT((DATE_SUB(reserva.fecha, INTERVAL -7 DAY)),'%d/%m/%Y') as vencimiento,proyecto.nombre, categorialote.categoria,lote.nroLote,lote.manzano,lote.superficie, (preciocategoria.precio * lote.superficie)as precio_superficie,preciocategoria.precio, CONCAT(cliente.nombre,' ',cliente.apellidos)as cliente, cliente.ci as ci_cliente, CONCAT(empleado.nombre,' ',empleado.apellido)as empleado, empleado.ci as ci_empleado  from reserva,detallereserva,lote,categorialote,proyecto,preciocategoria,cliente,empleado WHERE reserva.id=detallereserva.idReserva AND detallereserva.idLote=lote.id AND categorialote.idProyecto=proyecto.id AND lote.idCategoriaLote=categorialote.id AND preciocategoria.idCategoria=categorialote.id AND cliente.id=reserva.idCliente AND empleado.id=reserva.idEmpleado AND detallereserva.estado='r' and preciocategoria.deleted_at IS NULL");
+        $lista=DB::select("SELECT lote.id as idLote,lote.fase,reserva.id as idReserva,detallereserva.id as idDetalleReserva,DATE_FORMAT(reserva.fecha,'%d/%m/%Y %H:%i:%s') AS fecha ,DATE_FORMAT((DATE_SUB(reserva.fecha, INTERVAL -7 DAY)),'%d/%m/%Y') as vencimiento,proyecto.nombre, categorialote.categoria,lote.nroLote,lote.manzano,lote.superficie, (preciocategoria.precio * lote.superficie)as precio_superficie,preciocategoria.precio, CONCAT(cliente.nombre,' ',cliente.apellidos)as cliente, cliente.ci as ci_cliente, CONCAT(empleado.nombre,' ',empleado.apellido)as empleado, empleado.ci as ci_empleado  from reserva,detallereserva,lote,categorialote,proyecto,preciocategoria,cliente,empleado WHERE reserva.id=detallereserva.idReserva AND detallereserva.idLote=lote.id AND categorialote.idProyecto=proyecto.id AND lote.idCategoriaLote=categorialote.id AND preciocategoria.idCategoria=categorialote.id AND cliente.id=reserva.idCliente AND empleado.id=reserva.idEmpleado AND detallereserva.estado='r' and preciocategoria.deleted_at IS NULL order by reserva.id desc");
         return view('reserva.lista_Reserva', compact('lista'));
     }
 

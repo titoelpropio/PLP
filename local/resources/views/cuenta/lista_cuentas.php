@@ -27,9 +27,6 @@
 		<th><CENTER>HIJO</CENTER></th>
 		<th><CENTER>ESTADO</CENTER></th>
 		<th><CENTER>UTILIZABLE</CENTER></th>
-		
-		
-		
 		</thead>
 		 @foreach ($categoria as $cat)
 			<TR>

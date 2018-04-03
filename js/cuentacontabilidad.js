@@ -1,6 +1,7 @@
 $(document).ready(function(){
     $('#loading').css('display','none');
     $(".file-tree").filetree();
+    $(".folder-root").removeClass("closed").addClass("open");
 });
 
 $(function () {

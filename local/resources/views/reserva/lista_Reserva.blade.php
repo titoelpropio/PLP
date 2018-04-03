@@ -58,13 +58,8 @@
         <div class="table-responsive">
             <table id="example1" class="table table-striped table-bordered table-condensed table-hover">
                 <thead>
-                <th><CENTER>CARNET</CENTER></th>
-                <th><CENTER>CLIENTE</CENTER></th>                
-                <th><CENTER>PROYECTO</CENTER></th>
-                <th><CENTER>FASE</CENTER></th>
-                <th><CENTER>MANZANO</CENTER></th>
-                <th><CENTER>NRO LOTE</CENTER></th>
-                <th><CENTER>CATEGORIA</CENTER></th>
+                <th><CENTER>DATOS DEL CLIENTE</CENTER></th>
+                <th><CENTER>DATOS DEL PREVIO</CENTER></th>
                 <th><CENTER>FECHA REGISTRO</CENTER></th>
                 <th><CENTER>VENCIMIENTO</CENTER></th>
                 <th><CENTER>EMPLEADO</CENTER></th>
@@ -72,13 +67,9 @@
                 </thead>
                 @foreach ($lista as $lis)
                 <TR>
-                    <td align=center>{{$lis->ci_cliente}}</td>
-                    <td align=center>{{$lis->cliente}}</td>                
-                    <td align=center>{{$lis->nombre}}</td>
-                    <td align=center>Fase {{$lis->fase}}</td>
-                    <td align=center>{{$lis->manzano}}</td>
-                    <td align=center>{{$lis->nroLote}}</td>
-                    <td align=center>{{$lis->categoria}}</td>
+                    <td ><span style="font-weight: bold"> NOMBRE: </span>{{$lis->cliente}} <br><span style="font-weight: bold"> CI: </span>{{$lis->ci_cliente}}</td>
+                    <td ><span style="font-weight: bold"> URBANIZACOIN: </span>{{$lis->nombre}} <br><span style="font-weight: bold"> FASE: </span>{{$lis->fase}}<br> 
+                        <span style="font-weight: bold"> MANZANO: </span>{{$lis->manzano}}<br> <span style="font-weight: bold"> Nº LOTE: </span>{{$lis->nroLote}}<br> </td>
                     <td align=center>{{$lis->fecha}}</td>
                     <td align=center>{{$lis->vencimiento}}</td>
                     <td align=center>{{$lis->empleado}}</td>

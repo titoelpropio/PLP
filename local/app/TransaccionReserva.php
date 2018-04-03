@@ -24,7 +24,7 @@ class TransaccionReserva extends Authenticatable implements AuthenticatableContr
      */
       protected $table = 'transaccionreserva';
     protected $fillable = [
-        'idDetalleReserva', 'idBanco','idCuenta','monto','tipo','fecha'
+        'idDetalleReserva', 'idBanco','idCuenta','monto','tipo','fecha','montoBs'
     ];
 
     /**

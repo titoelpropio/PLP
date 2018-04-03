@@ -46,3 +46,4 @@ ALTER TABLE `transaccionpago` ADD foreign key(idPago) references pagocuota(id);
 alter table cuotas add column montoUsd decimal(12,2);
 
 alter table reserva add column idAsiento int;
+alter table transaccionreserva add column montoBs decimal(12,2);
