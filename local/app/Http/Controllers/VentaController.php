@@ -393,7 +393,7 @@ public function store(Request $request) {
                       $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/N'");
                     }else{
                       $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/E'");
-                      
+
                     }
                     
                     Detalle::create([
@@ -440,7 +440,7 @@ public function store(Request $request) {
                       $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/N'");
                     }else{
                       $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/E'");
-                      
+
                     }
                     Detalle::create([
                       'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
@@ -491,7 +491,7 @@ public function store(Request $request) {
                     'nro_asiento'=>$nroAs + 1,
                     'tipo'=>3,// 1 = Ingreso, 2 = Egreso, 3 = Traspaso
                     'glosa'=>$request['glosa'],
-                    'fecha_transaccion'=>'"$fecha_transaccion"',
+                    'fecha_transaccion'=>$fecha_transaccion,
                     'cambio_tipo'=>$tipocambio[0]->monedaVenta,
                     'estado'=>1,
                     'id_categoria'=>$categoria[0]->id,
