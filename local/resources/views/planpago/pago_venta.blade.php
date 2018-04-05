@@ -86,8 +86,9 @@
                                          ?>
                                         
                                     <?php endif ?>
-                                    <td><a href="{!!URL::to('PlanPago')!!}<?php echo "/".$lis->id ?>" class="btn-sm btn-success" >PAGAR</a>
-                                        <a data-toggle="modal" style="cursor: pointer;" data-target="#DetalleCuota" href="#" onclick="CargarCuotas(<?php echo $lis->id ?>)" class="btn-sm btn-info" >DETALLE</a>
+                                    <td><a href="{!!URL::to('PlanPago')!!}<?php echo "/".$lis->id ?>" class="btn  btn-success btn-sm" >PAGAR</a>
+                                        <a data-toggle="modal" style="cursor: pointer;" data-target="#DetalleCuota" href="#" onclick="CargarCuotas(<?php echo $lis->id ?>)" class=" btn btn-sm btn-info" >DETALLE</a>
+                                        <button class="btn bnt-warning" onclick=" window.open('generarPlanDePago/<?php echo  $lis->id  ;?>','','')"> PLAN CUOTAS</button>
                                     </td>
                                     </tr>
 

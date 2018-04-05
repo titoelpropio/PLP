@@ -124,6 +124,8 @@ Route::resource('moneda','CambioMonedaController');
 //plan de pago
 
 Route::get('plan_pago/{id_lote}','PlanPagoController@plan_pago');
+Route::get('generarPlanDePago/{id}','PlanPagoController@generarPlanDePago');
+
 
 //errores
 Route::get('error',function(){

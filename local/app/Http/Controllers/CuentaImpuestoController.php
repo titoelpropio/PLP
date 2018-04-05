@@ -20,10 +20,10 @@ class CuentaImpuestoController extends Controller {
         $this->middleware('auth', ['only' => 'admin']);
     }
     function index(Request $request) {
-         $cuentagrupo=DB::select("select cuentagrupo.id, cuentagrupo.nombre, cuentagrupo.descripcion, cuentagrupo.id_cuenta, cuenta.nombre as cuenta, cuenta.codigo from cuentagrupo, cuenta where cuentagrupo.id_cuenta = cuenta.id");
-         $cuenta=DB::select("select id, nombre, codigo from cuenta where id_padre = 0");
-         $nombre = array("ACTIVO","PASIVO","PATRIMONIO","INGRESOS","COSTOS","GASTOS");
-         return view('modulocontable.cuentagrupo.index',  compact('nombre','cuentagrupo','cuenta'));
+         $cuentaimpuesto=DB::select("select cuentaimpuesto.id, cuentaimpuesto.nombre, cuentaimpuesto.porcentaje, cuentaimpuesto.id_cuenta, cuenta.nombre as cuenta, cuenta.codigo from cuentaimpuesto, cuenta where cuentaimpuesto.id_cuenta = cuenta.id");
+         $cuenta=DB::select("select id, nombre, codigo from cuenta where utilizable = 1");
+         $nombre = array("Credito fiscal","Debito fiscal","IC","IT","IT POR PAGAR","IMT", "IUE");
+         return view('modulocontable.cuentaimpuesto.index',  compact('nombre','cuentaimpuesto','cuenta'));
     }
 
     public function create() {
@@ -38,10 +38,10 @@ class CuentaImpuestoController extends Controller {
     public function store(Request $request) {
         $respuesta=0;
         try {
-            CuentaGrupo::create([
+            CuentaImpuesto::create([
             'nombre'=>$request['nombre'],
-            'descripcion'=>$request['descripcion'],
-            'id_cuenta'=>$request['id_cuenta'],
+            'porcentaje'=>$request['porcentaje'],
+            'id_cuenta'=>$request['id_cuenta']
             ]);
             DB::commit();;
             $respuesta=1;
@@ -63,9 +63,9 @@ class CuentaImpuestoController extends Controller {
     public function update(Request $request) {
         $respuesta=0;
         try {
-            $cuentagrupo = CuentaGrupo::find($request['id']);
+            $cuentagrupo = CuentaImpuesto::find($request['id']);
             $cuentagrupo->fill([
-            'descripcion'=>$request['descripcion'],
+            'porcentaje'=>$request['porcentaje'],
             'id_cuenta' => $request['id_cuenta']
             ]);
             $cuentagrupo->save();

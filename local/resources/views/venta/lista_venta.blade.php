@@ -62,7 +62,7 @@
 
                     <td align=center>{{$lis->nroLote}}</td>
                     <td align=center>{{$lis->superficie}} MT²</td>
-                    <td align=center>{{$lis->cuotaInicial}}</td>
+                    <td align=center>{{$lis->totalapagar}}</td>
                     <td align=center>{{$lis->precio}}</td>
 
                     <!--td align=center>{{$lis->precio}}</td-->

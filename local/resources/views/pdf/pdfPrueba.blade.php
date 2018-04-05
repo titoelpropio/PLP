@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
  <meta charset="UTF-8">
-    <title>RECIBO RESERVA</title>
+    <title>PLAN DE CUENTA</title>
 </head>
 
 <body>
@@ -10,7 +10,7 @@
 <div style="width: 80%;display: inline-block;">
   <table style="width: 100%" >
     <tr>
-    <td width="250px"><font size="2" style="color:red;font-weight: bold; "">Nro: 5</font></td>
+    <td width="250px"><font size="2" style="color:red;font-weight: bold; "">Nro: <?php echo $cliente[0]->idVenta; ?></font></td>
       <td width="320px"> <font size="6">Plan de Pago</font></td>
     
     </tr> 
