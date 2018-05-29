@@ -755,8 +755,18 @@ function validarVenta(){
   celular_ref=$('input[name=celular_ref]').val();
   nit=$('input[name=nit]').val();
   fechaNacimiento=$('input[name=fechaNacimiento]').val();
-
+  cambioDolar=parseFloat($('#spanCambioDolar').text());
   var error="";
+  if ($('#pagoUsd').val()=="")
+  {
+   error+="COLOQUE ALGUN VALOR EN EL CAMPO PAGO. \n";
+
+  }
+  if (cambioDolar<0)
+  {
+   error+="EL PAGO TIENE QUE SER MAYOR AL TOTAL A PAGAR \n";
+
+  }
   if (validar('entero',ci) || ci=="0" || ci=="") {
    error+="EL CAMPO CI NO TIENE QUE ESTAR VACIO, NI TAMPOCO TENER CARACTERES DE TIPO LETRA \n";
  }

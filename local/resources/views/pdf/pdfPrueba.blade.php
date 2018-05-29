@@ -54,12 +54,20 @@
   </tr>
   
   </table>  -->
+  <?php 
+if ($cliente[0]->moneda=="BOLIVIANO") {
+  $totalapagar=$cliente[0]->totalapagarBs;
+}else{
+  $totalapagar=$cliente[0]->totalapagar;
+
+}
+   ?>
   <div style="margin-bottom: 10px">
     <span style="margin-right: 10px"><b> Cliente: </b> <?php echo $cliente[0]->nombre.' '.$cliente[0]->apellidos; ?></span>
     <span style="margin-right: 10px;"><b> CI:</b> <?php echo $cliente[0]->ci.' '.$cliente[0]->expedido.'.'; ?></span>
     </div> 
     <span style="margin-right: 10px"><b> Fecha de Venta: </b> <?php echo $cliente[0]->fecha; ?></span>
-    <span style="margin-right: 10px"><b> Cuota Inicial:</b> <?php echo $cliente[0]->cuotaInicial;  ?></span> <br>
+    <span style="margin-right: 10px"><b> Cuota Inicial:</b> <?php echo $totalapagar;  ?></span> <br>
     <div style="margin-top: 10px">
     <span style="margin-right: 10px"><b> Urbanizacion: </b> <?php echo $cliente[0]->nombreProyecto; ?></span>
       <span style="margin-right: 10px"><b> FASE: </b> <?php echo $cliente[0]->fase; ?></span>  
@@ -68,7 +76,33 @@
     </div> 
 <div style="margin-top: 10px">
     <span style="margin-right: 10px"><b> Superficie: </b> <?php echo $cliente[0]->superficie; ?> MT2</span> 
-    <span style="margin-right: 10px"><b> Precio de Venta: </b> <?php echo $cliente[0]->precio; ?> $US</span> 
+    <?php 
+
+    // if ($cliente[0]->descuento!=null && $cliente[0]->descuento>0) {
+    //   if ($cliente[0]->moneda=="BOLIVIANO") {
+    //     $venta=($cliente[0]->precioBs*100)/$cliente[0]->descuento;
+    //     $precio=$cliente[0]->precioBs-$venta;
+    //   }else{
+    //     $venta=($cliente[0]->precio*100)/$cliente[0]->descuento;
+    //     $precio=$cliente[0]->precioBs-$venta;
+    //   } 
+    // } 
+    // else{
+    //   if ($cliente[0]->moneda=="BOLIVIANO") {
+    //     $precio=$cliente[0]->precioBs;
+    //   }else{
+    //     $precio=$cliente[0]->precio;
+
+    //   }
+    // }
+      if ($cliente[0]->moneda=="BOLIVIANO") {
+        $precio=$cliente[0]->montoTotalBs;
+      }else{
+        $precio=$cliente[0]->montoTotal;
+
+      }
+    ?>
+    <span style="margin-right: 10px"><b> Precio de Venta: </b> <?php echo  $precio; ?> </span> 
 
     </div> 
 
@@ -95,17 +129,32 @@
 
  
         <?php 
+        if ($cliente[0]->moneda!="BOLIVIANO") {
+          
+        
                 for ($i=0; $i <count($cuotas) ; $i++) { 
                   echo  '   <tr align="center">
                   <td>'.$cuotas[$i]->num.'</td>
                   <td>'.$cuotas[$i]->fechaLimite.'</td>
                   <td>'.$cuotas[$i]->monto.'</td>';
-                   echo '<td>DEBE</td></tr>';
-                  // if ($cuotas[$i]->estado==='d') {
-                  //   echo '<td>DEBE</td></tr>';
-                  // }else{
-                  //    echo '<td>PAGADO</td></tr>';
-                  // }
+                  if ($cuotas[$i]->estado==='d') {
+                    echo '<td>DEBE</td></tr>';
+                  }else{
+                     echo '<td>PAGADO</td></tr>';
+                  }
+                }
+                }else{
+                   for ($i=0; $i <count($cuotas) ; $i++) { 
+                  echo  '   <tr align="center">
+                  <td>'.$cuotas[$i]->num.'</td>
+                  <td>'.$cuotas[$i]->fechaLimite.'</td>
+                  <td>'.$cuotas[$i]->montoBs.'</td>';
+                  if ($cuotas[$i]->estado==='d') {
+                    echo '<td>DEBE</td></tr>';
+                  }else{
+                     echo '<td>PAGADO</td></tr>';
+                  }
+                }
                 }
            ?>
    
@@ -118,7 +167,16 @@
   <tfoot border="2" style="text-align: center; background: #4EB7EC">
     <td style="font-weight: bold">Total</td>
     <td></td>
-    <td> <?php echo $totalCuotas[0]->totalCuotas; ?> </td>
+    <td> <?php 
+    if ($cliente[0]->moneda!="BOLIVIANO") 
+    {
+    echo $totalCuotas[0]->totalCuotas; 
+    }else
+    {
+    echo $totalCuotas[0]->totalCuotasBs; 
+
+    }
+    ?> </td>
     <td></td>
   </tfoot>
 

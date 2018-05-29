@@ -292,9 +292,9 @@ public function show($id){
     }
 
     public function generarPlanDePago($id){
-      $cliente=DB::select("select cliente.expedido, plandepago.cuotaInicialUsd as cuotaInicial, venta.reserva,lote.superficie,cliente.nombre,cliente.apellidos,cliente.ci,cliente.expedido,venta.precio,venta.fecha,lote.nroLote,lote.manzano,lote.fase,proyecto.nombre as nombreProyecto,venta.id as idVenta,venta.moneda    from cliente,venta, plandepago,lote,proyecto where venta.id=plandepago.idVenta and cliente.id=venta.idCliente and venta.id=".$id." and venta.idLote=lote.id and proyecto.id=lote.idProyecto");
-      $cuotas=DB::select("select cuotas.monto,cuotas.estado,cuotas.fechaLimite,@num:=@num+1 as num  from (select @num:=0) r, cliente,venta, plandepago, cuotas where venta.id=plandepago.idVenta and plandepago.id =cuotas.idPlandePago and cliente.id=venta.idCliente and venta.id=".$id);
-      $totalCuotas=DB::select("SELECT sum(cuotas.monto) as totalCuotas FROM venta,cuotas,plandepago where venta.id=plandepago.idVenta and plandepago.id=cuotas.idPlandePago  and venta.id=".$id);
+       $cliente=DB::select("select plandepago.montoTotalBs,plandepago.montoTotal, venta.moneda,venta.totalapagarBs ,venta.totalapagar , venta.descuento, venta.moneda, venta.precioBs ,cliente.expedido, plandepago.cuotaInicialUsd as cuotaInicial, venta.reserva,lote.superficie,cliente.nombre,cliente.apellidos,cliente.ci,cliente.expedido,venta.precio,venta.fecha,lote.nroLote,lote.manzano,lote.fase,proyecto.nombre as nombreProyecto ,venta.id as idVenta   from cliente,venta, plandepago,lote,proyecto where venta.id=plandepago.idVenta and cliente.id=venta.idCliente and venta.id=".$id." and venta.idLote=lote.id and proyecto.id=lote.idProyecto");
+       $cuotas=DB::select("select  cuotas.montoBs, cuotas.monto,cuotas.estado,cuotas.fechaLimite,@num:=@num+1 as num  from (select @num:=0) r, cliente,venta, plandepago, cuotas where venta.id=plandepago.idVenta and plandepago.id =cuotas.idPlandePago and cliente.id=venta.idCliente and venta.id=".$id);
+      $totalCuotas=DB::select("SELECT sum(cuotas.monto) as totalCuotas,sum(cuotas.montoBs) as totalCuotasBs FROM venta,cuotas,plandepago where venta.id=plandepago.idVenta and plandepago.id=cuotas.idPlandePago  and venta.id=".$id);
 
       $pdf=\PDF::loadView('pdf.pdfPrueba',compact('cliente','cuotas','totalCuotas'));
       DB::commit(); 
