@@ -8,7 +8,7 @@
 
       <div class="modal-body">
       
-			<table class="table table-striped table-bordered table-condensed table-hover">
+			<table id="example1" class="table table-striped table-bordered table-condensed table-hover">
 			<thead>
 				<th style="display: none"><CENTER>ID</CENTER></th>
 				<th><CENTER>CÓDIGO</CENTER></th>

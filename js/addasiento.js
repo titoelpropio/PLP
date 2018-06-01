@@ -166,11 +166,11 @@ function quitar_fila(index)
     $("#total_haber_sus").val(parseFloat(suma_habersus()).toFixed(2));
     $('#fila_'+index).remove();
 }
-
 function bloquear_desbloquear(index,valor)
 {
     if (onclick[index])
     {
+  
         if (valor == "debe_bs" || valor == "debe_sus")
         {
            $("#debe_bs_"+index).prop('readonly', false);

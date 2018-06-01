@@ -239,7 +239,6 @@ public function edit($id) {
   $silos = Silos::lists('nombre', 'id');
   return view('consumo.edit', compact('galpon', $galpon, 'silos', $silos), ['consumo' => $consumo]);
 }
-
 public function update($id, ConsumoRequest $request) {
   $consumo = Consumo::find($id);
   $consumo->fill($request->all());
