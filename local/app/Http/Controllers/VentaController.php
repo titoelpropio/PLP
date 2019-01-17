@@ -36,14 +36,14 @@ class VentaController extends Controller {
 
   public function __construct(Request $request) {
    if (Session::get('user')==null || Session::get('idPerfil')=="" ) {
-    Session::put('user', null); 
+    Session::put('user', null);
     $this->middleware('auth');
 
     $this->middleware('admin');
     $this->middleware('auth',['only'=>'admin']);
   }else{
    $verficar=DB::select("select modulo.nombre,perfilobjeto.puedeGuardar,perfilobjeto.puedeModificar,perfilobjeto.puedeEliminar,perfilobjeto.puedeListar, perfilobjeto.puedeVerReporte,perfilobjeto.puedeImprimir,objeto.urlObjeto from perfil,perfilobjeto,objeto,modulo where perfilobjeto.deleted_at IS NULL and perfil.id=perfilobjeto.idPerfil and perfilobjeto.idObjeto=objeto.id and modulo.id=objeto.idModulo and objeto.urlObjeto='/Venta'  and perfil.id=".Session::get('idPerfil'));
-   
+
 
 
    if (count($verficar)==0) {
@@ -52,7 +52,7 @@ class VentaController extends Controller {
     $this->middleware('auth');
 
     $this->middleware('admin');
-    $this->middleware('auth',['only'=>'admin']); 
+    $this->middleware('auth',['only'=>'admin']);
   }else{
     $this->puedeGuardar=$verficar[0]->puedeGuardar;
     $this->puedeModificar=$verficar[0]->puedeModificar;
@@ -69,13 +69,13 @@ function index(Request $request) {
   $Proyecto=DB::select("select *from proyecto where  proyecto.deleted_at IS NULL");
   if ($request->nroLote == "" )
   {
-   $Lote = DB::select("SELECT lote.id,lote.nroLote, lote.superficie, lote.manzano, lote.uv, categorialote.categoria, preciocategoria.precio, cuotaminima.porcentaje, descuentoventa.porcentaje as descuento from lote, categorialote, preciocategoria, proyecto, cuotaminima, descuentoventa WHERE lote.idCategoriaLote = categorialote.id and preciocategoria.idCategoria = categorialote.id and lote.idProyecto = proyecto.id and categorialote.idProyecto = proyecto.id and cuotaminima.idProyecto = proyecto.id and descuentoventa.idProyecto = proyecto.id and preciocategoria.deleted_at IS NULL and descuentoventa.deleted_at IS NULL and cuotaminima.deleted_at IS NULL and lote.estado = 0 order by lote.id desc LIMIT 20"); 
+   $Lote = DB::select("SELECT lote.id,lote.nroLote, lote.superficie, lote.manzano, lote.uv, categorialote.categoria, preciocategoria.precio, cuotaminima.porcentaje, descuentoventa.porcentaje as descuento from lote, categorialote, preciocategoria, proyecto, cuotaminima, descuentoventa WHERE lote.idCategoriaLote = categorialote.id and preciocategoria.idCategoria = categorialote.id and lote.idProyecto = proyecto.id and categorialote.idProyecto = proyecto.id and cuotaminima.idProyecto = proyecto.id and descuentoventa.idProyecto = proyecto.id and preciocategoria.deleted_at IS NULL and descuentoventa.deleted_at IS NULL and cuotaminima.deleted_at IS NULL and lote.estado = 0 order by lote.id desc LIMIT 20");
 
    return view('venta.index',compact('Lote', $Lote,'Proyecto',$Proyecto));
  }
  else
  {
-   $Lote = DB::select("SELECT lote.id,lote.nroLote, lote.superficie, lote.manzano, lote.uv, categorialote.categoria, preciocategoria.precio, cuotaminima.porcentaje, descuentoventa.porcentaje as descuento from lote, categorialote, preciocategoria, proyecto, cuotaminima, descuentoventa WHERE lote.idCategoriaLote = categorialote.id and preciocategoria.idCategoria = categorialote.id and lote.idProyecto = proyecto.id and categorialote.idProyecto = proyecto.id and cuotaminima.idProyecto = proyecto.id and descuentoventa.idProyecto = proyecto.id and preciocategoria.deleted_at IS NULL and descuentoventa.deleted_at IS NULL and cuotaminima.deleted_at IS NULL and lote.estado = 0  and lote.id = ".$request->nroLote." order by lote.id desc LIMIT 20"); 
+   $Lote = DB::select("SELECT lote.id,lote.nroLote, lote.superficie, lote.manzano, lote.uv, categorialote.categoria, preciocategoria.precio, cuotaminima.porcentaje, descuentoventa.porcentaje as descuento from lote, categorialote, preciocategoria, proyecto, cuotaminima, descuentoventa WHERE lote.idCategoriaLote = categorialote.id and preciocategoria.idCategoria = categorialote.id and lote.idProyecto = proyecto.id and categorialote.idProyecto = proyecto.id and cuotaminima.idProyecto = proyecto.id and descuentoventa.idProyecto = proyecto.id and preciocategoria.deleted_at IS NULL and descuentoventa.deleted_at IS NULL and cuotaminima.deleted_at IS NULL and lote.estado = 0  and lote.id = ".$request->nroLote." order by lote.id desc LIMIT 20");
 
    return view('venta.index',compact('Lote', $Lote,'Proyecto',$Proyecto));
  }
@@ -87,16 +87,20 @@ public function create() {
         // $proyecto=DB::select("SELECT *from proyecto");
  return view('venta.create');
 }
-
-public function store(Request $request) {
-  $texto = "";
-  $verificar = DB::select('select count(*) as count,estado from lote where estado<>0 and id='.$request->id_lote);
-  $verificargestion = DB::select("SELECT count(*) as count FROM gestion WHERE estado=1");
+public function verificadorContabilidadArray(  )
+{
+  $verificargestion = DB::table('gestion')->select( DB::raw( 'count(*) as count' ) )->where('estado','1');
   $verificarcuentaporcobrar = DB::select("SELECT count(*) as count FROM cuentaautomatica WHERE nombre='Cuenta por Cobrar'");
   $verificarcaja = DB::select("SELECT count(*) as count FROM cuentaautomatica WHERE nombre='Caja'");
   $verificarbanco = DB::select("SELECT count(*) as count FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/N'");
   $verificaringresodiferido = DB::select("SELECT count(*) as count FROM cuentaautomatica WHERE nombre='Ingreso Diferido'");
   $verificarIvaDebitoFiscal = DB::select("SELECT count(*) as count FROM cuentaimpuesto WHERE nombre='Debito fiscal'");
+  return ['verificargestion' => $verificargestion, 'verificarcuentaporcobrar' => $verificarcuentaporcobrar, 'verificarcaja' => $verificarcaja, 'verificarbanco' =>  $verificarbanco,
+  'verificaringresodiferido' => $verificaringresodiferido, 'verificarIvaDebitoFiscal' => $verificarIvaDebitoFiscal  ];
+}
+public function store(Request $request) {
+  $texto = "";
+
 
   $fechaNacimiento =  $request['fechaNacimiento'];
   $ci = $request['ci'];
@@ -111,18 +115,23 @@ public function store(Request $request) {
    $ocupacion = $request['ocupacion'];
     $expedido = $request['expedido'];
     $idEmpleado = $request['idEmpleado'];
-  
-  if ($verificar[0]->count==1 ) {
-    $verificarReserva=DB::select('select count(*) as count from detallereserva,reserva where reserva.id=detallereserva.idReserva and detallereserva.idLote='.$request['id_lote'].' and reserva.idCliente<>'.$request['idCliente'].' and detallereserva.estado="r"');
+    $idCliente = $request['idCliente'];
+    $idLote = $request['id_lote'];
+  $verificar = DB::select('select count(*) as count,estado from lote where estado<>0 and id=' . $idLote);
+ $verificadorContabilidadArray = $this->verificadorContabilidadArray();
+              dd(json_encode($verificadorContabilidadArray));
 
+  if ($verificar[0]->count==1 )
+  {
+    $verificarReserva = DetalleReserva::verifyReservation( $idLote, $idCliente,'r' );
     if ($verificarReserva[0]->count==1) {
       Session::flash('message-error','ESE LOTE YA NO ESTA DISPONIBLE PARA LA VENTA');
-      return Redirect::to('Venta');        
+      return Redirect::to('Venta');
     }
     else{
       if ($verificar[0]->estado==3) {
         Session::flash('message-error','ESE LOTE YA NO ESTA DISPONIBLE PARA LA VENTA');
-        return Redirect::to('Venta');  
+        return Redirect::to('Venta');
       }
     }
   }
@@ -167,7 +176,7 @@ public function store(Request $request) {
    Session::flash('message-error',$texto);
    return Redirect::to('VentaLote/'.$request->id_lote);
  }
- else if ($verificargestion[0]->count != 1 ) {
+ else if ($verificadorContabilidadArray['verificadorContabilidadArray'][0]->count != 1 ) {
    Session::flash('message-error','DEBE APERTURAR UNA GESTIÓN PARA PODER REALIZAR ESTA TRANSACCIÓN');
    return Redirect::to('Venta');
  }
@@ -193,46 +202,45 @@ public function store(Request $request) {
               /*$lote = Lote::find($request->id_lote);
               $lote->fill([
               'estado' => '3',
-             
+
               ]);
               $lote->save();*/
               $nombre = strtoupper($request['nombre']);
               $apellidos= strtoupper($request->apellidos);
-              $verificarCliente=DB::select('select *,count(*) as count from cliente where ci='.$request['ci']);
-
+              $verificarCliente= Cliente::verificarClienteDadoCi($ci) ;
               if ($verificarCliente[0]->count=='0') {
                 if ($request['idEmpleado']==0) {
-                  $padre=DB::select("SELECT v.idEmpleadoPadre FROM vendedor v WHERE (NOT EXISTS(SELECT *FROM vendedor v2 WHERE v2.idEmpleadoHijo=v.idEmpleadoPadre)) LIMIT 1"); 
+                  $padre=DB::select("SELECT v.idEmpleadoPadre FROM vendedor v WHERE (NOT EXISTS(SELECT *FROM vendedor v2 WHERE v2.idEmpleadoHijo=v.idEmpleadoPadre)) LIMIT 1");
                   $request['idEmpleado']=$padre[0]->idEmpleadoPadre;
                 }
                   $cliente=Cliente::create([ //aqui guarda
-                    'nombre' => $nombre,          
-                    'apellidos' => $apellidos,   
-                    'fechaNacimiento' => $fechaNacimiento,          
-                    'ci' => $ci,          
-                    'idPais' => $idPais, 
-                    'lugarProcedencia' => $lugarProcedencia,          
-                    'genero' => $genero,          
-                    'celular' => $celular,          
-                    'celular_ref' => $celular_ref,          
-                    'estadoCivil' => $estadoCivil,          
-                    'domicilio' => $domicilio,          
-                    'nit' => $nit,  
-                    'ocupacion' => $ocupacion, 
-                    'expedido' => $expedido,          
-                    'idEmpleado' => $idEmpleado,          
+                    'nombre' => $nombre,
+                    'apellidos' => $apellidos,
+                    'fechaNacimiento' => $fechaNacimiento,
+                    'ci' => $ci,
+                    'idPais' => $idPais,
+                    'lugarProcedencia' => $lugarProcedencia,
+                    'genero' => $genero,
+                    'celular' => $celular,
+                    'celular_ref' => $celular_ref,
+                    'estadoCivil' => $estadoCivil,
+                    'domicilio' => $domicilio,
+                    'nit' => $nit,
+                    'ocupacion' => $ocupacion,
+                    'expedido' => $expedido,
+                    'idEmpleado' => $idEmpleado,
                   ]);
                 }
                 else{
                   $cliente = Cliente::find($verificarCliente[0]->id);   //aqui modifica
                   $cliente->fill([
-                    'nombre' => $nombre ,           
-                    'apellidos' => $apellidos,          
-                    'fechaNacimiento' => $fechaNacimiento,          
-                    'ci' => $ci,          
-                    'idPais' => $idPais,          
-                    'lugarProcedencia' => $lugarProcedencia,          
-                    'genero' => $genero,          
+                    'nombre' => $nombre ,
+                    'apellidos' => $apellidos,
+                    'fechaNacimiento' => $fechaNacimiento,
+                    'ci' => $ci,
+                    'idPais' => $idPais,
+                    'lugarProcedencia' => $lugarProcedencia,
+                    'genero' => $genero,
                     'celular' => $celular,
                     'celular_ref' => $celular_ref,
                     'estadoCivil' => $estadoCivil,
@@ -251,17 +259,17 @@ public function store(Request $request) {
                 }
 
                 if ($request['idPreReserva']!=0) {
-                  $detalle_pre_reserva=DetallePreReserva::find($request['idPreReserva']);
                   $detalle_pre_reserva->fill(['estado'=>'v']);
+                  $detalle_pre_reserva=DetallePreReserva::find($request['idPreReserva']);
                   $detalle_pre_reserva->save();
                 }
 
                 if ($request['tipoPago']=='p') {//plan de pago
 
                   //---------------------------------- Contabilidad ----------------------------------------------------------//
-                  $categoria = DB::select("SELECT * FROM categoriacuenta WHERE nombre='Asiento Diario'");
-                  $gestion = DB::select("SELECT * FROM gestion WHERE estado=1");
-                  $tipocambio=DB::select("SELECT * FROM tipocambio where deleted_at IS NULL");
+                  $categoria =  DB::table('categoriacuenta')->where('nombre','Asiento Diario');
+                  $gestion = DB::table('gestion')->where( 'estado','1' );
+                  $tipocambio =  DB::select("SELECT * FROM tipocambio where deleted_at IS NULL");
                   $contAsiento=DB::select("SELECT count(*) as count from asiento where id_gestion=".$gestion[0]->id." order by id desc limit 1");
                   $nroAsiento=DB::select("SELECT * from asiento where id_gestion=".$gestion[0]->id." order by id desc limit 1");
                   $nroAs=0;
@@ -279,7 +287,7 @@ public function store(Request $request) {
                   $factura=$request['nroFactura']!=""?'':"CON NRO FACTURA: ".$request['nroFactura'];
                   $asiento=Asiento::create([
                     'nro_asiento'=>$nroAs + 1,
-                    'tipo'=>3,// 1 = Ingreso, 2 = Egreso, 3 = Traspaso 
+                    'tipo'=>3,// 1 = Ingreso, 2 = Egreso, 3 = Traspaso
                     'glosa'=>$request['glosa'],
                     'fecha_transaccion'=>$fecha_transaccion,
                     'cambio_tipo'=>$tipocambio[0]->monedaVenta,
@@ -290,7 +298,7 @@ public function store(Request $request) {
                     'id_usuario'=>Session::get('idEmpleado')
                   ]);
                   //----------------------------------- fin Contabilidad -----------------------------------------------------//
-                  
+
                   $venta=Venta::create([
                     'precio'=>$request['PrecioLote'],
                     'estado'=>'c',
@@ -320,7 +328,7 @@ public function store(Request $request) {
                     $cuotaInicialUsd=$request['pagoInicial'];
                     $cuotaInicialBs=$request['pagoInicialBs'];
 
-                    
+
                   }
                   $PlanDePago=PlanDePago::create([
                     'montoTotal'=>$request['PrecioPlazo'],
@@ -345,7 +353,7 @@ public function store(Request $request) {
                       $request['cuotaMensualBs']=$request['cuotaMensualBs']-$request['sumarDecimalBs'];
                     }
                     $nuevafecha = strtotime ( '+'.$i.' month' , strtotime ( $fecha ) ) ;
-                    $nuevafecha = date ( 'Y-m-j' , $nuevafecha ); 
+                    $nuevafecha = date ( 'Y-m-j' , $nuevafecha );
 
                     $planpago=Cuotas::create([
                       'fechaLimite'=>$nuevafecha,
@@ -361,7 +369,7 @@ public function store(Request $request) {
                   $cuentaporpagar = $venta['precio'] - $venta['cuotaInicial'];
                   $cuentaporpagarBs = $cuentaporpagar * $tipocambio[0]->monedaVenta;
                   //Cuenta por Cobrar
-                  $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta por Cobrar'");
+                  $cuentaautomatica = DB::table('cuentaautomatica')->where('nombre', 'Cuenta por Cobrar');
                   Detalle::create([
                     'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
                     'id_asiento'=>$asiento['id'],
@@ -411,7 +419,7 @@ public function store(Request $request) {
                       $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/E'");
 
                     }
-                    
+
                     Detalle::create([
                       'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
                       'id_asiento'=>$asiento['id'],
@@ -570,14 +578,15 @@ public function store(Request $request) {
                       'montoBs'=>$venta['pagoBs'],
                       'fecha'=>$request['fechaDeposito'],
                     ]);
-                    
+
                       //---------------------------------- Contabilidad BANCO----------------------------------------------------//
                     $montoBancoBs = $venta['cuotaInicial'] * $tipocambio[0]->monedaVenta;
-                    if ($request['tipoMoneda']=="BOLIVIANO") {
+                    if ($request['tipoMoneda']=="BOLIVIANO")
+                    {
                       $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/N'");
-                    }else{
+                    }else
+                    {
                       $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/E'");
-                      
                     }
                     Detalle::create([
                       'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
@@ -606,7 +615,7 @@ public function store(Request $request) {
                       //---------------------------------- Contabilidad BANCO CAJA------------------------------------------------//
                       //CAJA
                     $montoBs = $request->montoEfectivo * $tipocambio[0]->monedaVenta;
-                    $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Caja'");                      
+                    $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Caja'");
                     Detalle::create([
                       'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
                       'id_asiento'=>$asiento['id'],
@@ -624,7 +633,7 @@ public function store(Request $request) {
                       $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/N'");
                     }else{
                       $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/E'");
-                      
+
                     }
                     Detalle::create([
                       'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
@@ -658,16 +667,16 @@ public function store(Request $request) {
                 $cliente=DB::select("select plandepago.montoTotalBs,totalapagar,plandepago.montoTotal,venta.moneda,venta.totalapagarBs  , venta.descuento, venta.moneda, venta.precioBs ,cliente.expedido, plandepago.cuotaInicialUsd as cuotaInicial, venta.reserva,lote.superficie,cliente.nombre,cliente.apellidos,cliente.ci,cliente.expedido,venta.precio,venta.fecha,lote.nroLote,lote.manzano,lote.fase,proyecto.nombre as nombreProyecto ,venta.id as idVenta   from cliente,venta, plandepago,lote,proyecto where venta.id=plandepago.idVenta and cliente.id=venta.idCliente and venta.id=".$venta['id']." and venta.idLote=lote.id and proyecto.id=lote.idProyecto");
                 $cuotas=DB::select("select  cuotas.montoBs, cuotas.monto,cuotas.estado,cuotas.fechaLimite,@num:=@num+1 as num  from (select @num:=0) r, cliente,venta, plandepago, cuotas where venta.id=plandepago.idVenta and plandepago.id =cuotas.idPlandePago and cliente.id=venta.idCliente and venta.id=".$venta['id']);
                 $totalCuotas=DB::select("SELECT sum(cuotas.monto) as totalCuotas FROM venta,cuotas,plandepago where venta.id=plandepago.idVenta and plandepago.id=cuotas.idPlandePago  and venta.id=".$venta['id']);
-                 //  DB::commit(); 
+                 //  DB::commit();
                 $pdf=\PDF::loadView('pdf.pdfPrueba',compact('cliente','cuotas','totalCuotas'));
-                
+
                  return   $pdf->stream();
                  // return view('pdf.pdfPrueba',compact('cliente','cuotas','totalCuotas'));
               }
 
-             // DB::commit(); 
+             // DB::commit();
               Session::flash('message','GUARDADO CORRECTAMENTE');
-              return Redirect::to('/Venta'); 
+              return Redirect::to('/Venta');
             }
             catch (Exception $exc) {
               DB::rollback();
@@ -683,7 +692,7 @@ public function store(Request $request) {
 
 
           $pdf=\PDF::loadView('pdf.ReportePlanDepago',compact('datoventa','datos'));
-          return   $pdf->stream();       
+          return   $pdf->stream();
         }
         public function validar_texto($opcion,$variable){
 
@@ -760,7 +769,7 @@ public function store(Request $request) {
     function BuscarListaVenta(Request $request){
       $lista=DB::select("SELECT venta.id,DATE_FORMAT(venta.fecha,'%d/%m/%Y %H:%i:%s') AS fecha,venta.totalapagar as cuotaInicial,venta.precio,venta.estado as estado_venta, empleado.ci as ci_empleado,CONCAT(empleado.nombre,' ',empleado.apellido)as empleado, CONCAT(cliente.nombre,' ',cliente.apellidos)as cliente,cliente.ci as ci_cliente,cliente.celular,cliente.celular_ref,proyecto.nombre, categorialote.categoria,categorialote.descripcion, lote.nroLote,lote.manzano,lote.superficie,lote.uv,lote.matricula,lote.estado as estado_lote, preciocategoria.precio as precio_categoria
         from venta,empleado,cliente,lote,categorialote,proyecto,preciocategoria
-        WHERE venta.idEmpleado=empleado.id AND venta.idCliente=cliente.id AND lote.id=venta.idLote AND categorialote.id=lote.idCategoriaLote AND proyecto.id=categorialote.idProyecto AND preciocategoria.idCategoria=categorialote.id AND preciocategoria.deleted_at IS NULL AND  venta.fecha  BETWEEN DATE_FORMAT('".$request->fecha_inicio."','%Y-%m-%d') AND  DATE_FORMAT('".$request->fecha_fin."','%Y-%m-%d') ORDER BY venta.fecha");  
+        WHERE venta.idEmpleado=empleado.id AND venta.idCliente=cliente.id AND lote.id=venta.idLote AND categorialote.id=lote.idCategoriaLote AND proyecto.id=categorialote.idProyecto AND preciocategoria.idCategoria=categorialote.id AND preciocategoria.deleted_at IS NULL AND  venta.fecha  BETWEEN DATE_FORMAT('".$request->fecha_inicio."','%Y-%m-%d') AND  DATE_FORMAT('".$request->fecha_fin."','%Y-%m-%d') ORDER BY venta.fecha");
       return view('venta.lista_venta', compact('lista'));
     }
 
@@ -796,7 +805,7 @@ public function store(Request $request) {
   }
 
   public function VentaPreReserva($id){
-    $prereserva=DB::select("SELECT lote.id as idLote,cliente.id as idCliente,cliente.ci,detalleprereserva.id as idDetalle, prereserva.id, DATE_FORMAT(prereserva.fecha,'%d/%m/%Y %H:%i:%s') AS fecha  ,proyecto.nombre, categorialote.categoria,lote.nroLote,lote.manzano,lote.superficie, (preciocategoria.precio * lote.superficie)as precio_superficie,preciocategoria.precio, CONCAT(cliente.nombre,' ',cliente.apellidos)as cliente, cliente.ci as ci_cliente, CONCAT(empleado.nombre,' ',empleado.apellido)as empleado, empleado.ci as ci_empleado from prereserva,detalleprereserva,lote,categorialote,proyecto,preciocategoria,cliente,empleado WHERE prereserva.id=detalleprereserva.idPreReserva AND detalleprereserva.idLote=lote.id AND categorialote.idProyecto=proyecto.id AND lote.idCategoriaLote=categorialote.id AND preciocategoria.idCategoria=categorialote.id AND cliente.id=prereserva.idCliente AND empleado.id=prereserva.idEmpleado  and preciocategoria.deleted_at IS NULL and detalleprereserva.id=".$id);  
+    $prereserva=DB::select("SELECT lote.id as idLote,cliente.id as idCliente,cliente.ci,detalleprereserva.id as idDetalle, prereserva.id, DATE_FORMAT(prereserva.fecha,'%d/%m/%Y %H:%i:%s') AS fecha  ,proyecto.nombre, categorialote.categoria,lote.nroLote,lote.manzano,lote.superficie, (preciocategoria.precio * lote.superficie)as precio_superficie,preciocategoria.precio, CONCAT(cliente.nombre,' ',cliente.apellidos)as cliente, cliente.ci as ci_cliente, CONCAT(empleado.nombre,' ',empleado.apellido)as empleado, empleado.ci as ci_empleado from prereserva,detalleprereserva,lote,categorialote,proyecto,preciocategoria,cliente,empleado WHERE prereserva.id=detalleprereserva.idPreReserva AND detalleprereserva.idLote=lote.id AND categorialote.idProyecto=proyecto.id AND lote.idCategoriaLote=categorialote.id AND preciocategoria.idCategoria=categorialote.id AND cliente.id=prereserva.idCliente AND empleado.id=prereserva.idEmpleado  and preciocategoria.deleted_at IS NULL and detalleprereserva.id=".$id);
     $nacionalidad=DB::select('SELECT * FROM `pais` ORDER by paisnombre');
 
     $cliente = Cliente::find($prereserva[0]->idCliente);
@@ -820,7 +829,7 @@ public function store(Request $request) {
 
          //$pdf=\PDF::loadView('pdf.vendedores',compact('vendedor'));
     $pdf=\PDF::loadView('pdf.gestorvendedor',compact('vendedor'));
-    return   $pdf->stream();       
+    return   $pdf->stream();
   }
 //REPORTES DE VENTAS
   public function ReporteVentas(){
@@ -835,16 +844,16 @@ public function store(Request $request) {
     $fecha_fin=DB::select("SELECT '".$request['fecha_fin']."'as fecha");
 
     $lista=DB::select("SELECT cliente.id as idCliente, CONCAT(empleado.nombre,' ',empleado.apellido)as empleado,CONCAT(empleado.ci,' ',empleado.expedido) as ci_empleado,empleado.celular as celular_empleado, CONCAT(cliente.nombre,' ',cliente.apellidos)as cliente,CONCAT(cliente.ci,' ',cliente.expedido) as ci_cliente,cliente.celular as celular_cliente,proyecto.nombre,categorialote.categoria,lote.fase,lote.manzano,lote.nroLote,DATE_FORMAT(venta.fecha,'%d/%M/%Y %H:%i:%s') AS fecha,cuotaInicialBs,venta.estado from venta,empleado,cliente,lote,categorialote,preciocategoria,proyecto,plandepago WHERE  cliente.idEmpleado=empleado.id AND venta.idCliente=cliente.id AND venta.idLote=lote.id AND categorialote.id=lote.idCategoriaLote AND categorialote.id=preciocategoria.idCategoria AND categorialote.idProyecto=proyecto.id AND preciocategoria.deleted_at IS NULL AND venta.fecha BETWEEN '".$fecha_inicio[0]->fecha."' AND DATE_SUB('".$fecha_fin[0]->fecha."',INTERVAL -1 DAY) and plandepago.idVenta=venta.id ORDER BY empleado.nombre,venta.fecha");
-    return view('reportes.reportevista.reporte_venta',compact('lista','fecha_inicio','fecha_fin'));    
-  }  
+    return view('reportes.reportevista.reporte_venta',compact('lista','fecha_inicio','fecha_fin'));
+  }
   public function ReporteVentaPDF($fecha_inicio, $fecha_fin){
 
     $fecha_inicio_aux=DB::select("SELECT DATE_FORMAT('".$fecha_inicio."','%d/%M/%Y') as fecha");
     $fecha_fin_aux=DB::select("SELECT DATE_FORMAT('".$fecha_fin."','%d/%M/%Y')as fecha");
     $lista=DB::select("SELECT CONCAT(empleado.nombre,' ',empleado.apellido)as empleado,CONCAT(empleado.ci,' ',empleado.expedido) as ci_empleado,empleado.celular as celular_empleado, CONCAT(cliente.nombre,' ',cliente.apellidos)as cliente,CONCAT(cliente.ci,' ',cliente.expedido) as ci_cliente,cliente.celular as celular_cliente,proyecto.nombre,categorialote.categoria,lote.fase,lote.manzano,lote.nroLote,DATE_FORMAT(venta.fecha,'%d/%M/%Y %H:%i:%s') AS fecha,plandepago.cuotaInicialUsd,venta.estado from venta,empleado,cliente,lote,categorialote,preciocategoria,proyecto,plandepago WHERE  cliente.idEmpleado=empleado.id AND venta.idCliente=cliente.id AND venta.idLote=lote.id AND categorialote.id=lote.idCategoriaLote AND categorialote.id=preciocategoria.idCategoria AND categorialote.idProyecto=proyecto.id AND preciocategoria.deleted_at IS NULL AND venta.fecha BETWEEN '".$fecha_inicio."' AND DATE_SUB('".$fecha_fin."',INTERVAL -1 DAY)  and plandepago.idVenta=venta.id  ORDER BY empleado.nombre,venta.fecha");
     $pdf = \PDF::loadView('reportes.reporte_venta_PDF',compact('lista','fecha_inicio_aux','fecha_fin_aux'));
-    return $pdf->stream();  
-  } 
+    return $pdf->stream();
+  }
   public function ObtenerVenta($id){
     $lista=DB::select("SELECT lote.superficie,venta.precio,venta.estado,lote.uv,lote.nroLote, pais.paisnombre,pais.id as idPais, cliente.fechaNacimiento,cliente.domicilio,cliente.ocupacion, cliente.celular,cliente.ci as ciCliente, cliente.nombre as nombreCliente,cliente.apellidos,cliente.fechaNacimiento,cliente.expedido,cliente.estadoCivil,cliente.ocupacion,cliente.domicilio,cliente.genero,cliente.lugarProcedencia, cliente.id as idCliente,CONCAT(empleado.nombre,' ',empleado.apellido)as empleado,CONCAT(empleado.ci,' ',empleado.expedido) as ci_empleado,empleado.celular as celular_empleado, CONCAT(cliente.nombre,' ',cliente.apellidos)as cliente,CONCAT(cliente.ci,' ',cliente.expedido) as ci_cliente,cliente.celular as celular_cliente,proyecto.nombre as nombreProyecto,categorialote.categoria,lote.fase,lote.manzano,lote.nroLote,DATE_FORMAT(venta.fecha,'%d/%M/%Y %H:%i:%s') AS fecha,venta.totalapagar as cuotaInicial,venta.estado from pais, venta,empleado,cliente,lote,categorialote,preciocategoria,proyecto WHERE  cliente.idEmpleado=empleado.id  AND venta.idCliente=cliente.id AND venta.idLote=lote.id AND categorialote.id=lote.idCategoriaLote AND categorialote.id=preciocategoria.idCategoria AND categorialote.idProyecto=proyecto.id AND preciocategoria.deleted_at IS NULL and cliente.idPais=pais.id  AND venta.id=".$id);
     return response()->json($lista);

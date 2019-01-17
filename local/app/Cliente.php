@@ -14,7 +14,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 class Cliente extends Authenticatable implements AuthenticatableContract,
                                     AuthorizableContract
-                                    
+
 {
     use  Authorizable, SoftDeletes;
     /**
@@ -28,12 +28,16 @@ class Cliente extends Authenticatable implements AuthenticatableContract,
         ,'lugarProcedencia','genero','celular','celular_ref','estadoCivil','domicilio','nit','idEmpleado','ocupacion'
     ];
 
+public static function verificarClienteDadoCi( $ci )
+{
+return DB::select('select *,count(*) as count from cliente where ci= ' . $ci);
+}
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
     protected $dates = ['deleted_at'];
- 
-    
+
+
 }

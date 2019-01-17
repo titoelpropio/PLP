@@ -45,7 +45,7 @@
         }
         ?>
         <script type="text/javascript">
-         
+
           monedaReserva='<?php echo $moneda; ?>';
           subTotalReservaBs='<?php echo $reservaBs; ?>';
           subTotalReservaDolar='<?php echo $reserva; ?>';
@@ -57,19 +57,19 @@
             <div class="panel-heading">
               {!!Form::open(['route'=>'Venta.store', 'method'=>'POST','onKeypress'=>'if(event.keyCode == 13) event.returnValue = false;','onsubmit'=>'javascript: return validarVenta()'])!!}
 
-              <strong>DATOS DEL CLIENTE</strong>  
+              <strong>DATOS DEL CLIENTE</strong>
               <div class="form-group pull-right">
                 codigo vendedor
                 <select name="idEmpleado" class="form-control selectpicker" data-live-search="true">
                   <option value="0">seleccione</option>
-                  <?php 
+                  <?php
                   foreach ($vendedor as $key => $value) {
                     echo "<option value=".$value->id.">".$value->codigo;
                   }
                   ?>
                 </select>
-              </div>     
-            </div>  
+              </div>
+            </div>
             <div class="panel-body">
 
               <div class="row">
@@ -83,7 +83,7 @@
                       <label for="ci">CEDULA DE IDENTIDAD *</label>
                       <input type="hidden" name="idCliente" value="0">
                       {!!Form::text('ci',$ci,['id'=>'ci','class'=>'form-control ','placeholder'=>'NUMERO DE CARNET','value'=> old('ci'),'onchange'=>'BuscarCliente()'])!!}
-                    </div>        
+                    </div>
                   </div>
                   <div class="col-sm-2 ">
                    <div class="form-group">
@@ -100,8 +100,8 @@
                       <option value="OR">[OR] ORURO</option>
                       <option value="EX">[EX] EXTRANJERO</option>
                     </select>
-                  </div>       
-                </div>  
+                  </div>
+                </div>
                 <div class="col-sm-2 ">
                   <div class="form-group">
                     <label for="nacionalidad">Pais de origen *</label>
@@ -110,21 +110,21 @@
                         echo "<option value=".$value->id.">".$value->paisnombre;
                       } ?>
                     </select>
-                  </div>        
-                </div>    
+                  </div>
+                </div>
                 <div class="col-sm-3 ">
                   <div class="form-group">
                     <label for="ocupacion">Ocupacion</label>
-                    <input  type="text"  class="form-control" name="ocupacion"  placeholder="Cargo " >  
-                  </div>        
-                </div> 
-                
+                    <input  type="text"  class="form-control" name="ocupacion"  placeholder="Cargo " >
+                  </div>
+                </div>
+
 
                 <div class="col-sm-3 ">
                   <div class="form-group">
                     <label for="lugarProcedencia">Ciudad de Procedencia*</label>
-                    <input  type="text"  class="form-control" name="lugarProcedencia" placeholder="" >  
-                  </div>        
+                    <input  type="text"  class="form-control" name="lugarProcedencia" placeholder="" >
+                  </div>
                 </div>
 
               </section>
@@ -136,14 +136,14 @@
                 <div class="col-sm-3 ">
                   <div class="form-group">
                     <label for="nombre">Nombres *</label>
-                    <input  type="text"  class="form-control" name="nombre" placeholder="" >  
-                  </div>        
+                    <input  type="text"  class="form-control" name="nombre" placeholder="" >
+                  </div>
                 </div>
                 <div class="col-sm-3 ">
                   <div class="form-group">
                     <label for="apellidos">Apellidos *</label>
-                    <input type="text"  class="form-control" name="apellidos" >  
-                  </div>        
+                    <input type="text"  class="form-control" name="apellidos" >
+                  </div>
                 </div>
                 <div class="col-sm-2 ">
                   <div class="form-group">
@@ -155,7 +155,7 @@
                      <option value="v">VIUDO (A)</option>
 
                    </select>
-                 </div>        
+                 </div>
                </div>
                <div class="col-sm-4 ">
                 <div class="form-group">
@@ -174,7 +174,7 @@
 
                     </label>
                   </div>
-                </div>        
+                </div>
               </div>
 
             </section>
@@ -195,46 +195,46 @@
                   </div>
                   <!-- /.input group -->
                 </div>
-              </div>        
+              </div>
             </div>
             <div class="col-sm-3 ">
               <div class="form-group">
                 <label for="domicilio">Domicilio *</label>
-                <input   type="text"  class="form-control" name="domicilio"  placeholder="Direccion del Domicilio actual" >  
-              </div>        
+                <input   type="text"  class="form-control" name="domicilio"  placeholder="Direccion del Domicilio actual" >
+              </div>
             </div>
             <div class="col-sm-2 ">
               <div class="form-group">
                 <label for="celular">Celular *</label>
-                <input  type="text"  class="form-control" name="celular"  placeholder="Celular del Cliente">  
-              </div>        
+                <input  type="text"  class="form-control" name="celular"  placeholder="Celular del Cliente">
+              </div>
             </div>
 
             <div class="col-sm-2 ">
               <div class="form-group">
                 <label for="celular_ref">Celular Ref:</label>
-                <input  type='text'  class="form-control" name="celular_ref"  placeholder="Telefono de referencia " >  
-              </div>        
+                <input  type='text'  class="form-control" name="celular_ref"  placeholder="Telefono de referencia " >
+              </div>
             </div>
 
             <div class="col-sm-2 ">
               <div class="form-group">
                 <label for="nit">NIT</label>
-                <input  type="text"  class="form-control" name="nit"  placeholder="Nit " >  
-              </div>        
+                <input  type="text"  class="form-control" name="nit"  placeholder="Nit " >
+              </div>
             </div>
 
           </section>
         </div>
-      </div>                  
+      </div>
 
     </div>
     <div class="panel-footer"></div>
     <div class="panel panel-success">
       <div class="panel-heading">
-        <h4>DATOS DEL LOTE DE TERRENO</h4>       
+        <h4>DATOS DEL LOTE DE TERRENO</h4>
 
-      </div>  
+      </div>
       <div class="panel-body">
         <div class="row">
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -243,73 +243,73 @@
                 <div class="form-group">
                   <label for="id_lote">CODIGO</label>
 
-                  <input <?php echo "value=".$id_lote ?>  type="text"  class="form-control" name="id_lote" readonly="readonly"> 
-                </div>        
+                  <input <?php echo "value=".$id_lote ?>  type="text"  class="form-control" name="id_lote" readonly="readonly">
+                </div>
               </div>
               <div class="col-sm-2 ">
                 <div class="form-group">
                   <label for="proyecto">Proyecto</label><br>
                   <label for="proyecto" style="color: rgba(255, 26, 0, 0.86);"><?php echo $lote[0]->nombreProyecto ?></label>
 
-                </div>        
+                </div>
               </div>
               <div class="col-sm-2 ">
                 <div class="form-group">
                   <label for="fase">Fase</label>
-                  <input value=<?php echo $lote[0]->fase ?>  class="form-control" type="number"  class="form-control" name="fase" placeholder="USD$" id="fase"  disabled="">  
+                  <input value=<?php echo $lote[0]->fase ?>  class="form-control" type="number"  class="form-control" name="fase" placeholder="USD$" id="fase"  disabled="">
 
-                </div>        
+                </div>
               </div>
               <div class="col-sm-2 ">
                 <div class="form-group">
                   <label for="nro_manzano">Nro. U-V</label>
-                  <input value=<?php echo $lote[0]->uv ?> type="text"  class="form-control" name="nro_manzano"   disabled="">  
-                </div>        
+                  <input value=<?php echo $lote[0]->uv ?> type="text"  class="form-control" name="nro_manzano"   disabled="">
+                </div>
               </div>
               <div class="col-sm-2 ">
                 <div class="form-group">
                   <label for="nro_manzano">Nro. Manzano</label>
-                  <input value=<?php echo $lote[0]->manzano ?> type="text"  class="form-control" name="nro_manzano"   disabled="">  
-                </div>        
+                  <input value=<?php echo $lote[0]->manzano ?> type="text"  class="form-control" name="nro_manzano"   disabled="">
+                </div>
               </div>
               <div class="col-sm-2 ">
                 <div class="form-group">
                   <label for="nro_lote">Nro. Lote</label>
-                  <input value=<?php echo $lote[0]->nroLote ?>  type="text"  class="form-control" name="nro_lote" disabled="">  
-                  <input value=<?php echo $lote[0]->nroLote ?>  type="hidden"  class="form-control" name="nro_lote"  disabled="" > 
-                </div>        
+                  <input value=<?php echo $lote[0]->nroLote ?>  type="text"  class="form-control" name="nro_lote" disabled="">
+                  <input value=<?php echo $lote[0]->nroLote ?>  type="hidden"  class="form-control" name="nro_lote"  disabled="" >
+                </div>
               </div>
 
 
               <div class="col-sm-2 ">
                 <div class="form-group">
                   <label for="superfice">Supercie(mt2)</label>
-                  <input value=<?php echo $lote[0]->superficie ?> type="text"  class="form-control" name="superficie"    id="superficie" disabled="" >  
-                </div>        
+                  <input value=<?php echo $lote[0]->superficie ?> type="text"  class="form-control" name="superficie"    id="superficie" disabled="" >
+                </div>
               </div>
 
               <div class="col-sm-2 ">
                 <div class="form-group">
                   <label for="categoria">Categoria</label>
                   <input value=<?php echo $lote[0]->categoria ?>  class="form-control"   class="form-control" name="categoria" placeholder="USD$" disabled="" >
-                </div>        
-              </div>  
+                </div>
+              </div>
               <div class="col-sm-5 ">
                 <div class="form-group">
                   <label for="detalleCategoria">Detalle Categoria:</label> <br>
                   <textarea rows="4" cols="50" class="form-control" disabled="">
                     <?php echo $lote[0]->descripcion."." ?>
                   </textarea>
-                </div>        
-              </div>  
+                </div>
+              </div>
               <div class="col-sm-2 ">
                 <div class="form-group">
                   <label for="precio">Precio(mt2) </label>
                   <input value=<?php echo $lote[0]->precio ?>  class="form-control" type="number"  class="form-control" name="precio" placeholder="USD$" id="precio" >
-                </div>  
-                <input type="hidden" name="idReserva" value=<?php echo $idReserva; ?>>      
-                <input type="hidden" name="idPreReserva" value=<?php echo $idPreReserva; ?>> 
-              </div>  
+                </div>
+                <input type="hidden" name="idReserva" value=<?php echo $idReserva; ?>>
+                <input type="hidden" name="idPreReserva" value=<?php echo $idPreReserva; ?>>
+              </div>
             </section>
           </div>
           <h3 style="text-align: center">Colindancias</h3>
@@ -320,79 +320,79 @@
                   <label for="norte">Norte</label>
 
 
-                  <input <?php echo "value=".$lote[0]->norte ?>  type="text"  class="form-control" name="norte" disabled=""> 
-                </div>        
+                  <input <?php echo "value=".$lote[0]->norte ?>  type="text"  class="form-control" name="norte" disabled="">
+                </div>
               </div>
               <div class="col-sm-1 ">
                 <div class="form-group">
                   <label for="nro_lote">Medida</label>
-                  <input value=<?php echo $lote[0]->medidaNorte ?>  type="text"  class="form-control" name="nro_lote" disabled="">  
-                  <input value=<?php echo $lote[0]->nroLote ?>  type="hidden"  class="form-control" name="nro_lote"  > 
-                </div>        
+                  <input value=<?php echo $lote[0]->medidaNorte ?>  type="text"  class="form-control" name="nro_lote" disabled="">
+                  <input value=<?php echo $lote[0]->nroLote ?>  type="hidden"  class="form-control" name="nro_lote"  >
+                </div>
               </div>
               <div class="col-sm-3 ">
                 <div class="form-group">
                   <label for="sur">sur</label>
-                  <input value=<?php echo $lote[0]->sur ?> type="text"  class="form-control" name="sur"   disabled="">  
-                </div>        
+                  <input value=<?php echo $lote[0]->sur ?> type="text"  class="form-control" name="sur"   disabled="">
+                </div>
               </div>
               <div class="col-sm-1 ">
                 <div class="form-group">
                   <label for="medidaSur">Medida</label>
-                  <input value=<?php echo $lote[0]->medidaSur ?> type="text"  class="form-control" name="medidaSur"   disabled="">  
-                </div>        
+                  <input value=<?php echo $lote[0]->medidaSur ?> type="text"  class="form-control" name="medidaSur"   disabled="">
+                </div>
               </div>
               <div class="col-sm-3 ">
                 <div class="form-group">
                   <label for="este">Este</label>
-                  <input value=<?php echo $lote[0]->este ?> type="text"  class="form-control" name="este"    id="este" disabled="">  
-                </div>        
+                  <input value=<?php echo $lote[0]->este ?> type="text"  class="form-control" name="este"    id="este" disabled="">
+                </div>
               </div>
               <div class="col-sm-1 ">
                 <div class="form-group">
                   <label for="medidaEste">Medida</label>
-                  <input value=<?php echo $lote[0]->medidaEste ?>  class="form-control" type="number"  class="form-control" name="medidaEste" placeholder="USD$" id="medidaEste" disabled="">  
-                </div>     
+                  <input value=<?php echo $lote[0]->medidaEste ?>  class="form-control" type="number"  class="form-control" name="medidaEste" placeholder="USD$" id="medidaEste" disabled="">
+                </div>
 
               </div>
               <div class="col-sm-3 ">
                 <div class="form-group">
                   <label for="oeste">Oeste</label>
-                  <input value=<?php echo $lote[0]->oeste ?> type="text"  class="form-control" name="oeste"    id="oeste" disabled="">  
-                </div>        
+                  <input value=<?php echo $lote[0]->oeste ?> type="text"  class="form-control" name="oeste"    id="oeste" disabled="">
+                </div>
               </div>
               <div class="col-sm-1 ">
                 <div class="form-group">
                   <label for="medidaOeste">Medida</label>
-                  <input value=<?php echo $lote[0]->medidaOeste ?>  class="form-control" type="number"  class="form-control" name="medidaOeste" placeholder="USD$" id="medidaOeste"  disabled="">  
-                </div>     
+                  <input value=<?php echo $lote[0]->medidaOeste ?>  class="form-control" type="number"  class="form-control" name="medidaOeste" placeholder="USD$" id="medidaOeste"  disabled="">
+                </div>
               </section>
             </div>
 
 
-          </div>                  
+          </div>
 
         </div>
         <div class="panel-footer"></div>
       </div>
       <div class="panel panel-success">
         <div class="panel-heading">
-          <h4>DATOS DE LA TRANSACCCION COMERCIAL</h4> 
+          <h4>DATOS DE LA TRANSACCCION COMERCIAL</h4>
           <label>
             <input type="radio" id="tipoPagoc" name="tipoPago" value="c" checked="" onclick="CargarTabla(this)">Contado
-          </label>      
+          </label>
           <label>
 
             <input type="radio" id="tipoPagop" name="tipoPago" value="p" onclick="CargarTabla(this)">Plazo
-          </label>      
+          </label>
           <label class="pull-right"> <input type="radio" id="tipoMonedaDolares" name="tipoMoneda" value="DOLAR" checked="" onclick="convertirMoneda(this)">Dolares</label>
           <label class="pull-right"> <input type="radio" id="tipoMonedaBoliviano" name="tipoMoneda" value="BOLIVIANO" onclick="convertirMoneda(this)">Bolivianos</label>
-        </div>  
+        </div>
         <div class="panel-body">
           <div class="row">
 
            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-             <?php 
+             <?php
              $tipoCambioVenta=$tipoCambio[0]->monedaVenta;
              $tipoCambioCompra=$tipoCambio[0]->monedaCompra;
 
@@ -426,14 +426,14 @@ number_format($pagoInicialReserva, 2, '.', '');//esto es lo qe tiene q pagar com
 
    <th>RESERVA</th>
    <th>TOTAL A PAGAR</th>
-   
+
  </thead>
  <tbody>
    <tr>
 
      <td><input type="text" readonly="" name="PrecioLote" value= <?php $precioVenta=($lote[0]->precio*$lote[0]->superficie);
      echo number_format($precioVenta, 2, '.', ''); ?> readonly="readonly" class="form-control">
-     <input type="hidden" readonly="" name="PrecioLoteBolivano" value= <?php 
+     <input type="hidden" readonly="" name="PrecioLoteBolivano" value= <?php
      echo number_format($precioVenta*$tipoCambio[0]->monedaVenta, 2, '.', ''); ?> readonly="readonly" class="form-control">
      <td ><?php echo $lote[0]->descuento."%"; ?>
       <td>
@@ -447,7 +447,7 @@ number_format($pagoInicialReserva, 2, '.', '');//esto es lo qe tiene q pagar com
         <td> <input type="text" name="PCMR" value=  <?php echo number_format($precioContadoMenoReserva, 2, '.', '');  ?> readonly="readonly" class="form-control">
           <input type="hidden" name="PCMRBs" value='<?php echo number_format($precioContadoBsMenosReserva, 2, '.', '');  ?>' readonly="readonly" class="form-control">
         </td>
-        
+
 
       </tr>
     </tbody>
@@ -457,7 +457,7 @@ number_format($pagoInicialReserva, 2, '.', '');//esto es lo qe tiene q pagar com
      <th>PRECIO DEL LOTE DE TERRENO</th>
      <th>% DESCUENTO</th>
      <th>PRECIO DEL LOTE CON DESCUENTO
-      
+
        <th>PLAZOS</th>
        <th>DIA DE PAGO</th>
        <th>CUOTA MENSUAL</th>
@@ -468,20 +468,20 @@ number_format($pagoInicialReserva, 2, '.', '');//esto es lo qe tiene q pagar com
      <tbody>
        <tr>
          <td id="tdPrecioLoteTipoPlazo"><?php $precioVenta=($lote[0]->precio*$lote[0]->superficie);
-         echo number_format($precioVenta, 2, '.', ''); ?> 
+         echo number_format($precioVenta, 2, '.', ''); ?>
          <input type="hidden" name="PrecioLotePlazo" value= <?php $precioVenta=($lote[0]->precio*$lote[0]->superficie);
          echo number_format($precioVenta, 2, '.', ''); ?> readonly="readonly" class="form-control">
          <td>
           <input class="form-control" type="text" name="DescuentoPlazo" value="0" readonly="readonly">
         </td>
-        <td> 
+        <td>
          <input class="form-control" type="text" name="PrecioPlazo" value= <?php echo number_format($precioPlazo, 2, '.', ''); ?> readonly="readonly">
          <input class="form-control" type="hidden" name="PrecioPlazoBs" value= <?php echo number_format($precioPlazo*$tipoCambio[0]->monedaVenta, 2, '.', ''); ?> readonly="readonly">
        </td>
-       
+
        <td><input type="number" name="meses" class="form-control" onchange="verificarPlazo(this)">
          <td><select class="form-control" name="diaMes">
-          <?php for ($i=1; $i <29 ; $i++) { 
+          <?php for ($i=1; $i <29 ; $i++) {
             echo "<option value=".$i.">".$i;
           } ?>
         </select>
@@ -491,7 +491,7 @@ number_format($pagoInicialReserva, 2, '.', '');//esto es lo qe tiene q pagar com
           <input type="hidden" name="sumarDecimal" readonly="readonly" class="form-control">
           <input type="hidden" name="sumarDecimalBs" readonly="readonly" class="form-control">
         </td>
-        
+
         <td><!-- <input class="form-control" type="hidden" name="pago" value=<?php echo number_format($pagoInicialReserva, 2, '.', ''); ?>> -->
           <select name="SelectPagoInicial" onchange="PagoInicial(this)" style="display: none" class="form-control">
 
@@ -522,10 +522,10 @@ number_format($pagoInicialReserva, 2, '.', '');//esto es lo qe tiene q pagar com
   <label>TIPO DE PAGO</label><br>
   <label>
     <input type="radio" name="tipoDepositoC"   value='e' onclick="cargarBanco(this)" checked="">Efectivo
-  </label>      
+  </label>
   <label>
     <input type="radio" name="tipoDepositoC" value='b'onclick="cargarBanco(this)">Banco
-  </label>  
+  </label>
   <label>
     <!-- <input type="radio" name="tipoDepositoC" value='be'onclick="cargarBanco(this)">Banco y Efectivo -->
   </label>
@@ -568,7 +568,7 @@ number_format($pagoInicialReserva, 2, '.', '');//esto es lo qe tiene q pagar com
   </div>
 </div>
 
-</div>                                 
+</div>
 </div>
 <div class="panel-footer">
 

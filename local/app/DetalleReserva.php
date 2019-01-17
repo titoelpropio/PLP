@@ -14,7 +14,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 class DetalleReserva extends Authenticatable implements AuthenticatableContract,
                                     AuthorizableContract
-                                    
+
 {
     use  Authorizable, SoftDeletes;
     /**
@@ -27,12 +27,16 @@ class DetalleReserva extends Authenticatable implements AuthenticatableContract,
      'idLote','idReserva','subTotal','subTotalBs','tipoPago','estado'
     ];
 
+    public static function verifyReservation( $idLote, $idCliente, $estado )
+    {
+       return  DB::select('select count(*) as count from detallereserva,reserva where reserva.id=detallereserva.idReserva and detallereserva.idLote='.$idLote.' and reserva.idCliente<>'. $idCliente,.' and detallereserva.estado="$estado"');
+    }
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
     protected $dates = ['deleted_at'];
- 
-    
+
+
 }
