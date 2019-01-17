@@ -13,7 +13,7 @@ class PrecioController extends Controller
 {
 function index(){
 
-    $precio=DB::select(" SELECT precio,categorialote.id,categorialote.categoria, proyecto.id,proyecto.nombre from preciocategoria, proyecto, categorialote where preciocategoria.deleted_at IS NULL and proyecto.id=categorialote.idProyecto and categorialote.id=preciocategoria.idCategoria and proyecto.id = ".Session::get('idProyecto'));
+    $precio=DB::select(" SELECT precio,categorialote.id,categorialote.categoria, proyecto.id,proyecto.nombre from preciocategoria, proyecto, categorialote where preciocategoria.deleted_at IS NULL and proyecto.id=categorialote.idProyecto and categorialote.id=preciocategoria.idCategoria ");
 
     // $precio=DB::table('preciocategoria')
     // ->join('proyecto','proyecto.id','=','categorialote.idProyecto')
@@ -25,7 +25,8 @@ function index(){
   }
   
   public function create(){
-    $categoria=DB::select("SELECT *from categorialote where categorialote.idProyecto=".Session::get('idProyecto'));
+    $categoria=Categoria::with('proyecto')->get();
+    // dd(json_encode($categoria));
     return view('precio.create',compact('categoria',$categoria));    
   }
 

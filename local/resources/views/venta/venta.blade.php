@@ -82,8 +82,7 @@
                     <div class="form-group">
                       <label for="ci">CEDULA DE IDENTIDAD *</label>
                       <input type="hidden" name="idCliente" value="0">
-                      {!!Form::text('ci',$ci,['id'=>'ci','class'=>'form-control ','placeholder'=>'NUMERO DE CARNET','onchange'=>'BuscarCliente()'])!!}
-
+                      {!!Form::text('ci',$ci,['id'=>'ci','class'=>'form-control ','placeholder'=>'NUMERO DE CARNET','value'=> old('ci'),'onchange'=>'BuscarCliente()'])!!}
                     </div>        
                   </div>
                   <div class="col-sm-2 ">

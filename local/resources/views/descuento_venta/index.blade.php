@@ -26,7 +26,7 @@
 			 @foreach ($descuentoVenta as $des)
 			<TR>
 				<td align="center">{{$des->porcentaje}} %</td>
-                <td align="center">{{$des->nombre}}</td>
+                <td align="center">{{$des->proyectos->nombre}}</td>
 			</TR>
 			@endforeach 
 		</table>

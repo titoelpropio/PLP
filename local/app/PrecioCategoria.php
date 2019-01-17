@@ -22,6 +22,11 @@ class PrecioCategoria extends Authenticatable implements AuthenticatableContract
     protected $fillable = [
         'precio', 'idCategoria'
     ];
+
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class, 'idCategoria');
+    }
     /**
      * The attributes that should be hidden for arrays.
      *

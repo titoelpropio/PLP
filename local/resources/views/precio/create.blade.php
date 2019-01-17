@@ -17,7 +17,7 @@
 	        <select name="categoria" class="form-control selectpicker" id="categoria" data-live-search="true">
 	         <option value="">SELECCIONE UNA CATEGORIA</option>
 	            @foreach($categoria as $hij)
-	            <option value="{{$hij->id}}">{{$hij->categoria}}</option>
+	            <option value="{{$hij->id}}">{{$hij->categoria}} => {{$hij->proyecto->nombre}}</option>
 	            @endforeach
 	        </select>
 	    </div>

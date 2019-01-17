@@ -25,7 +25,7 @@
                 @foreach ($porcentaje as $cli)
                 <TR>
                 <td><CENTER>{{$cli->porcentaje}}</CENTER></td>
-                <td><CENTER>{{$cli->nombre}}</CENTER></td>
+                <td><CENTER>{{$cli->proyectos->nombre}}</CENTER></td>
                 </TR>
                 @endforeach 
             </table>

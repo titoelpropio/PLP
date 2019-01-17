@@ -26,7 +26,10 @@ class Categoria extends Authenticatable implements AuthenticatableContract,
     protected $fillable = [
      'categoria','idProyecto','descripcion'
     ];
-
+    public function proyecto()
+    {
+        return $this->belongsTo(Proyecto::class, 'idProyecto');
+    }
     /**
      * The attributes that should be hidden for arrays.
      *

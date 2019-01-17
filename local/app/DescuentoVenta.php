@@ -22,6 +22,10 @@ class DescuentoVenta extends Authenticatable implements AuthenticatableContract,
     protected $fillable = [
         'porcentaje', 'idProyecto'
     ];
+    public function proyectos()
+    {
+        return $this->belongsTo(Proyecto::class, 'idProyecto');
+    }
     /**
      * The attributes that should be hidden for arrays.
      *

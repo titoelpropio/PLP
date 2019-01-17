@@ -7,6 +7,10 @@
       <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
         <h3>REGISTRAR DESCUENTO VENTA</h3>
 
+     <div class="form-group">
+      {!!Form::label('proyecto','proyecto:')!!}
+       {!!Form::select('idProyecto',$proyecto,null,array('class'=>'form-control'))!!}
+    </div>
     <div class="form-group">
       {!!Form::label('porcentaje','Porcentaje:')!!}
       {!!Form::text('porcentaje',null,['class'=>'form-control ','placeholder'=>'Porcentaje'])!!}

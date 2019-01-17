@@ -68,7 +68,7 @@ class UsuarioController extends Controller {
         $verificar = DB::select('select count(*) count from users where users.email="' . $request->email.'" and users.idEmpleado<>'.$id);
         if ($verificar[0]->count == 0) {
           $name = strtolower($request['email']);
-         DB::table('users')->where('idEmpleado',$id)->update(['email' =>  $name, 'password' => Hash::make($request['password']),'idPerfil'=>$request['idPerfil']]);
+         DB::table('users')->where('idempleado',$id)->update(['email' =>  $name, 'password' => Hash::make($request['password']),'idPerfil'=>$request['idPerfil']]);
         Session::flash('message', 'Usuario Actualizado Correctamente');
         return Redirect::to('/Empleado');
          }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use App\Proyecto;
+use App\Porcerntajes;
 use App\Http\Requests\CategoriaRequest;
 use App\PorcentajeDevolucionReserva;
 use DB;
@@ -12,18 +14,21 @@ use Redirect;
 class PorcentajeDevolucionReservaController extends Controller
 {
 function index(){
-    $porcentaje=DB::select("SELECT *from porcentajedevolucionreserva,proyecto where porcentajedevolucionreserva.idProyecto=proyecto.id and porcentajedevolucionreserva.deleted_at IS NULL and porcentajedevolucionreserva.idProyecto=".Session::get('idProyecto'));
+    $porcentaje=PorcentajeDevolucionReserva::with('proyectos')->get();
+    // dd(json_encode($porcentaje));
     return view('porcentaje_devolucion_reserva.index',compact('porcentaje'));
   }
   
   public function create(){
-    return view('porcentaje_devolucion_reserva.create'); 
+  $proyectos=Proyecto::lists('nombre','id');
+    return view('porcentaje_devolucion_reserva.create',compact('proyectos')); 
   }
 
   public function store(Request $request){
   try {
-      DB::beginTransaction();   
-       $porcentaje=DB::select("SELECT *from porcentajedevolucionreserva WHERE porcentajedevolucionreserva.deleted_at IS NULL and porcentajedevolucionreserva.idProyecto=".Session::get('idProyecto'));
+      DB::beginTransaction();  
+      $idProyecto = $request['idProyecto'] ;
+       $porcentaje=DB::select("SELECT *from porcentajedevolucionreserva WHERE porcentajedevolucionreserva.deleted_at IS NULL and porcentajedevolucionreserva.idProyecto=".$idProyecto);
        if(count($porcentaje) != 0)
         {
           $this->destroy($porcentaje[0]->id);
@@ -31,7 +36,7 @@ function index(){
 
         PorcentajeDevolucionReserva::create([
           'porcentaje' => $request['porcentaje'],
-          'idProyecto' => Session::get('idProyecto'),
+          'idProyecto' => $idProyecto,
         ]);
               
         DB::commit();                                               

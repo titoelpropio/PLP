@@ -6,6 +6,10 @@
 	{!!Form::open(['route'=>'PorcentajeDevolucionReserva.store', 'method'=>'POST'])!!}
       <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
         <h3>REGISTRAR PORCENTAJE DEVOLUCION RESERVA</h3>
+        <div class="form-group">
+			{!!Form::label('proyecto','Proyecto:')!!}
+			 {!!Form::select('idProyecto',$proyectos,null,array('class'=>'form-control'))!!}
+		</div>
 		<div class="form-group">
 			{!!Form::label('porcentaje','Porcentaje:')!!}
 			{!!Form::text('porcentaje',null,['class'=>'form-control ','placeholder'=>'Porcentaje'])!!}

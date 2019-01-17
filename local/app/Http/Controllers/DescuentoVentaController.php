@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\DescuentoVenta;
+use App\Proyecto;
 use App\Http\Requests;
 use App\Http\Requests\UserUpdateRequest;
 use Session;
@@ -20,25 +21,28 @@ class DescuentoVentaController extends Controller {
     }
 
     function index() {
-        $descuentoVenta = DB::select("SELECT *from proyecto,descuentoventa WHERE proyecto.id=descuentoventa.idProyecto and descuentoventa.deleted_at IS NULL and proyecto.id=".Session::get('idProyecto'));
+        $descuentoVenta =  DescuentoVenta::with('proyectos')->get();
+        // dd(json_encode($descuentoVenta));
         return view('descuento_venta.index', compact('descuentoVenta'));
     }
 
     public function create() {
-        return view('descuento_venta.create');
+        $proyecto = Proyecto::lists('nombre','id');
+        return view('descuento_venta.create', compact('proyecto'));
     }
 
     public function store(Request $request) {
         try {
           DB::beginTransaction();  
-           $descuento=DB::select("SELECT *from descuentoventa WHERE descuentoventa.idProyecto=".Session::get('idProyecto')." AND descuentoventa.deleted_at IS NULL");
+          $idProyecto = $request['idProyecto'];
+           $descuento=DB::select("SELECT *from descuentoventa WHERE descuentoventa.idProyecto=".$idProyecto." AND descuentoventa.deleted_at IS NULL");
            if(count($descuento) != 0)
             {
               $this->destroy($descuento[0]->id);
             }
             DescuentoVenta::create([
                 'porcentaje'=>$request['porcentaje'],
-                'idProyecto'=>Session::get('idProyecto'),
+                'idProyecto'=>$idProyecto,
             ]);
             DB::commit(); 
             return redirect('DescuentoVenta')->with('message','GUARDADO CORRECTAMENTE');  

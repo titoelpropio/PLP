@@ -98,6 +98,20 @@ public function store(Request $request) {
   $verificaringresodiferido = DB::select("SELECT count(*) as count FROM cuentaautomatica WHERE nombre='Ingreso Diferido'");
   $verificarIvaDebitoFiscal = DB::select("SELECT count(*) as count FROM cuentaimpuesto WHERE nombre='Debito fiscal'");
 
+  $fechaNacimiento =  $request['fechaNacimiento'];
+  $ci = $request['ci'];
+  $idPais = $request['idPais'];
+  $lugarProcedencia = $request['lugarProcedencia'];
+   $genero =  $request['genero'];
+   $celular =  $request['celular'];
+   $celular_ref =  $request['celular_ref'];
+   $estadoCivil = $request['estadoCivil'];
+   $domicilio =  $request['domicilio'];
+   $nit = $request['nit'];
+   $ocupacion = $request['ocupacion'];
+    $expedido = $request['expedido'];
+    $idEmpleado = $request['idEmpleado'];
+  
   if ($verificar[0]->count==1 ) {
     $verificarReserva=DB::select('select count(*) as count from detallereserva,reserva where reserva.id=detallereserva.idReserva and detallereserva.idLote='.$request['id_lote'].' and reserva.idCliente<>'.$request['idCliente'].' and detallereserva.estado="r"');
 
@@ -175,7 +189,7 @@ public function store(Request $request) {
  }
  else{
   try {
-    DB::beginTransaction();
+    // DB::beginTransaction();
               /*$lote = Lote::find($request->id_lote);
               $lote->fill([
               'estado' => '3',
@@ -194,38 +208,38 @@ public function store(Request $request) {
                   $cliente=Cliente::create([ //aqui guarda
                     'nombre' => $nombre,          
                     'apellidos' => $apellidos,   
-                    'fechaNacimiento' => $request['fechaNacimiento'],          
-                    'ci' => $request['ci'],          
-                    'idPais' => $request['idPais'], 
-                    'lugarProcedencia' => $request['lugarProcedencia'],          
-                    'genero' => $request['genero'],          
-                    'celular' => $request['celular'],          
-                    'celular_ref' => $request['celular_ref'],          
-                    'estadoCivil' => $request['estadoCivil'],          
-                    'domicilio' => $request['domicilio'],          
-                    'nit' => $request['nit'],  
-                    'ocupacion' => $request['ocupacion'], 
-                    'expedido' => $request['expedido'],          
-                    'idEmpleado' => $request['idEmpleado'],          
+                    'fechaNacimiento' => $fechaNacimiento,          
+                    'ci' => $ci,          
+                    'idPais' => $idPais, 
+                    'lugarProcedencia' => $lugarProcedencia,          
+                    'genero' => $genero,          
+                    'celular' => $celular,          
+                    'celular_ref' => $celular_ref,          
+                    'estadoCivil' => $estadoCivil,          
+                    'domicilio' => $domicilio,          
+                    'nit' => $nit,  
+                    'ocupacion' => $ocupacion, 
+                    'expedido' => $expedido,          
+                    'idEmpleado' => $idEmpleado,          
                   ]);
                 }
                 else{
                   $cliente = Cliente::find($verificarCliente[0]->id);   //aqui modifica
                   $cliente->fill([
                     'nombre' => $nombre ,           
-                    'apellidos' => $request->apellidos,          
-                    'fechaNacimiento' => $request['fechaNacimiento'],          
-                    'ci' => $request['ci'],          
-                    'idPais' => $request['idPais'],          
-                    'lugarProcedencia' => $request['lugarProcedencia'],          
-                    'genero' => $request['genero'],          
-                    'celular' => $request['celular'],          
-                    'celular_ref' => $request['celular_ref'],          
-                    'estadoCivil' => $request['estadoCivil'],          
-                    'domicilio' => $request['domicilio'],          
-                    'nit' => $request['nit'],  
-                    'ocupacion' => $request['ocupacion'], 
-                    'expedido' => $request['expedido'],          
+                    'apellidos' => $apellidos,          
+                    'fechaNacimiento' => $fechaNacimiento,          
+                    'ci' => $ci,          
+                    'idPais' => $idPais,          
+                    'lugarProcedencia' => $lugarProcedencia,          
+                    'genero' => $genero,          
+                    'celular' => $celular,
+                    'celular_ref' => $celular_ref,
+                    'estadoCivil' => $estadoCivil,
+                    'domicilio' => $domicilio,
+                    'nit' => $nit,
+                    'ocupacion' => $ocupacion,
+                    'expedido' => $expedido,
                   ]);
                   $cliente->save();
                 }
@@ -641,17 +655,17 @@ public function store(Request $request) {
                 }
 
               if ($request['tipoPago']=='p') {//reporte pdf plan de pago
-                $cliente=DB::select("select plandepago.montoTotalBs,plandepago.montoTotal,venta.moneda,venta.totalapagarBs  , venta.descuento, venta.moneda, venta.precioBs ,cliente.expedido, plandepago.cuotaInicialUsd as cuotaInicial, venta.reserva,lote.superficie,cliente.nombre,cliente.apellidos,cliente.ci,cliente.expedido,venta.precio,venta.fecha,lote.nroLote,lote.manzano,lote.fase,proyecto.nombre as nombreProyecto ,venta.id as idVenta   from cliente,venta, plandepago,lote,proyecto where venta.id=plandepago.idVenta and cliente.id=venta.idCliente and venta.id=".$venta['id']." and venta.idLote=lote.id and proyecto.id=lote.idProyecto");
+                $cliente=DB::select("select plandepago.montoTotalBs,totalapagar,plandepago.montoTotal,venta.moneda,venta.totalapagarBs  , venta.descuento, venta.moneda, venta.precioBs ,cliente.expedido, plandepago.cuotaInicialUsd as cuotaInicial, venta.reserva,lote.superficie,cliente.nombre,cliente.apellidos,cliente.ci,cliente.expedido,venta.precio,venta.fecha,lote.nroLote,lote.manzano,lote.fase,proyecto.nombre as nombreProyecto ,venta.id as idVenta   from cliente,venta, plandepago,lote,proyecto where venta.id=plandepago.idVenta and cliente.id=venta.idCliente and venta.id=".$venta['id']." and venta.idLote=lote.id and proyecto.id=lote.idProyecto");
                 $cuotas=DB::select("select  cuotas.montoBs, cuotas.monto,cuotas.estado,cuotas.fechaLimite,@num:=@num+1 as num  from (select @num:=0) r, cliente,venta, plandepago, cuotas where venta.id=plandepago.idVenta and plandepago.id =cuotas.idPlandePago and cliente.id=venta.idCliente and venta.id=".$venta['id']);
                 $totalCuotas=DB::select("SELECT sum(cuotas.monto) as totalCuotas FROM venta,cuotas,plandepago where venta.id=plandepago.idVenta and plandepago.id=cuotas.idPlandePago  and venta.id=".$venta['id']);
-
+                 //  DB::commit(); 
                 $pdf=\PDF::loadView('pdf.pdfPrueba',compact('cliente','cuotas','totalCuotas'));
-                 DB::commit(); 
+                
                  return   $pdf->stream();
                  // return view('pdf.pdfPrueba',compact('cliente','cuotas','totalCuotas'));
               }
 
-              DB::commit(); 
+             // DB::commit(); 
               Session::flash('message','GUARDADO CORRECTAMENTE');
               return Redirect::to('/Venta'); 
             }

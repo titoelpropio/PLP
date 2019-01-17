@@ -26,7 +26,10 @@ class Proyecto extends Authenticatable implements AuthenticatableContract,
     protected $fillable = [
         'nombre','ubicacion'
     ];
-
+    public function PorcentajeDevolucionReserva()
+    {
+        return $this->hasMany(PorcentajeDevolucionReserva::class);
+    }
     /**
      * The attributes that should be hidden for arrays.
      *
