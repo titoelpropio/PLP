@@ -777,12 +777,10 @@ public function store(Request $request) {
     public function VentaLote($id){
      $lote=DB::select('select  proyecto.nombre as nombreProyecto,categorialote.descripcion,preciocategoria.precio,manzano,uv,fase,nroLote,norte,sur,este,oeste,medidaEste,medidaOeste,medidaSur,medidaNorte,superficie,categorialote.categoria,descuentoventa.porcentaje as descuento from lote,categorialote,proyecto,preciocategoria,descuentoventa where proyecto.id=descuentoventa.idProyecto and   lote.id="'.$id.'" and lote.idCategoriaLote=categorialote.id and proyecto.id=categorialote.idProyecto and preciocategoria.idCategoria=categorialote.id and preciocategoria.deleted_at IS NULL and categorialote.deleted_at IS NULL');
      $meses=DB::select('select *from meses where deleted_at IS NULL');
-
      $descuento=DB::select('select *from descuentoventa where deleted_at IS NULL');
      $tipoCambio=DB::select('select *from tipocambio where deleted_at IS NULL');
      $cuotaMinima=DB::select('select *from cuotaminima where deleted_at IS NULL');
      $nacionalidad=DB::select('SELECT * FROM `pais` ORDER by paisnombre');
-
      $vendedor=DB::select('select empleado.codigo,nombre,id from empleado where codigo IS NOT NULL and deleted_at IS NULL GROUP by codigo');
      return view('venta.venta',['ci'=>0,'id_lote'=>$id,'reserva'=>0,'idReserva'=>0,'idPreReserva'=>0,'moneda'=>0,'reservaBs'=>0],compact('lote','descuento','tipoCambio','cuotaMinima','meses','vendedor','nacionalidad'));
 
