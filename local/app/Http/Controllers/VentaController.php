@@ -97,19 +97,19 @@ public function verificadorContabilidadArray(  )
   $verificarIvaDebitoFiscal = DB::select("SELECT count(*) as count FROM cuentaimpuesto WHERE nombre='Debito fiscal'");
   return ['verificargestion' => $verificargestion[0]->count, 'verificarcuentaporcobrar' => $verificarcuentaporcobrar[0]->count, 'verificarcaja' => $verificarcaja[0]->count, 'verificarbanco' =>  $verificarbanco[0]->count,  'verificaringresodiferido' => $verificaringresodiferido[0]->count, 'verificarIvaDebitoFiscal' => $verificarIvaDebitoFiscal[0]->count  ];
 }
-public function isContabilidad( $verificadorContabilidadArray )
+public function isContabilidad( $verificadorContabilidadArray , $tipoPago)
 {
   $arrayResult = ["status" => true , "message" =>""];
-  if ($verificadorContabilidadArray['verificargestion'] != 1 ) 
+  if ($verificadorContabilidadArray['verificargestion'] != 1 )
   {
     $arrayResult[ "status"] = false;
     $arrayResult[ "message" ]  = "DEBE APERTURAR UNA GESTIÓN PARA PODER REALIZAR ESTA TRANSACCIÓN"  ;
   }
- else if ( $verificadorContabilidadArray['verificarcuentaporcobrar'] != 1 && $request['tipoPago'] == 'p') 
+ else if ( $verificadorContabilidadArray['verificarcuentaporcobrar'] != 1 && $tipoPago == 'p')
  {
     $arrayResult=[ "status" => "false", "message" => 'DEBE CONFIGURAR LA "CUENTA POR COBRAR" POR DEFECTO EN CUENTAS AUTOMÁTICAS PARA PODER REALIZAR ESTA TRANSACCIÓN' ] ;
  }
- else if ( $verificadorContabilidadArray['verificarcaja'] != 1 ) 
+ else if ( $verificadorContabilidadArray['verificarcaja'] != 1 )
  {
     $arrayResult=[ "status" => false, "message"=> 'DEBE CONFIGURAR LA "CUENTA CAJA" POR DEFECTO EN CUENTAS AUTOMÁTICAS PARA PODER REALIZAR ESTA TRANSACCIÓN' ] ;
  }
@@ -140,7 +140,10 @@ public function store(Request $request) {
     $idEmpleado = $request['idEmpleado'];
     $idCliente = $request['idCliente'];
     $idLote = $request['id_lote'];
+    $tipoPago = $request['tipoPago'];
+    $tipoMoneda = $request['tipoMoneda'];
   $verificar = DB::select('select count(*) as count,estado from lote where estado<>0 and id=' . $idLote);
+  $cuentaAutomaticaBanco = $tipoMoneda == "BOLIVIANO" ? DB::table('cuentaautomatica')->where('name','Cuenta Bancaria M/N')->get() :  DB::table('cuentaautomatica')->where('name','Cuenta Bancaria M/E')->get();
  $verificadorContabilidadArray = $this->verificadorContabilidadArray();
 
   if ($verificar[0]->count==1 )
@@ -196,17 +199,17 @@ public function store(Request $request) {
 
   if ($texto!="") {
    Session::flash('message-error',$texto);
-   return Redirect::to('VentaLote/'.$request->id_lote);
+   return Redirect::to('VentaLote/'.$idLote);
  }
-  $_isContabilidad = $this->isContabilidad($verificadorContabilidadArray);
+  $_isContabilidad = $this->isContabilidad($verificadorContabilidadArray, $tipoPago);
  if ( ! $_isContabilidad['status']  ) {
   Session::flash('message-error',$_isContabilidad['message']);
-   return Redirect::to('VentaLote/'.$request->id_lote);
+   return Redirect::to('VentaLote/'.$idLote);
  }
  else{
   try {
 
-    // DB::beginTransaction();
+    DB::beginTransaction();
               /*$lote = Lote::find($request->id_lote);
               $lote->fill([
               'estado' => '3',
@@ -216,36 +219,19 @@ public function store(Request $request) {
               $nombre = strtoupper($request['nombre']);
               $apellidos= strtoupper($request->apellidos);
               $verificarCliente= Cliente::verificarClienteDadoCi($ci) ;
-              $arrayCliente = ['nombre' => $nombre,
-                    'apellidos' => $apellidos,
-                    'fechaNacimiento' => $fechaNacimiento,
-                    'ci' => $ci,
-                    'idPais' => $idPais,
-                    'lugarProcedencia' => $lugarProcedencia,
-                    'genero' => $genero,
-                    'celular' => $celular,
-                    'celular_ref' => $celular_ref,
-                    'estadoCivil' => $estadoCivil,
-                    'domicilio' => $domicilio,
-                    'nit' => $nit,
-                    'ocupacion' => $ocupacion,
-                    'expedido' => $expedido];
+              $arrayCliente = ['nombre' => $nombre, 'apellidos' => $apellidos,  'fechaNacimiento' => $fechaNacimiento, 'ci' => $ci,'idPais' => $idPais,'lugarProcedencia' => $lugarProcedencia,  'genero' => $genero,    'celular' => $celular,  'celular_ref' => $celular_ref,  'estadoCivil' => $estadoCivil,   'domicilio' => $domicilio,    'nit' => $nit, 'ocupacion' => $ocupacion, 'expedido' => $expedido];
               if ($verificarCliente[0]->count=='0') {
                 if ($request['idEmpleado']==0) {
                   $padre=DB::select("SELECT v.idEmpleadoPadre FROM vendedor v WHERE (NOT EXISTS(SELECT *FROM vendedor v2 WHERE v2.idEmpleadoHijo=v.idEmpleadoPadre)) LIMIT 1");
                   $request['idEmpleado']=$padre[0]->idEmpleadoPadre;
                 }
-                  $cliente=Cliente::create([ //aqui guarda
-                    $arrayCliente,
-                    'idEmpleado' => $idEmpleado,
-                  ]);
+                  $cliente=Cliente::create( array_merge([ //aqui guarda
+                    'idEmpleado' => Session::get('idEmpleado'),
+                  ], $arrayCliente));
                 }
                 else{
                   $cliente = Cliente::find($verificarCliente[0]->id);   //aqui modifica
-                  $cliente->fill([
-                    $arrayCliente,
-                    'expedido' => $expedido,
-                  ]);
+                  $cliente->fill($arrayCliente);
                   $cliente->save();
                 }
                 $idReserva = $request['idReserva'];
@@ -268,8 +254,8 @@ public function store(Request $request) {
                   $categoria =  DB::table('categoriacuenta')->where('nombre','Asiento Diario')->get();
                   $gestion = DB::table('gestion')->where( 'estado','1' )->get();
                   $tipocambio =  DB::select("SELECT * FROM tipocambio where deleted_at IS NULL");
-                  $contAsiento=DB::select("SELECT count(*) as count from asiento where id_gestion=".$gestion[0]->id." order by id desc limit 1");
-                  $nroAsiento=DB::select("SELECT * from asiento where id_gestion=".$gestion[0]->id." order by id desc limit 1");
+                  $contAsiento = DB::select("SELECT count(*) as count from asiento where id_gestion=".$gestion[0]->id." order by id desc limit 1");
+                  $nroAsiento = DB::select("SELECT * from asiento where id_gestion=".$gestion[0]->id." order by id desc limit 1");
                   $nroAs=0;
                   $nro_detalle = 1;
 
@@ -325,8 +311,6 @@ public function store(Request $request) {
                   }else{
                     $cuotaInicialUsd=$request['pagoInicial'];
                     $cuotaInicialBs=$request['pagoInicialBs'];
-
-
                   }
                   $PlanDePago=PlanDePago::create([
                     'montoTotal'=>$request['PrecioPlazo'],
@@ -343,7 +327,7 @@ public function store(Request $request) {
                   $mes=date('n');
                   $año=date("Y");
                   $date = date_create( $año.'-'.$mes.'-'.$request['diaMes']);
-                  $fecha=date_format($date, 'd-m-Y');
+                  $fecha = date_format($date, 'd-m-Y');
 
                   for ($i=1; $i <=$request['meses'] ; $i++) {
                     if ($request['meses']==$i) {
@@ -411,15 +395,8 @@ public function store(Request $request) {
 
                       //---------------------------------- Contabilidad BANCO----------------------------------------------------//
                     $montoBancoBs = $venta['cuotaInicial'] * $tipocambio[0]->monedaVenta;
-                    if ($request['tipoMoneda']=="BOLIVIANO") {
-                      $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/N'");
-                    }else{
-                      $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/E'");
-
-                    }
-
                     Detalle::create([
-                      'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
+                      'id_cuenta'=>$cuentaAutomaticaBanco[0]->id_cuenta,
                       'id_asiento'=>$asiento['id'],
                       'nro_detalle'=>$nro_detalle,
                         'tipo'=>1,//1 = Debe, 2 = Haber
@@ -457,15 +434,9 @@ public function store(Request $request) {
                     $nro_detalle++;
 
                       //BANCO
-                    $montoBancoBs = $request->montoBanco * $tipocambio[0]->monedaVenta;
-                    if ($request['tipoMoneda']=="BOLIVIANO") {
-                      $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/N'");
-                    }else{
-                      $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/E'");
 
-                    }
                     Detalle::create([
-                      'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
+                      'id_cuenta'=>$cuentaAutomaticaBanco[0]->id_cuenta,
                       'id_asiento'=>$asiento['id'],
                       'nro_detalle'=>$nro_detalle,
                         'tipo'=>1,//1 = Debe, 2 = Haber
@@ -509,7 +480,7 @@ public function store(Request $request) {
                     $nroAs = $nroAsiento[0]->nro_asiento;
                   }
 
-                  $asiento=Asiento::create([
+                  $asiento= Asiento::create([
                     'nro_asiento'=>$nroAs + 1,
                     'tipo'=>3,// 1 = Ingreso, 2 = Egreso, 3 = Traspaso
                     'glosa'=>$request['glosa'],
@@ -524,7 +495,6 @@ public function store(Request $request) {
                   //----------------------------------- fin Contabilidad -----------------------------------------------------//
                   $venta=Venta::create([
                     'precio'=>$request['PrecioLote'],
-
                     'estado'=>'p',
                     'tipoPago'=>$request['tipoDepositoC'],
                     'descuento'=>$request['descuentoContado'],
@@ -545,8 +515,6 @@ public function store(Request $request) {
                     'moneda'=>$request['tipoMoneda'],
                     'tipoVenta'=>'CONTADO',
                     'reservaBs'=>$request['reservaBolivano']
-
-
                   ]);
 
                   //---------------------------------- Contabilidad CAJA----------------------------------------------------------//
@@ -579,15 +547,8 @@ public function store(Request $request) {
 
                       //---------------------------------- Contabilidad BANCO----------------------------------------------------//
                     $montoBancoBs = $venta['cuotaInicial'] * $tipocambio[0]->monedaVenta;
-                    if ($request['tipoMoneda']=="BOLIVIANO")
-                    {
-                      $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/N'");
-                    }else
-                    {
-                      $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/E'");
-                    }
                     Detalle::create([
-                      'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
+                      'id_cuenta'=>$cuentaAutomaticaBanco[0]->id_cuenta,
                       'id_asiento'=>$asiento['id'],
                       'nro_detalle'=>$nro_detalle,
                         'tipo'=>1,//1 = Debe, 2 = Haber
@@ -627,14 +588,8 @@ public function store(Request $request) {
 
                       //BANCO
                     $montoBancoBs = $request->montoBanco * $tipocambio[0]->monedaVenta;
-                    if ($request['tipoMoneda']=="BOLIVIANO") {
-                      $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/N'");
-                    }else{
-                      $cuentaautomatica = DB::select("SELECT * FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/E'");
-
-                    }
                     Detalle::create([
-                      'id_cuenta'=>$cuentaautomatica[0]->id_cuenta,
+                      'id_cuenta'=>$cuentaAutomaticaBanco[0]->id_cuenta,
                       'id_asiento'=>$asiento['id'],
                       'nro_detalle'=>$nro_detalle,
                         'tipo'=>1,//1 = Debe, 2 = Haber
@@ -644,7 +599,6 @@ public function store(Request $request) {
 
                     $nro_detalle++;
                       //----------------------------------- fin Contabilidad -----------------------------------------------------//
-
                   }
 
                   //---------------------------------- Contabilidad INGRESO DIFERIDO----------------------------------------------//
@@ -662,17 +616,15 @@ public function store(Request $request) {
                 }
 
               if ($request['tipoPago']=='p') {//reporte pdf plan de pago
-                $cliente=DB::select("select plandepago.montoTotalBs,totalapagar,plandepago.montoTotal,venta.moneda,venta.totalapagarBs  , venta.descuento, venta.moneda, venta.precioBs ,cliente.expedido, plandepago.cuotaInicialUsd as cuotaInicial, venta.reserva,lote.superficie,cliente.nombre,cliente.apellidos,cliente.ci,cliente.expedido,venta.precio,venta.fecha,lote.nroLote,lote.manzano,lote.fase,proyecto.nombre as nombreProyecto ,venta.id as idVenta   from cliente,venta, plandepago,lote,proyecto where venta.id=plandepago.idVenta and cliente.id=venta.idCliente and venta.id=".$venta['id']." and venta.idLote=lote.id and proyecto.id=lote.idProyecto");
-                $cuotas=DB::select("select  cuotas.montoBs, cuotas.monto,cuotas.estado,cuotas.fechaLimite,@num:=@num+1 as num  from (select @num:=0) r, cliente,venta, plandepago, cuotas where venta.id=plandepago.idVenta and plandepago.id =cuotas.idPlandePago and cliente.id=venta.idCliente and venta.id=".$venta['id']);
+                $cliente=Venta::SaleAndDetalilsSaleByIdVenta($venta['id']);
+                $cuotas = DB::select("select  cuotas.montoBs, cuotas.monto,cuotas.estado,cuotas.fechaLimite,@num:=@num+1 as num  from (select @num:=0) r, cliente,venta, plandepago, cuotas where venta.id=plandepago.idVenta and plandepago.id =cuotas.idPlandePago and cliente.id=venta.idCliente and venta.id=".$venta['id']);
                 $totalCuotas=DB::select("SELECT sum(cuotas.monto) as totalCuotas FROM venta,cuotas,plandepago where venta.id=plandepago.idVenta and plandepago.id=cuotas.idPlandePago  and venta.id=".$venta['id']);
-                 //  DB::commit();
                 $pdf=\PDF::loadView('pdf.pdfPrueba',compact('cliente','cuotas','totalCuotas'));
-
+                  DB::commit();
                  return   $pdf->stream();
                  // return view('pdf.pdfPrueba',compact('cliente','cuotas','totalCuotas'));
               }
-
-             // DB::commit();
+                 DB::commit();
               Session::flash('message','GUARDADO CORRECTAMENTE');
               return Redirect::to('/Venta');
             }
@@ -706,8 +658,6 @@ public function store(Request $request) {
             return true;
           }
           break;
-
-
           default:
           return false;
           break;
