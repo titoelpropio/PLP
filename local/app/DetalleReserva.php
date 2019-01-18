@@ -11,7 +11,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-
+use DB;
 class DetalleReserva extends Authenticatable implements AuthenticatableContract,
                                     AuthorizableContract
 
@@ -29,7 +29,7 @@ class DetalleReserva extends Authenticatable implements AuthenticatableContract,
 
     public static function verifyReservation( $idLote, $idCliente, $estado )
     {
-       return  DB::select('select count(*) as count from detallereserva,reserva where reserva.id=detallereserva.idReserva and detallereserva.idLote='.$idLote.' and reserva.idCliente<>'. $idCliente,.' and detallereserva.estado="$estado"');
+       return  DB::select('select count(*) as count from detallereserva,reserva where reserva.id=detallereserva.idReserva and detallereserva.idLote='.$idLote.' and reserva.idCliente<>'. $idCliente.' and detallereserva.estado="$estado"');
     }
     /**
      * The attributes that should be hidden for arrays.

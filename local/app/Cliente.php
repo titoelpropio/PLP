@@ -11,7 +11,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-
+use DB;
 class Cliente extends Authenticatable implements AuthenticatableContract,
                                     AuthorizableContract
 
@@ -30,7 +30,7 @@ class Cliente extends Authenticatable implements AuthenticatableContract,
 
 public static function verificarClienteDadoCi( $ci )
 {
-return DB::select('select *,count(*) as count from cliente where ci= ' . $ci);
+    return DB::select('select *,count(*) as count from cliente where ci= ' . $ci);
 }
     /**
      * The attributes that should be hidden for arrays.
