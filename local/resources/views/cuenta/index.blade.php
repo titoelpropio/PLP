@@ -33,12 +33,10 @@ $childrens = $elements["childrens"];
 <section class="sidebar">
     <!-- Sidebar user panel -->
 
-
-
     <div class="container" >
         <div class="row" >
             <div class="col-md-5" id="nested"  >
-  <?php
+          <?php
                 foreach ($masters as $master) {
                     ?>
                      <li style="margin: 5px 0px">

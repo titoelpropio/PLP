@@ -8,14 +8,24 @@
         <h3>REGISTRAR MES</h3>
 
 		<div class="form-group">
-			{!!Form::label('mesMin','Mes:')!!}
+			{!!Form::label('mesMin','Mes Minimo:')!!}
 			{!!Form::text('mesMin',null,['class'=>'form-control ','placeholder'=>'Mes Minimo'])!!}
 		</div>
-	<div class="form-group">
-			{!!Form::label('mesMax','Mes:')!!}
+		<div class="form-group">
+			{!!Form::label('mesMax','Mes Maximo:')!!}
 			{!!Form::text('mesMax',null,['class'=>'form-control ','placeholder'=>'Mes Maximo'])!!}
 		</div>
+		<div class="form-group">
+			<label>Urbanizacion</label>
+			<select name="idProyecto" class="form-control">
+				@foreach($proyecto as $value)
+					<option value="{{ $value->id }}">{{ $value->nombre }}</option>
+				@endforeach
+			</select>
+		</div>
 	  </div>
+	  </div>
+	 
 
     </div>
 

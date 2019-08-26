@@ -20,19 +20,18 @@ class MesesController extends Controller {
 
     function index() {
         //$meses = Meses::paginate(20);
-        $meses=DB::select("SELECT *from proyecto,meses WHERE proyecto.id=meses.idProyecto and meses.deleted_at IS NULL and proyecto.id=".Session::get('idProyecto'));        
+        $meses=DB::select("SELECT *from proyecto,meses WHERE proyecto.id=meses.idProyecto and meses.deleted_at IS NULL ");        
         return view('meses.index', compact('meses'));
     }
 
     public function create() {
-        //$proyecto=DB::select("SELECT *from proyecto");        
-        return view('meses.create');//,compact('proyecto'));
+        $proyecto=DB::select("SELECT *from proyecto");        
+        return view('meses.create', compact('proyecto'));//,compact('proyecto'));
     }
 
     public function store(Request $request) {
         try {
             DB::beginTransaction();
-            $mes=DB::select('select * from meses where deleted_at IS NULL and idProyecto='.Session::get('idProyecto'));
             if (count($mes) !=0) {
                  $this->destroy($mes[0]->id);
             }
@@ -40,7 +39,7 @@ class MesesController extends Controller {
                     'mesMin' => $request['mesMin'],          
                     'mesMax' => $request['mesMax'],          
 
-                    'idProyecto' => Session::get('idProyecto'),//$request['idProyecto'],               
+                    'idProyecto' => $request['idProyecto'],//$request['idProyecto'],               
                 ]);
                 DB::commit();                             
                 Session::flash('message', 'CREADO CORRECTAMENTE');
