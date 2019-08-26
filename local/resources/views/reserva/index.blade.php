@@ -132,10 +132,10 @@
               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
             <div class="form-group">
                 <label>
-                 <input type="radio" name="genero" id="m" value="m" checked="" class="minimal"> Masculino 
+                 <input type="radio" name="genero" id="m" value="m" checked="" class="minimal" required=""> Masculino 
                  </label>
                  <label> 
-                 <input type="radio" name="genero" id="f" value="f" class="minimal"> Femenino 
+                 <input type="radio" name="genero" id="f" value="f" class="minimal" > Femenino 
                  </label>
                 
             </div>
@@ -147,20 +147,20 @@
       <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" >
             <div class="form-group">
                 {!!Form::label('nombre','Nombres:')!!}
-                <input  class="form-control" name="nombre" type="text" value="" style="text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                <input required=""  class="form-control" name="nombre" type="text" value="" style="text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();">
             </div>
             </div>
 
       <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" >
             <div class="form-group">
                 {!!Form::label('apellidos','Apellidos:')!!}
-                 <input  class="form-control" name="apellidos" type="text" value="" style="text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                 <input required="" class="form-control" name="apellidos" type="text" value="" style="text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();">
             </div>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" >
             <div class="form-group">
                 {!!Form::label('nacionalidad','Pais de origen:')!!}
-                <select name="nacionalidad" class="form-control" onchange="cargarCiudad()">
+                <select name="nacionalidad" class="form-control" onchange="cargarCiudad()" required="">
                     <option>Seleccione un pais</option>
                     <?php foreach ($nacionalidad as $key => $value) {
                         echo "<option value=".$value->id.">".$value->paisnombre;
@@ -171,7 +171,7 @@
              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" >
             <div class="form-group">
                 {!!Form::label('apellidos','Lugar de Nacimiento(ciudad-provincia):')!!}
-                 <input  class="form-control" name="apellidos" type="text" value="" style="text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();">
+                 <input required="" class="form-control" name="apellidos" type="text" value="" style="text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();">
             </div>
             </div>
       <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" >

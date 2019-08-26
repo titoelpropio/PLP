@@ -5,7 +5,7 @@
 <div class="row">   
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-            <font size="6">PORCENTAJE DEVOLUCION</font>
+            <font size="6">PORCENTAJE DEVOLUCION DE RESERVA</font>
         </div>
 
         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pull-right">
@@ -19,7 +19,7 @@
         <div class="table-responsive">
             <table class="table table-striped table-bordered table-condensed table-hover">
                 <thead>
-                <th><CENTER>PORCENTAJE</CENTER></th>
+                <th><CENTER>Devolucion en $US</CENTER></th>
                 <th><CENTER>PROYECTO</CENTER></th>
                 </thead>
                 @foreach ($porcentaje as $cli)

@@ -21,9 +21,9 @@ use Hash;
 use App\TransaccionReserva;
 class ReservaController extends Controller {
   var $puedeGuardar=0;
-var   $puedeModificar=0;
+  var $puedeModificar=0;
   var  $puedeEliminar=0;
-   var $puedeImprimir=0;
+  var $puedeImprimir=0;
   var $puedeListar=0;
   var $puedeVerReporte=0;
      public function __construct(Request $request) {
@@ -74,7 +74,8 @@ var   $puedeModificar=0;
 
       $verificargestion = DB::select("SELECT count(*) as count FROM gestion WHERE estado=1");
       $verificarcaja = DB::select("SELECT count(*) as count FROM cuentaautomatica WHERE nombre='Caja'");
-      $verificarbanco = DB::select("SELECT count(*) as count FROM cuentaautomatica WHERE nombre='Bancos'");
+
+      $verificarbanco = $request['moneda'] == "DOLAR" ? DB::select("SELECT count(*) as count FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/N'") : DB::select("SELECT count(*) as count FROM cuentaautomatica WHERE nombre='Cuenta Bancaria M/E'");
       $verificaringresodiferido = DB::select("SELECT count(*) as count FROM cuentaautomatica WHERE nombre='Ingreso Diferido'");
 
       if ($verificargestion[0]->count != 1 ) {
@@ -93,6 +94,7 @@ var   $puedeModificar=0;
          Session::flash('message-error','DEBE CONFIGURAR LA "CUENTA INGRESO DIFERIDO" POR DEFECTO EN CUENTAS AUTOMÁTICAS PARA PODER REALIZAR ESTA TRANSACCIÓN');
          return Redirect::to('ListaPreReserva');
       }
+      
       else{
         try {
             DB::beginTransaction();
